@@ -5750,8 +5750,14 @@
     document.body.appendChild(keepEl);
     keepEl.querySelector('.acct-keep-go').addEventListener('click',function(){ hideKeepNote(); openAccount(); });
     keepEl.querySelector('.acct-keep-x').addEventListener('click',hideKeepNote);
+    /* It floats over the bottom of the screen, so it never stays in the way:
+       it steps aside as soon as someone starts typing, and after 15 seconds. */
+    keepTimer=setTimeout(hideKeepNote,15000);
+    document.addEventListener('focusin',keepOnFocus,true);
   }
-  function hideKeepNote(){ if(keepEl){ keepEl.remove(); keepEl=null; } }
+  var keepTimer=null;
+  function keepOnFocus(e){ var t=e.target; if(t&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!(keepEl&&keepEl.contains(t))) hideKeepNote(); }
+  function hideKeepNote(){ clearTimeout(keepTimer); document.removeEventListener('focusin',keepOnFocus,true); if(keepEl){ keepEl.remove(); keepEl=null; } }
   function openAccount(){
     var panel=$('byokPanel'), tog=$('byokToggle');
     if(panel&&panel.hidden&&tog) tog.click();
