@@ -1104,6 +1104,24 @@
   .pstamp-mini.pm6 .pstamp-in{transform:none}
   .pstamp-mini.pm8::before{display:none}
   @media(prefers-reduced-motion:reduce){.collect-reveal.pulse{animation:none}}
+
+  /* ——— Manifestation in one column · 造梦单栏 ———
+     The couch and cat lead, the story direction sits right under it, then
+     Create. The scene and story appear below only once there is something
+     to show (no empty placeholder on the right), with the Listen player
+     above the story text. Story direction is set a little tighter. */
+  #daydream .day-head,#daydream .day-grid{max-width:760px;margin-left:auto;margin-right:auto}
+  #daydream .day-grid{grid-template-columns:1fr;gap:20px}
+  #daydream .day-output[hidden]{display:none}
+  #daydream + #sleepPlayer{display:none}
+  #storySettings{margin-top:12px;padding:12px 13px}
+  #storySettings .set-group{margin-top:10px}
+  #storySettings .set-group>.set-name{margin-bottom:5px}
+  #storySettings .pick-row{gap:6px}
+  #storySettings .pick-btn{padding:6px 11px;font-size:12px}
+  #storySettings .plan-bar{margin-top:10px;padding:8px 11px}
+  #storySettings .weave-box{margin-top:10px;padding-top:9px}
+  #daydream .day-cta{margin-top:12px}
 </style>
 </head>
 <body>
@@ -1316,7 +1334,7 @@
         </div>
         <button class="day-cta" id="createDaydreamBtn"><span id="dayBtnLabel">Create my scene &amp; story</span><span>→</span></button>
       </div>
-      <div class="day-output" id="dayOutput" aria-live="polite">
+      <div class="day-output" id="dayOutput" aria-live="polite" hidden>
         <div class="kicker">Your scene</div>
         <div id="dayOutputBody">
           <div class="day-empty"><b>Your scene will appear here.</b>Write a wish and tap Create.</div>
@@ -4246,8 +4264,17 @@
     runStory();
   }
 
+  function parkSleepPlayer(){
+    // Once a story exists the player lives inside the story block. Move it
+    // back out before that block is rewritten, or a second Create would
+    // delete the player along with the old story.
+    var plx=$('sleepPlayer'), sec=$('daydream'), body=$('dayOutputBody');
+    if(plx&&sec&&body&&body.contains(plx)) sec.parentNode.insertBefore(plx,sec.nextSibling);
+  }
+  function showDayOutput(){ var o=$('dayOutput'); if(o) o.hidden=false; }
   function renderDaydream(dd,fromAI){
     activeDaydream=dd;
+    parkSleepPlayer(); showDayOutput();
     var body=$('dayOutputBody');
     body.innerHTML='<div class="day-scene-title">'+esc(dd.title)+'</div><p class="day-scene">'+esc(dd.scene)+'</p>'
       +'<div class="seed-box"><div class="sl"><span>'+L('Tonight\u2019s seed','今晚的入睡种子')+'</span></div><blockquote>\u201C'+esc(dd.seed)+'\u201D</blockquote></div>'
@@ -4274,6 +4301,7 @@
     var wish=wishInput.value.trim();
     if(wish.length<12){toast(L('Write a little more of the scene — where you are, what it feels like.','再多写一点这个场景——你在哪里，感觉如何。')); wishInput.focus(); return}
     createBtn.disabled=true; $('dayBtnLabel').textContent=L('Making your scene & story…','正在生成场景与故事…');
+    parkSleepPlayer(); showDayOutput();
     var dob=$('dayOutputBody'); if(dob) dob.innerHTML='<div class="wait">'+waitSceneHTML()+'<b>'+L('Making your scene…','正在生成你的场景…')+'</b><div class="wait-sub">'+L('Listening to your wish','聆听你的心愿')+'</div><div class="wait-dots" aria-hidden="true"><span></span><span></span><span></span></div></div>';
     if(window.showWaitOverlay) window.showWaitOverlay(L('Making your scene…','正在生成你的场景…'),[L('Listening to your wish','聆听你的心愿'),L('Painting the scene','描绘这个场景'),L('Choosing tonight’s seed','选定今晚的种子')]);
     var started=Date.now();
