@@ -15,7 +15,14 @@ const SYSTEM = `You are a dream reader in the 周公解梦 tradition. Read the d
 // in) is well under MAX_PROMPT_CHARS; a call that big is not from the app.
 const MAX_PROMPT_CHARS = 60000;
 const MAX_OUTPUT_TOKENS = 3000;
+const MAX_OUTPUT_TOKENS_STORY = 4000; // a Chinese chapter runs longer in tokens; never cut a story mid-sentence
 const HOURLY_CALLS = 60; // readings + daydream scenes + story parts, per visitor
+// How long to wait for OpenAI. A sleep-story chapter is ~5 minutes of text and
+// takes gpt-4o-mini roughly 12-25 s to write; at 14 s it was often cut off,
+// and the page then fell back to its built-in story (same story every time,
+// not about the wish). The page itself waits 45 s, so stay just under that.
+const TIMEOUT_MS_STORY = 42000;
+const TIMEOUT_MS_DEFAULT = 14000;
 
 // ---- Guard (same block in all three Dream a Dream functions; keep in sync) ----
 // 1. Only the app's own site may call this function from a browser.
@@ -131,6 +138,10 @@ Deno.serve(async (req: Request) => {
   const key = Deno.env.get("OPENAI_API_KEY");
   if (!key) return deny(req, 500, "OPENAI_API_KEY not set");
 
+  const kind = String(body.type || body.kind || "reading");
+  const isStory = kind === "sleep-story" || kind === "sleepstory";
+  const started = Date.now();
+
   try {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -141,18 +152,24 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         temperature: 0.9,
-        max_tokens: MAX_OUTPUT_TOKENS,
+        max_tokens: isStory ? MAX_OUTPUT_TOKENS_STORY : MAX_OUTPUT_TOKENS,
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: SYSTEM },
           { role: "user", content: userPrompt },
         ],
       }),
-      signal: AbortSignal.timeout(14000),
+      signal: AbortSignal.timeout(isStory ? TIMEOUT_MS_STORY : TIMEOUT_MS_DEFAULT),
     });
     const data = await r.json();
+    if (!r.ok) {
+      // Logged so failures show up in Supabase -> Edge Functions -> Logs,
+      // instead of only as the page quietly using its built-in text.
+      console.error(kind, "openai error", r.status, Date.now() - started, "ms", JSON.stringify(data?.error || {}).slice(0, 300));
+    }
     return json(req, data, r.status);
   } catch (e) {
+    console.error(kind, "failed after", Date.now() - started, "ms:", String(e));
     return json(req, { error: String(e) }, 502);
   }
 });
