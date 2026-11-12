@@ -352,10 +352,10 @@
   @keyframes twinkle{0%,100%{opacity:.18}50%{opacity:.95}}
   .firefly{position:absolute;width:5px;height:5px;border-radius:50%;background:#ffd977;box-shadow:0 0 10px 3px rgba(255,205,90,.55);animation:drift 16s ease-in-out infinite alternate,twinkle 5s ease-in-out infinite}
   @keyframes drift{from{transform:translate(0,0)}to{transform:translate(46px,-64px)}}
-  .mist{position:absolute;left:-6%;width:112%;object-fit:cover;mix-blend-mode:screen;animation:mistDrift 90s ease-in-out infinite alternate;-webkit-mask-image:linear-gradient(to top,#000 0%,#000 35%,rgba(0,0,0,.55) 62%,transparent 100%),linear-gradient(to right,transparent 0%,#000 8%,#000 92%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to top,#000 0%,#000 35%,rgba(0,0,0,.55) 62%,transparent 100%),linear-gradient(to right,transparent 0%,#000 8%,#000 92%,transparent 100%);mask-composite:intersect}
+  .mist{position:absolute;left:-6%;width:112%;object-fit:cover;will-change:transform;transform:translate3d(0,0,0);backface-visibility:hidden;-webkit-backface-visibility:hidden;animation:mistDrift 90s ease-in-out infinite alternate}
   .mist-a{bottom:-5vh;height:36vh;opacity:.5}
   .mist-b{bottom:-3vh;height:25vh;opacity:.3;animation-duration:130s;animation-delay:-55s}
-  @keyframes mistDrift{from{transform:translateX(-1.5%)}to{transform:translateX(1.5%)}}
+  @keyframes mistDrift{from{transform:translate3d(-1.5%,0,0)}to{transform:translate3d(1.5%,0,0)}}
   /* ——— The couch · 沙发: the input is a velvet couch; the cat sits on its back ——— */
   .couch-scene{position:relative;padding-top:2px}
   .couch-scene::after{content:"";position:absolute;left:5%;right:5%;bottom:-16px;height:24px;background:radial-gradient(ellipse at center,rgba(0,0,0,.55),transparent 70%);filter:blur(5px);z-index:0}
@@ -1125,7 +1125,7 @@
 </style>
 </head>
 <body>
-<div class="sky" aria-hidden="true"><img class="sky-stars" src="assets/sky-stars-3f7764a7.webp" alt="" /><img class="sky-moon" src="assets/sky-moon-c82e905d.webp" alt="" /><img class="mist mist-a" src="assets/mist-c143abba.webp" alt="" /><img class="mist mist-b" src="assets/mist-c143abba.webp" alt="" /></div>
+<div class="sky" aria-hidden="true"><img class="sky-stars" src="assets/sky-stars-3f7764a7.webp" alt="" /><img class="sky-moon" src="assets/sky-moon-c82e905d.webp" alt="" /><img class="mist mist-a" src="assets/mist-soft-b1e0853c.webp" alt="" /><img class="mist mist-b" src="assets/mist-soft-b1e0853c.webp" alt="" /></div>
 <div class="wait-overlay" id="waitOverlay" aria-live="polite"><div class="wo-panel"><div class="wait-scene" aria-hidden="true"><span class="wait-star" style="left:4%;top:14%">✦</span><span class="wait-star sm" style="right:8%;top:6%;animation-delay:.55s">✦</span><span class="wait-star" style="right:2%;top:46%;animation-delay:1.05s">✦</span><span class="wait-star sm" style="left:12%;top:54%;animation-delay:1.45s">✦</span><div class="wait-moon">☾</div><img class="wait-cat" src="assets/cat-sleep-0f293551.webp" alt="" /><div class="wait-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></div></div><b id="waitOverlayTitle">Reading your dream…</b><div class="steps" id="waitOverlayStep"></div><div class="wait-dots" aria-hidden="true"><span></span><span></span><span></span></div></div></div>
 <div class="wrap">
   <header class="site-head">
