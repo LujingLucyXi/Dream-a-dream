@@ -1412,6 +1412,31 @@
   .ac-form textarea{flex:1;resize:none;font:inherit;font-size:14px;color:#eef0fa;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:9px 11px}
   .ac-send{font:inherit;font-size:13px;font-weight:600;padding:10px 14px;border-radius:12px;border:0;background:var(--gold2);color:#1b1730;cursor:pointer;white-space:nowrap}
   .ac-send:disabled{opacity:.5}
+  .self-note{margin:16px 0 6px}
+  .sn-hint{margin:0 0 8px;font-size:12.5px;line-height:1.45;color:#aab2d4}
+  .self-note textarea{width:100%;box-sizing:border-box;resize:none;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.35;color:#f3eedd;background:rgba(0,0,0,.22);border:1px solid rgba(214,178,94,.3);border-radius:12px;padding:10px 12px}
+  .sn-row{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:8px}
+  .sn-saved{font-size:12px;color:#9fd8b0}
+  .sn-btn{font:inherit;font-size:13px;font-weight:600;padding:9px 16px;border-radius:12px;border:0;background:var(--gold2);color:#1b1730;cursor:pointer}
+  .dream-cal{margin:18px 0 22px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+  .dc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .dc-head h4{margin:0;font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600}
+  .dc-head h4 small{display:block;font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.6;font-weight:400}
+  .dc-nav{font:inherit;font-size:18px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:transparent;color:inherit;cursor:pointer}
+  .dc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .dc-dow{font-size:10.5px;opacity:.5;padding:2px 0}
+  .dc-day{position:relative;aspect-ratio:1;border-radius:10px;font-size:13px;display:grid;place-items:center;border:1px solid transparent;background:none;color:#c8cde6;font-family:inherit;padding:0}
+  .dc-day.has{cursor:pointer;color:#fff;background:rgba(214,178,94,.12);border-color:rgba(214,178,94,.35)}
+  .dc-day.has:after{content:"☾";position:absolute;bottom:1px;font-size:9px;color:var(--gold2)}
+  .dc-day.today{box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+  .dc-day.sel{background:rgba(214,178,94,.32)}
+  .dc-list{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+  .dc-entry{padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.08)}
+  .dc-entry .de-meta{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+  .dc-entry b{display:block;font-family:"Cormorant Garamond",serif;font-size:19px;margin:2px 0 4px}
+  .dc-entry .de-note{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;color:#f0dfae;margin:4px 0}
+  .dc-entry p{margin:3px 0 0;font-size:12.5px;line-height:1.45;color:#b9c0dc}
+  .dc-empty{font-size:13px;opacity:.65;margin:10px 0 0}
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -1662,6 +1687,12 @@
             <div class="signs-grid" id="signsGrid"></div>
           </div>
           <div class="reading-story" id="readingStory"><div class="section-label"><span>The reading</span></div><p id="readingNarrative"></p><p class="closing" id="readingClosing"></p></div>
+          <div class="self-note" id="selfNote">
+            <div class="section-label"><span id="snT">A sentence for yourself</span></div>
+            <p class="sn-hint" id="snHint">Write one line to your future self about this dream. It is kept with the dream in your Dream Calendar.</p>
+            <textarea id="snInput" rows="2" maxlength="240" placeholder="Today I want to remember…"></textarea>
+            <div class="sn-row"><span class="sn-saved" id="snSaved" hidden>✓ Kept in your Dream Calendar</span><button type="button" class="sn-btn" id="snBtn">Keep it</button></div>
+          </div>
           <div class="deep-hook" id="deepHook">
             <div class="section-label"><span>The deeper part</span><span id="deepStateLabel" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></div>
             <h4 id="deepTitle"></h4>
@@ -1692,6 +1723,7 @@
     <div class="kicker">Dream Journey</div>
     <h2 class="journey-title">What your dreams <em>keep returning to</em></h2>
     <p class="journey-lede">Every dream you read here is gathered below — the signs, places, people and scenes that come back, dream after dream. The more dreams you bring, the clearer the pattern, and the better it knows you. This is your Dream Memory: on the free version it keeps only the last 3 days; the full version keeps every dream.</p>
+    <div class="dream-cal" id="dreamCal"></div>
     <div id="journeyBody"><p class="journey-empty">No dreams read yet. Read your first dream above, and its signs, places, people and scenes will start gathering here.</p></div>
   </section>
   </main>
@@ -3079,6 +3111,63 @@
     body.innerHTML=html;
   }
   window.renderDreamJourney=renderJourney;
+  /* ——— Dream Calendar · 梦历 ——— every read dream lands on its day. */
+  var calMonth=null, calSel=null;
+  function dayKey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+  function renderCalendar(){
+    var el=$('dreamCal'); if(!el) return;
+    var now=new Date(); if(!calMonth) calMonth=new Date(now.getFullYear(),now.getMonth(),1);
+    var byDay={};
+    journal.forEach(function(j){ if(!j||!j.date) return; var d=new Date(j.date); if(isNaN(d)) return; var k=dayKey(d); (byDay[k]=byDay[k]||[]).push(j); });
+    var y=calMonth.getFullYear(), m=calMonth.getMonth();
+    var mName=window.DREAM_LANG==='zh'?(y+'年'+(m+1)+'月'):calMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    var dows=window.DREAM_LANG==='zh'?['日','一','二','三','四','五','六']:['S','M','T','W','T','F','S'];
+    var html='<div class="dc-head"><button type="button" class="dc-nav" data-cal="-1" aria-label="Previous month">‹</button><h4><small>'+L('Dream Calendar','梦历')+'</small>'+esc(mName)+'</h4><button type="button" class="dc-nav" data-cal="1" aria-label="Next month">›</button></div><div class="dc-grid">';
+    dows.forEach(function(d){ html+='<div class="dc-dow">'+d+'</div>'; });
+    var first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+    for(var i=0;i<first;i++) html+='<div></div>';
+    for(var d=1;d<=days;d++){
+      var k=y+'-'+(m+1)+'-'+d, has=byDay[k];
+      html+='<button type="button" class="dc-day'+(has?' has':'')+(k===dayKey(now)?' today':'')+(k===calSel?' sel':'')+'" '+(has?'data-day="'+k+'" aria-label="'+has.length+' dream(s)"':'disabled')+'>'+d+'</button>';
+    }
+    html+='</div>';
+    var list=calSel&&byDay[calSel];
+    if(list){
+      var SN={zhougong:L('Zhou Gong','周公'),freud:L('Freud','弗洛伊德'),jung:L('Jung','荣格')};
+      html+='<div class="dc-list">'+list.map(function(j){
+        var t=new Date(j.date).toLocaleTimeString(window.DREAM_LANG==='zh'?'zh-CN':'en-US',{hour:'numeric',minute:'2-digit'});
+        return '<div class="dc-entry"><span class="de-meta">'+esc(t)+' · '+(SN[j.lens]||'')+'</span><b>'+esc(j.title||'')+'</b>'+(j.note?'<div class="de-note">“'+esc(j.note)+'”</div>':'')+(j.school?'<p>'+esc(j.school)+'</p>':'')+'<p>'+esc(j.snippet||'')+'</p></div>';
+      }).join('')+'</div>';
+    } else if(!Object.keys(byDay).length){
+      html+='<p class="dc-empty">'+L('Each dream you read will appear here, on the day you dreamed it.','你解过的每个梦，都会落在它的那一天。')+'</p>';
+    }
+    el.innerHTML=html;
+  }
+  document.addEventListener('click',function(e){
+    var n=e.target.closest&&e.target.closest('[data-cal]');
+    if(n){ calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+parseInt(n.getAttribute('data-cal'),10),1); calSel=null; renderCalendar(); return; }
+    var dd=e.target.closest&&e.target.closest('.dc-day.has');
+    if(dd){ var k=dd.getAttribute('data-day'); calSel=(calSel===k?null:k); renderCalendar(); }
+  });
+  var _rj=renderJourney; renderJourney=function(){ _rj(); try{ renderCalendar(); }catch(e){} };
+  window.renderDreamJourney=renderJourney;
+  /* A sentence for yourself: kept on the newest journal entry. */
+  function resetSelfNote(){
+    var i=$('snInput'); if(!i) return; i.value=''; $('snSaved').hidden=true;
+    $('snT').textContent=L('A sentence for yourself','写给自己的一句话');
+    $('snHint').textContent=L('Write one line to your future self about this dream. It is kept with the dream in your Dream Calendar.','为这个梦，写一句给未来的自己。它会和这个梦一起，存进你的梦历。');
+    i.placeholder=L('Today I want to remember…','今天，我想记住……');
+    $('snBtn').textContent=L('Keep it','存下来');
+  }
+  document.addEventListener('click',function(e){
+    if(!e.target||e.target.id!=='snBtn') return;
+    var v=$('snInput').value.trim(); if(!v||!journal.length) return;
+    journal[0].note=v; $('snSaved').textContent=L('✓ Kept in your Dream Calendar','✓ 已存进你的梦历'); $('snSaved').hidden=false;
+    var d=new Date(journal[0].date||Date.now()); calMonth=new Date(d.getFullYear(),d.getMonth(),1); calSel=dayKey(d);
+    try{ renderCalendar(); }catch(err){}
+    toast(L('Kept with this dream ✦','已和这个梦存在一起 ✦'));
+  });
+  document.addEventListener('dreamread',function(){ try{ resetSelfNote(); }catch(e){} });
   /* Accounts read and restore the journal through this (see the Accounts script). */
   window.__dreamJournalIO={get:function(){ return journal.slice(); },set:function(a){ journal.length=0; Array.prototype.push.apply(journal,Array.isArray(a)?a:[]); try{ renderJourney(); }catch(e){} if(typeof refreshWeaveList==='function'){ try{ refreshWeaveList(); }catch(e){} } }};
   /* ——— The ONE completion path · 唯一的完成路径 ———
@@ -3117,7 +3206,7 @@
     try{ renderReading(r); }catch(e){}
     // 3 · Journal + Journey, from the captured dream text.
     try{
-      journal.unshift({title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
+      journal.unshift({date:new Date().toISOString(),lens:r.lens||'zhougong',school:r.school||'',note:'',title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
     }catch(e){}
     try{ renderJourney(); }catch(e){}
     try{ refreshWeaveList(); }catch(e){}
@@ -6937,7 +7026,7 @@
   }
   function parts(){
     var list=[], q=function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
-    list=list.concat(q('#shareCard .card-art'), q('#shareCard .card-body > .section-label'), q('#symbols > *'), q('#lensConcept'), q('#signsHook'), q('#readingStory'), q('#deepHook'), q('#shareCard .remember'), q('#shareCard .card-foot'), q('#revealSection .card-actions'));
+    list=list.concat(q('#shareCard .card-art'), q('#shareCard .card-body > .section-label'), q('#symbols > *'), q('#lensConcept'), q('#signsHook'), q('#readingStory'), q('#selfNote'), q('#deepHook'), q('#shareCard .remember'), q('#shareCard .card-foot'), q('#revealSection .card-actions'));
     return list.filter(function(n){ return n&&n.offsetParent!==null; });
   }
   function finish(){
