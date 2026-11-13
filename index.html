@@ -1440,6 +1440,11 @@
   .sub-limit{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:rgba(214,178,94,.14);border:1px solid rgba(214,178,94,.45);color:#f6e2ac;font-size:14px;line-height:1.5}
   .price-tag{margin:6px 0 10px;font-family:"Cormorant Garamond",serif}
   .price-tag b{font-size:34px}.price-tag span{font-size:16px;opacity:.8}.price-tag small{display:block;font-family:"DM Sans",sans-serif;font-size:12px;opacity:.75;margin-top:2px}
+  .price-btn.is-busy{opacity:.75;cursor:progress;animation:busyPulse 1.2s ease-in-out infinite}
+  @keyframes busyPulse{50%{opacity:.5}}
+  .byok-plan{margin:18px 0 0;padding:16px 18px;border-radius:18px;border:1px dashed rgba(127,214,162,.45);background:rgba(127,214,162,.06);display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .byok-plan>div{flex:1 1 260px}.byok-plan b{display:block;font-size:16px;margin:4px 0 6px}.byok-plan p{margin:0;font-size:13px;line-height:1.5;opacity:.85}
+  .byok-plan.on{border-style:solid;border-color:rgba(127,214,162,.7)}
   .price-btn.alt{background:transparent;border:1px solid rgba(214,178,94,.6);color:#f0d48a;margin-top:8px}
   .price-card.plus.is-mine{box-shadow:0 0 0 2px rgba(214,178,94,.6)}
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
@@ -1853,9 +1858,17 @@
         </ul>
         <div class="price-tag" id="subPriceTag"><b>$3.99</b> <span>/ month</span><small>or $29 / year — save 39%</small></div>
         <button class="price-btn" id="subBtn" type="button">Subscribe — $3.99 / month</button>
-        <button class="price-btn alt" id="subYearly" type="button">Yearly — $29</button>
-        <p class="price-sub" id="subNote">Cancel anytime. Secure payment by Stripe.</p>
+        <button class="price-btn alt" id="subYearly" type="button">Yearly — $29 / year</button>
+        <p class="price-sub" id="subNote">Renews automatically each month or year. Cancel anytime in Settings → Manage subscription — you keep the full version until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.</p>
       </div>
+    </div>
+    <div class="byok-plan" id="byokPlan">
+      <div>
+        <div class="kicker">Or · free</div>
+        <b id="byokPlanTitle">Bring your own OpenAI key — every lock opens, free</b>
+        <p id="byokPlanText">Have an OpenAI account? Paste your API key in Settings and Dreameri runs on it: unlimited readings and stories, every voice, theme and length — no subscription. OpenAI bills you directly for what you use (usually a few cents a night). Your key stays on this device only; it is never sent to Dreameri.</p>
+      </div>
+      <button class="price-btn alt" id="byokPlanBtn" type="button">Use my own key</button>
     </div>
   </div>
 </div>
@@ -1896,13 +1909,25 @@
     var ou=document.querySelector('#subscribePage .one-unlock'); if(ou) ou.hidden=true;
     window.openSubscribePage();
   };
+  var bp=document.getElementById('byokPlanBtn'); if(bp) bp.addEventListener('click',function(){
+    close();
+    var panel=document.getElementById('byokPanel'), tog=document.getElementById('byokToggle');
+    if(panel&&panel.hidden&&tog) tog.click();
+    setTimeout(function(){ var k=document.getElementById('byokKey'); if(k){ k.scrollIntoView({behavior:'smooth',block:'center'}); k.focus({preventScroll:true}); } },120);
+  });
   window.dreamPaintPlan=function(){
+    var byok=!!(window.dreamHasByok&&window.dreamHasByok()), zh0=window.DREAM_LANG==='zh';
+    var bc=document.getElementById('byokPlan'); if(bc) bc.classList.toggle('on',byok);
+    var bt=document.getElementById('byokPlanTitle'), bx=document.getElementById('byokPlanText'), bb=document.getElementById('byokPlanBtn');
+    if(bt) bt.textContent=byok?(zh0?'你的 OpenAI 密钥已连接 ✓ 所有的锁都已打开':'Your OpenAI key is connected ✓ every lock is open'):(zh0?'用你自己的 OpenAI 密钥——所有的锁都打开，免费':'Bring your own OpenAI key — every lock opens, free');
+    if(bx) bx.textContent=zh0?'有 OpenAI 账户？在“设置”里粘贴你的 API 密钥，Dreameri 就在它上面运行：解梦和故事不限次数，所有声音、主题和长度都打开——不用订阅。OpenAI 按你的用量直接向你收费（通常每晚几美分）。密钥只保存在这台设备上，从不发给 Dreameri。':'Have an OpenAI account? Paste your API key in Settings and Dreameri runs on it: unlimited readings and stories, every voice, theme and length — no subscription. OpenAI bills you directly for what you use (usually a few cents a night). Your key stays on this device only; it is never sent to Dreameri.';
+    if(bb) bb.textContent=byok?(zh0?'管理我的密钥':'Manage my key'):(zh0?'用我自己的密钥':'Use my own key');
     var full=window.dreamPlan&&window.dreamPlan()==='full', zh=window.DREAM_LANG==='zh';
     var b=document.getElementById('subBtn'), y=document.getElementById('subYearly'), n=document.getElementById('subNote'), t=document.getElementById('subPriceTag');
     var card=b&&b.closest('.price-card'); if(card) card.classList.toggle('is-mine',!!full);
     if(b) b.textContent=full?(zh?'管理订阅':'Manage subscription'):(zh?'订阅——每月 $3.99':'Subscribe — $3.99 / month');
     if(y) y.hidden=!!full; if(t) t.hidden=!!full;
-    if(n) n.textContent=full?(zh?'你正在使用完整版 ✦ 所有的锁都已打开。':'You’re on the full version ✦ every lock is open.'):(zh?'随时可以取消。由 Stripe 安全支付。':'Cancel anytime. Secure payment by Stripe.');
+    if(n) n.textContent=full?(zh?'你正在使用完整版 ✦ 所有的锁都已打开。':'You’re on the full version ✦ every lock is open.'):(zh?'按月或按年自动续费，随时可在“设置 → 管理订阅”里取消；已付的这个周期结束前，完整版都还在。取消后不再扣费，已付的周期不退款。由 Stripe 安全支付。':'Renews automatically each month or year. Cancel anytime in Settings → Manage subscription — you keep the full version until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.');
   };
   var uo=document.getElementById('subUnlockOne'); if(uo) uo.addEventListener('click',function(){ if(window.unlockPreviewReading){ close(); window.unlockPreviewReading(); } });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&page.classList.contains('open')) close(); });
@@ -2259,7 +2284,7 @@
       +'<div class="sign-tile bright"><div class="sign-tag"><span>✦ '+L('Bright sign','光明之象')+'</span></div><b>'+esc(bright?bright.name:'')+'</b><p>'+esc(truncStr(bright?bright.meaning:'',200))+'</p></div>'
       +'<div class="sign-tile warn"><div class="sign-tag"><span>◑ '+L('Warning sign','警示之象')+'</span></div><b>'+esc(warn?warn.name:'')+'</b><p>'+esc(truncStr(warn?warn.meaning:'',200))+'</p></div>';
     var rel=waiting?true:isRelationshipDream(lastDreamText);
-    var unlocked=previewUnlocked||isFullPlan()||(!!paidFor&&paidFor===readingKey(lastReading));
+    var unlocked=previewUnlocked||hasAllAccess()||(!!paidFor&&paidFor===readingKey(lastReading));
     var dt=$('deepTitle');
     if(dt) dt.textContent=waiting?L('The deeper part of a reading looks like this','一次解读的深处，长这样'):(rel?L('What this dream is saying about love','这个梦，在说你们之间的事'):L('What this dream is saying underneath','这个梦，在底下说什么'));
     var LOCKED_ICON='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>';
@@ -2304,14 +2329,14 @@
      in full, in place — and keep every later reading this visit open
      too, so the unlocked reading can be read the way a buyer would. */
   function unlockPreviewReading(){
-    if(isFullPlan()){ if(lastReading){ try{ renderHook(lastReading); }catch(e){} } return; }
+    if(hasAllAccess()){ if(lastReading){ try{ renderHook(lastReading); }catch(e){} } return; }
     if(!lastReading){ toast(L('Read a dream first — then its deeper part can be unlocked.','先解一个梦——它的深处才能解锁。')); return; }
     if(window.dreamStartUnlock) window.dreamStartUnlock(readingKey(lastReading));
   }
   window.dreamMarkPaid=function(key){ paidFor=key; if(lastReading){ try{ renderHook(lastReading); }catch(e){} } toast(L('Unlocked — this reading is open ✦','已解锁——这一次解读已打开 ✦')); setTimeout(function(){ var hook=$('deepHook'); if(hook) hook.scrollIntoView({behavior:'smooth',block:'nearest'}); },80); };
   window.unlockPreviewReading=unlockPreviewReading;
   document.addEventListener('dreamplan',function(){
-    var full=isFullPlan();
+    var full=hasAllAccess();
     Array.prototype.forEach.call(document.querySelectorAll('[data-locked], [data-was-locked]'),function(b){
       if(full&&b.getAttribute('data-locked')==='true'){ b.setAttribute('data-was-locked','1'); b.setAttribute('data-locked','false'); b.classList.remove('locked'); var t=b.querySelector('.lock-tag'); if(t) t.style.display='none'; }
       else if(!full&&b.getAttribute('data-was-locked')==='1'){ b.setAttribute('data-locked','true'); b.classList.add('locked'); var t2=b.querySelector('.lock-tag'); if(t2) t2.style.display=''; }
@@ -2416,6 +2441,7 @@
   var byokKey='';
   try{ byokKey=String(localStorage.getItem(BYOK_STORAGE_KEY)||'').trim(); }catch(e){ byokKey=''; }
   function byokActive(){ return !!byokKey; }
+  window.dreamHasByok=byokActive;
   function byokChatCompletion(prompt,timeoutMs){
     var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
     var timer=ctrl?setTimeout(function(){ctrl.abort()},timeoutMs||30000):null;
@@ -2430,6 +2456,7 @@
     if(inp&&document.activeElement!==inp) inp.value=byokKey||'';
     if(show&&inp) show.textContent=(inp.type==='password')?L('Show','显示'):L('Hide','隐藏');
     if(gear) gear.classList.toggle('has-key',byokActive());
+    try{ document.dispatchEvent(new CustomEvent('dreamplan')); }catch(e){}
     if(st) st.textContent=byokActive()
       ? L('On — your key is active on this device. Readings, stories, voices and transcription now run on your OpenAI account.','已开启——你的密钥已在这台设备上生效。解梦、故事、声音和转写现在都走你的 OpenAI 账户。')
       : L('Not connected — everything runs on the built-in cloud, as before.','未连接——一切照常走内置云端。');
@@ -2659,6 +2686,7 @@
     return Promise.resolve(g).catch(function(){return null}).then(function(t){ if(t){ opts.headers=Object.assign({},opts.headers||{},{Authorization:'Bearer '+t}); } return fetch(url,opts); });
   }
   function isFullPlan(){ return !!(window.dreamPlan&&window.dreamPlan()==='full'); }
+  function hasAllAccess(){ return isFullPlan()||byokActive(); }
   function checkQuota(){
     if(byokActive()||!AI_ENDPOINT||isFullPlan()) return Promise.resolve(null);
     var ctrl=(typeof AbortController!=='undefined')?new AbortController():null; var tm=ctrl?setTimeout(function(){ctrl.abort()},5000):null;
@@ -5393,6 +5421,8 @@
     'Stories of 10, 20, 30 & 45 minutes':'10、20、30 和 45 分钟的故事',
     'Unlimited dream readings & sleep stories':'不限次数的解梦与睡前故事',
     'Yearly — $29':'按年——$29',
+    'Yearly — $29 / year':'按年——每年 $29',
+    'Or · free':'或者 · 免费',
     'Cancel anytime. Secure payment by Stripe.':'随时可以取消。由 Stripe 安全支付。',
     'Sleep stories up to 10 minutes':'睡前故事最长 10 分钟',
     'Two voices — Nova & Onyx':'两个声音——Nova 和 Onyx',
@@ -6301,11 +6331,17 @@
     setTimeout(openAccount,250);
   }
   function returnUrl(){ return location.origin+location.pathname; }
+  function busyBtns(on){
+    ['subBtn','subYearly'].forEach(function(id){ var b=document.getElementById(id); if(!b) return;
+      if(on){ b.setAttribute('data-label',b.textContent); b.disabled=true; b.classList.add('is-busy'); b.textContent=T('Opening secure checkout…','正在打开安全支付…'); }
+      else { b.disabled=false; b.classList.remove('is-busy'); if(b.getAttribute('data-label')) b.textContent=b.getAttribute('data-label'); } });
+  }
+  window.addEventListener('pageshow',function(){ busyBtns(false); });
   window.dreamStartCheckout=function(plan){
     if(!user){ needSignIn(); return; }
-    toastNote(T('Opening secure checkout…','正在打开安全支付页面…'));
-    billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } })
-      .catch(function(e){ var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
+    busyBtns(true);
+    billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } else busyBtns(false); })
+      .catch(function(e){ busyBtns(false); var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
   };
   window.dreamOpenPortal=function(){
     if(!user){ needSignIn(); return; }
