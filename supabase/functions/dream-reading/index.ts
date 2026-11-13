@@ -6,7 +6,8 @@
 // in the page. It returns OpenAI's raw response; the page already parses
 // OpenAI-style choices content.
 // Secrets: OPENAI_API_KEY (required), DREAM_ALLOWED_ORIGINS (recommended).
-// "Verify JWT" stays OFF: the page has no Supabase login yet. The guard below
+// "Verify JWT" stays OFF: visitors read without an account. A signed-in page
+// sends its access token so the free allowance and the full plan follow the user. The guard below
 // is what keeps strangers from using this as a free OpenAI proxy.
 
 const SYSTEM = `You are a dream reader in the 周公解梦 tradition. Read the dream through the five elements (五行 Wood, Fire, Earth, Metal, Water), omens (兆), and timing (时机). Speak warmly and mysteriously, like an old book of signs, never like a clinical analysis or a ChatGPT summary. Every symbol must come from the dream itself. Give the reader hope and a reason to dream again tonight. For pregnancy dreams (胎梦), speak only of folk tradition, temperament and fortune as cultural stories, never a medical fact or a real gender prediction. This is folk tradition for fun, never real fortune-telling or medical fact. Return a JSON object with: title, symbols (array of 4 objects with name and meaning), mood, line (one line to remember), narrative (2-3 sentences), closing (one hopeful sentence pulling toward the next dream), xuan (object with dominant element, movement, omen, timing).`;
@@ -110,6 +111,63 @@ function deny(req: Request, status: number, error: string): Response {
 }
 // ---- end Guard ----
 
+// ---- Plans: who is asking, and what the free plan allows ----
+// Free: FREE_READINGS_PER_DAY dream readings (Pacific day) and FREE_STORIES_PER_WEEK
+// sleep stories of up to FREE_STORY_MAX_MIN minutes. Full plan: no limits beyond the
+// hourly guard. Signed-in users are counted by user id; visitors by hashed IP.
+// Plan is read from dream_profiles, which only the Stripe webhook can change.
+const FREE_READINGS_PER_DAY = 1;
+const FREE_STORIES_PER_WEEK = 2;
+const FREE_STORY_MAX_MIN = 5;
+const FREE_STORY_MAX_TOKENS = 2200;
+
+async function whoIs(req: Request): Promise<{ id: string; plan: string } | null> {
+  const url = Deno.env.get("SUPABASE_URL");
+  const svc = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const token = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+  if (!url || !svc || !token || token.split(".").length !== 3) return null;
+  try {
+    const me = await fetch(`${url}/auth/v1/user`, {
+      headers: { apikey: svc, Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!me.ok) return null;
+    const user = await me.json().catch(() => ({}));
+    if (!user?.id) return null;
+    const pr = await fetch(`${url}/rest/v1/dream_profiles?user_id=eq.${user.id}&select=plan`, {
+      headers: { apikey: svc, Authorization: `Bearer ${svc}` },
+      signal: AbortSignal.timeout(3000),
+    });
+    const rows = pr.ok ? await pr.json().catch(() => []) : [];
+    return { id: user.id, plan: rows?.[0]?.plan === "full" ? "full" : "free" };
+  } catch {
+    return null;
+  }
+}
+
+async function rpc(name: string, args: Record<string, unknown>): Promise<number | null> {
+  const url = Deno.env.get("SUPABASE_URL");
+  const svc = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!url || !svc) return null;
+  try {
+    const r = await fetch(`${url}/rest/v1/rpc/${name}`, {
+      method: "POST",
+      headers: { apikey: svc, Authorization: `Bearer ${svc}`, "Content-Type": "application/json" },
+      body: JSON.stringify(args),
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!r.ok) {
+      console.error("rpc", name, r.status, (await r.text().catch(() => "")).slice(0, 200));
+      return null;
+    }
+    const v = await r.json();
+    return typeof v === "number" ? v : null;
+  } catch {
+    return null;
+  }
+}
+// ---- end Plans ----
+
 function json(req: Request, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -145,6 +203,34 @@ Deno.serve(async (req: Request) => {
   const isStory = kind === "sleep-story" || kind === "sleepstory";
   const started = Date.now();
 
+  // Plan + free allowance. Only real readings and new sleep stories count;
+  // follow-up questions, daydream scenes and later story chapters are free.
+  const who = await whoIs(req);
+  const plan = who?.plan || "free";
+  const subject = who ? "u:" + who.id : "ip:" + (await sha256(clientIp(req)));
+  if (kind === "quota") {
+    if (plan === "full") return json(req, { plan, readingsLeft: null, storiesLeft: null });
+    const readingsLeft = await rpc("dream_reading_take", { p_subject: subject, p_limit: FREE_READINGS_PER_DAY, p_take: false });
+    const storiesLeft = await rpc("dream_story_take", { p_subject: subject, p_story_id: "", p_limit: FREE_STORIES_PER_WEEK });
+    return json(req, { plan, readingsLeft, storiesLeft, storyMaxMin: FREE_STORY_MAX_MIN });
+  }
+  let left: number | null = null;
+  if (plan !== "full") {
+    if (kind === "reading") {
+      left = await rpc("dream_reading_take", { p_subject: subject, p_limit: FREE_READINGS_PER_DAY, p_take: true });
+      if (left === -1) return json(req, { error: "free_limit", what: "reading", limit: FREE_READINGS_PER_DAY, plan }, 402);
+    } else if (isStory) {
+      const mins = Number(body.storyLength || 0);
+      if (mins > FREE_STORY_MAX_MIN) return json(req, { error: "free_limit", what: "story_length", limit: FREE_STORY_MAX_MIN, plan }, 402);
+      const sid = String(body.storyId || "").slice(0, 64) || crypto.randomUUID();
+      left = await rpc("dream_story_take", { p_subject: subject, p_story_id: sid, p_limit: FREE_STORIES_PER_WEEK });
+      if (left === -1) return json(req, { error: "free_limit", what: "story", limit: FREE_STORIES_PER_WEEK, plan }, 402);
+    }
+  }
+  const maxTokens = isStory
+    ? (plan === "full" ? MAX_OUTPUT_TOKENS_STORY : FREE_STORY_MAX_TOKENS)
+    : (kind === "followups" ? 500 : MAX_OUTPUT_TOKENS);
+
   try {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -155,7 +241,7 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         temperature: 0.9,
-        max_tokens: isStory ? MAX_OUTPUT_TOKENS_STORY : MAX_OUTPUT_TOKENS,
+        max_tokens: maxTokens,
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: SYSTEM },
@@ -170,6 +256,7 @@ Deno.serve(async (req: Request) => {
       // instead of only as the page quietly using its built-in text.
       console.error(kind, "openai error", r.status, Date.now() - started, "ms", JSON.stringify(data?.error || {}).slice(0, 300));
     }
+    if (data && typeof data === "object") data.dreameri = { plan, left };
     return json(req, data, r.status);
   } catch (e) {
     console.error(kind, "failed after", Date.now() - started, "ms:", String(e));
