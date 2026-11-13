@@ -53,7 +53,7 @@ function reply(req: Request, status: number, body: unknown): Response {
 }
 
 async function stripe(path: string, params?: Record<string, string>, method = "POST"): Promise<any> {
-  const key = Deno.env.get("DREAMERI_STRIPE_SECRET_KEY") || Deno.env.get("STRIPE_SECRET_KEY");
+  const key = Deno.env.get("DREAMERI_STRIPE_SECRET_KEY") || Deno.env.get("STRIPE_SECRET_KEY") || Deno.env.get("stripe_secret_key");
   if (!key) throw new Error("DREAMERI_STRIPE_SECRET_KEY (or STRIPE_SECRET_KEY) not set");
   const r = await fetch("https://api.stripe.com/v1/" + path, {
     method,
