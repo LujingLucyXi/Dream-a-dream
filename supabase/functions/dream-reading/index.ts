@@ -113,13 +113,17 @@ function deny(req: Request, status: number, error: string): Response {
 
 // ---- Plans: who is asking, and what the free plan allows ----
 // Free: FREE_READINGS_PER_DAY dream readings (Pacific day) and FREE_STORIES_PER_WEEK
-// sleep stories of up to FREE_STORY_MAX_MIN minutes. Full plan: no limits beyond the
-// hourly guard. Signed-in users are counted by user id; visitors by hashed IP.
+// sleep stories of up to FREE_STORY_MAX_MIN minutes. Pro (plan "full"): the PRO_ limits.
+// Unlimited = bring your own key, which never reaches this function. Signed-in users are counted by user id; visitors by hashed IP.
 // Plan is read from dream_profiles, which only the Stripe webhook can change.
 const FREE_READINGS_PER_DAY = 1;
 const FREE_STORIES_PER_WEEK = 2;
 const FREE_STORY_MAX_MIN = 5;
 const FREE_STORY_MAX_TOKENS = 2200;
+// Pro: 10 readings a day, 2 sleep stories a day of up to 45 minutes.
+const PRO_READINGS_PER_DAY = 10;
+const PRO_STORIES_PER_DAY = 2;
+const PRO_STORY_MAX_MIN = 45;
 
 async function whoIs(req: Request): Promise<{ id: string; plan: string } | null> {
   const url = Deno.env.get("SUPABASE_URL");
@@ -208,27 +212,28 @@ Deno.serve(async (req: Request) => {
   const who = await whoIs(req);
   const plan = who?.plan || "free";
   const subject = who ? "u:" + who.id : "ip:" + (await sha256(clientIp(req)));
+  const pro = plan === "full";
+  const L = pro
+    ? { readings: PRO_READINGS_PER_DAY, stories: PRO_STORIES_PER_DAY, days: 1, maxMin: PRO_STORY_MAX_MIN }
+    : { readings: FREE_READINGS_PER_DAY, stories: FREE_STORIES_PER_WEEK, days: 7, maxMin: FREE_STORY_MAX_MIN };
   if (kind === "quota") {
-    if (plan === "full") return json(req, { plan, readingsLeft: null, storiesLeft: null });
-    const readingsLeft = await rpc("dream_reading_take", { p_subject: subject, p_limit: FREE_READINGS_PER_DAY, p_take: false });
-    const storiesLeft = await rpc("dream_story_take", { p_subject: subject, p_story_id: "", p_limit: FREE_STORIES_PER_WEEK });
-    return json(req, { plan, readingsLeft, storiesLeft, storyMaxMin: FREE_STORY_MAX_MIN });
+    const readingsLeft = await rpc("dream_reading_take", { p_subject: subject, p_limit: L.readings, p_take: false });
+    const storiesLeft = await rpc("dream_story_take", { p_subject: subject, p_story_id: "", p_limit: L.stories, p_days: L.days });
+    return json(req, { plan, readingsLeft, storiesLeft, storyMaxMin: L.maxMin });
   }
   let left: number | null = null;
-  if (plan !== "full") {
-    if (kind === "reading") {
-      left = await rpc("dream_reading_take", { p_subject: subject, p_limit: FREE_READINGS_PER_DAY, p_take: true });
-      if (left === -1) return json(req, { error: "free_limit", what: "reading", limit: FREE_READINGS_PER_DAY, plan }, 402);
-    } else if (isStory) {
-      const mins = Number(body.storyLength || 0);
-      if (mins > FREE_STORY_MAX_MIN) return json(req, { error: "free_limit", what: "story_length", limit: FREE_STORY_MAX_MIN, plan }, 402);
-      const sid = String(body.storyId || "").slice(0, 64) || crypto.randomUUID();
-      left = await rpc("dream_story_take", { p_subject: subject, p_story_id: sid, p_limit: FREE_STORIES_PER_WEEK });
-      if (left === -1) return json(req, { error: "free_limit", what: "story", limit: FREE_STORIES_PER_WEEK, plan }, 402);
-    }
+  if (kind === "reading") {
+    left = await rpc("dream_reading_take", { p_subject: subject, p_limit: L.readings, p_take: true });
+    if (left === -1) return json(req, { error: "free_limit", what: "reading", limit: L.readings, plan }, 402);
+  } else if (isStory) {
+    const mins = Number(body.storyLength || 0);
+    if (mins > L.maxMin) return json(req, { error: "free_limit", what: "story_length", limit: L.maxMin, plan }, 402);
+    const sid = String(body.storyId || "").slice(0, 64) || crypto.randomUUID();
+    left = await rpc("dream_story_take", { p_subject: subject, p_story_id: sid, p_limit: L.stories, p_days: L.days });
+    if (left === -1) return json(req, { error: "free_limit", what: "story", limit: L.stories, plan }, 402);
   }
   const maxTokens = isStory
-    ? (plan === "full" ? MAX_OUTPUT_TOKENS_STORY : FREE_STORY_MAX_TOKENS)
+    ? (pro ? MAX_OUTPUT_TOKENS_STORY : FREE_STORY_MAX_TOKENS)
     : (kind === "followups" ? 500 : MAX_OUTPUT_TOKENS);
 
   try {
