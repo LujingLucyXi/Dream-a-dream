@@ -4,7 +4,7 @@
 // active (or trialing / briefly past due), "free" otherwise.
 // Deploy with "Verify JWT" OFF (Stripe does not send a Supabase token):
 //   supabase functions deploy dream-stripe-webhook --no-verify-jwt
-// Secrets: STRIPE_WEBHOOK_SECRET (whsec_..., from the webhook endpoint in Stripe).
+// Secrets: DREAMERI_STRIPE_WEBHOOK_SECRET (whsec_..., from the webhook endpoint in Stripe).
 // Every request is checked against Stripe's signature before anything changes.
 
 const enc = new TextEncoder();
@@ -46,7 +46,7 @@ function fromSubscription(sub: any): Record<string, unknown> {
 
 Deno.serve(async (req: Request) => {
   if (req.method !== "POST") return new Response("POST only", { status: 405 });
-  const secret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
+  const secret = Deno.env.get("DREAMERI_STRIPE_WEBHOOK_SECRET");
   if (!secret) return new Response("not configured", { status: 500 });
   const raw = await req.text();
   if (!(await verify(raw, req.headers.get("Stripe-Signature") || "", secret))) {

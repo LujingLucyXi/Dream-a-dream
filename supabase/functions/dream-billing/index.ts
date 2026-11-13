@@ -7,7 +7,10 @@
 //   { action: "portal", returnUrl } -> { url } : Stripe's billing portal (cancel, card).
 //   { action: "verify", sessionId } -> { paid } : was this one-time unlock paid by this user?
 // Prices are set here (Stripe price_data), so no products need creating in Stripe.
-// Secrets: STRIPE_SECRET_KEY (required; sk_test_... while testing, sk_live_... for real),
+// Secrets are project-wide, so these are prefixed DREAMERI_ to never clash with
+// another app (e.g. Glomere) in the same Supabase project.
+// Falls back to STRIPE_SECRET_KEY when the DREAMERI_ one is not set.
+// Secrets: DREAMERI_STRIPE_SECRET_KEY (required; sk_test_... while testing, sk_live_... for real),
 //          DREAM_ALLOWED_ORIGINS (optional, same as the other functions).
 // "Verify JWT" can stay ON: only signed-in users call it.
 
@@ -49,8 +52,8 @@ function reply(req: Request, status: number, body: unknown): Response {
 }
 
 async function stripe(path: string, params?: Record<string, string>, method = "POST"): Promise<any> {
-  const key = Deno.env.get("STRIPE_SECRET_KEY");
-  if (!key) throw new Error("STRIPE_SECRET_KEY not set");
+  const key = Deno.env.get("DREAMERI_STRIPE_SECRET_KEY") || Deno.env.get("STRIPE_SECRET_KEY");
+  if (!key) throw new Error("DREAMERI_STRIPE_SECRET_KEY (or STRIPE_SECRET_KEY) not set");
   const r = await fetch("https://api.stripe.com/v1/" + path, {
     method,
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/x-www-form-urlencoded" },
