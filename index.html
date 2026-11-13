@@ -1479,21 +1479,50 @@
   @media (max-width:520px){ .prof-stats{grid-template-columns:repeat(2,1fr)} }
   .byok-panel:not([hidden]){position:fixed;inset:0;z-index:72;max-width:none;margin:0;border:0;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0c1020;padding:28px max(18px,calc((100% - 600px)/2)) 64px}
   .byok-panel:not([hidden]) .settings-head{position:sticky;top:-28px;z-index:2;background:#0c1020;padding:14px 0 10px;margin-top:-14px}
-  /* Manifestation · the princess-and-the-pea room */
-  .pea-scene{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:1100/1971;max-width:460px;margin-left:auto!important;margin-right:auto!important;margin:-6px -6px 12px;background:#0f1428;box-shadow:0 18px 50px rgba(0,0,0,.45)}
-  .pea-bg{position:absolute;inset:0;background-color:#141a33;background-position:center top;background-size:cover;background-repeat:no-repeat;transform-origin:76% 75%;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
-  .pea-scene.wishing .pea-bg{transform:scale(1.05)}
+  /* Manifestation · the princess-and-the-pea room: the whole upper half */
+  body{overflow-x:clip}
+  .pea-scene{position:relative;overflow:hidden;width:100vw;margin:0 0 18px calc(50% - 50vw);margin-bottom:18px;height:clamp(460px,62vh,760px);background:#0f1428}
+  .pea-blur{position:absolute;inset:-40px;background:#141a33 center/cover no-repeat;filter:blur(28px) brightness(.55) saturate(1.1)}
+  .pea-zoom{position:absolute;inset:0;transition:transform 1.3s cubic-bezier(.2,.8,.2,1)}
+  .pea-art{position:absolute;background:#141a33 center/100% 100% no-repeat;box-shadow:0 0 80px 40px rgba(10,13,28,.55)}
   .pea-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  .pea-ui{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 10px;background:linear-gradient(180deg,rgba(10,13,28,0),rgba(10,13,28,.6) 40%,rgba(10,13,28,.82))}
-  .pea-head{position:absolute;left:0;right:0;top:0;text-align:center;padding:16px 16px 40px;background:linear-gradient(180deg,rgba(8,10,22,.82),rgba(8,10,22,.45) 60%,rgba(8,10,22,0));pointer-events:none}
+  .pea-scene:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,10,22,.75),rgba(8,10,22,0) 26%,rgba(8,10,22,0) 62%,rgba(8,10,22,.85))}
+  .pea-head{position:absolute;left:0;right:0;top:0;z-index:2;text-align:center;padding:18px 16px 0;pointer-events:none;transition:opacity .6s}
+  .pea-scene.listening .pea-head{opacity:0}
   .pea-kicker{font-size:10.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2)}
-  .pea-head h3{margin:4px 0 2px;font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;line-height:1.1;color:#fbeccb;text-shadow:0 2px 12px rgba(0,0,0,.6)}
-  .pea-head p{margin:0;font-size:13px;color:#cdd3ee;text-shadow:0 1px 6px rgba(0,0,0,.7)}
-  .pea-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .pea-ui .voice-field{background:rgba(14,18,38,.72);border:1px solid rgba(240,212,138,.35);border-radius:18px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-  .pea-scene .pea-ui .voice-field #wishInput{min-height:58px;height:58px;resize:none;border:0;background:transparent;color:#f3f0e6;font-family:"Cormorant Garamond",serif;font-size:18px;line-height:1.35}
-  .pea-scene.wishing .pea-ui .voice-field{border-color:rgba(184,160,255,.7);box-shadow:0 0 0 3px rgba(150,120,255,.18),0 0 30px rgba(150,120,255,.25)}
-  @media (max-width:520px){ .pea-scene{margin:-10px -10px 12px} .pea-head h3{font-size:22px} }
+  .pea-head h3{margin:4px 0 2px;font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;line-height:1.1;color:#fbeccb;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+  .pea-head p{margin:0;font-size:13.5px;color:#cdd3ee;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+  .pea-cta{position:absolute;left:0;right:0;bottom:16px;z-index:2;text-align:center}
+  .pea-mic{position:relative;width:78px;height:78px;border-radius:50%;border:0;cursor:pointer;color:#1b1730;background:radial-gradient(circle at 35% 30%,#fff4cf,#f0d48a 45%,#b8892f);box-shadow:0 0 0 6px rgba(240,212,138,.18),0 10px 30px rgba(0,0,0,.5);display:inline-grid;place-items:center;-webkit-tap-highlight-color:transparent}
+  .pea-mic svg{position:relative;z-index:1}
+  .pea-ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(190,160,255,.7);opacity:0}
+  .pea-scene.listening .pea-mic{background:radial-gradient(circle at 35% 30%,#efe6ff,#b9a0ff 50%,#6c4fd0);color:#fff}
+  .pea-scene.listening .pea-ring{animation:peaRing 1.8s ease-out infinite}
+  .pea-scene.listening .pea-ring.r2{animation-delay:.9s}
+  @keyframes peaRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.9);opacity:0}}
+  .pea-status{margin:10px auto 2px;padding:0 18px;max-width:520px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:#fbeccb;text-shadow:0 1px 8px rgba(0,0,0,.8)}
+  .pea-type{font:inherit;font-size:12.5px;background:none;border:0;color:#c9d0ee;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.85}
+  .pea-scene.listening .pea-type{visibility:hidden}
+  .pea-form-label{display:block;font-weight:800;font-size:13px;margin:0 0 8px}
+  #wishMicBtn{display:none!important}
+  /* results: the wish becomes its own view, unfolding in place */
+  #panelDay.day-reveal .pea-scene,#panelDay.day-reveal .day-head,#panelDay.day-reveal .day-form{display:none}
+  #panelDay.day-reveal .day-grid{grid-template-columns:1fr;max-width:760px;margin:0 auto}
+  .day-back{font:inherit;font-size:13px;font-weight:700;background:none;border:1px solid rgba(255,255,255,.2);color:#e8ebf8;border-radius:999px;padding:8px 14px;cursor:pointer;margin:0 0 14px}
+  #dayOutputBody.unfold>*{opacity:0;animation:peaIn .9s ease forwards}
+  #dayOutputBody.unfold>*:nth-child(1){animation-delay:.1s}#dayOutputBody.unfold>*:nth-child(2){animation-delay:.6s}#dayOutputBody.unfold>*:nth-child(3){animation-delay:1.3s}#dayOutputBody.unfold>*:nth-child(n+4){animation-delay:1.9s}
+  @keyframes peaIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .pea-pop{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(6,8,18,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:peaFade .4s ease}
+  @keyframes peaFade{from{opacity:0}}
+  .pea-pop-card{position:relative;width:min(88vw,380px);padding:26px 22px 20px;border-radius:22px;text-align:center;background:radial-gradient(circle at 50% 0,rgba(185,160,255,.28),transparent 60%),linear-gradient(180deg,#221a3d,#141025);border:1px solid rgba(240,212,138,.45);box-shadow:0 30px 80px rgba(0,0,0,.6);animation:peaPop .6s cubic-bezier(.2,1.3,.4,1)}
+  @keyframes peaPop{from{transform:scale(.8);opacity:0}}
+  .pea-pop-card .pp-orb{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#cdb8ff 30%,#6fd6c8 70%,#3a2a7a);box-shadow:0 0 40px rgba(185,160,255,.7);animation:peaOrb 4s ease-in-out infinite}
+  @keyframes peaOrb{50%{transform:scale(1.06);filter:hue-rotate(25deg)}}
+  .pea-pop-card .pp-k{font-size:10.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2)}
+  .pea-pop-card h4{margin:6px 0 8px;font-family:"Cormorant Garamond",serif;font-size:26px;line-height:1.15;color:#fbeccb}
+  .pea-pop-card blockquote{margin:0 0 14px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:#e9dcff}
+  .pea-pop-card button{font:inherit;font-weight:800;font-size:14px;padding:11px 20px;border-radius:999px;border:0;background:var(--gold2);color:#1b1730;cursor:pointer}
+  @media (max-width:520px){ .pea-scene{height:clamp(440px,60vh,640px)} .pea-head h3{font-size:24px} }
   .pricing.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
   .pricing.tiers .price-card{display:flex;flex-direction:column}
   .pricing.tiers .price-card ul{flex:1;align-content:start;align-items:start}
@@ -1797,6 +1826,19 @@
 
   <main id="panelDay" role="tabpanel" aria-label="Manifestation — daydreaming" hidden>
 <!-- DAYDREAM · 造梦 -->
+  <div class="pea-scene" id="peaScene">
+    <div class="pea-blur" id="peaBlur" aria-hidden="true"></div>
+    <div class="pea-zoom" id="peaZoom">
+      <div class="pea-art" id="peaBg" role="img" aria-label="Coffee the cat asleep on top of ten mattresses, a tiny pea beneath the last one, and a glowing crystal ball on the table"></div>
+      <canvas class="pea-canvas" id="peaCanvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="pea-head"><span class="pea-kicker" id="peaKicker">Manifestation</span><h3 id="peaTitle">Whisper a wish into the crystal ball</h3><p id="peaSub">Coffee is asleep on ten mattresses, waiting to dream it with you.</p></div>
+    <div class="pea-cta">
+      <button type="button" class="pea-mic" id="peaMic" aria-label="Speak your wish" aria-pressed="false"><span class="pea-ring"></span><span class="pea-ring r2"></span><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" stroke="none"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg></button>
+      <p class="pea-status" id="peaStatus">Tap and tell the crystal ball your wish</p>
+      <button type="button" class="pea-type" id="peaType">or type it below ↓</button>
+    </div>
+  </div>
   <section class="daydream" id="daydream" aria-label="Daydream — create a dream by day">
     <div class="day-head">
       <div>
@@ -1806,18 +1848,11 @@
     </div>
     <div class="day-grid">
       <div class="day-form">
-        <div class="pea-scene" id="peaScene">
-          <div class="pea-bg" id="peaBg" role="img" aria-label="Coffee the cat asleep on top of ten mattresses, a tiny pea beneath the last one, and a glowing crystal ball on the table"></div>
-          <canvas class="pea-canvas" id="peaCanvas" aria-hidden="true"></canvas>
-          <div class="pea-head"><span class="pea-kicker" id="peaKicker">Manifestation</span><h3 id="peaTitle">Whisper a wish into the crystal ball</h3><p id="peaSub">Coffee is asleep on ten mattresses, waiting to dream it with you.</p></div>
-          <div class="pea-ui">
-            <label for="wishInput" class="pea-label">Your wish, as a future scene</label>
-            <div class="voice-field">
+        <label for="wishInput" class="pea-form-label" id="peaFormLabel">Your wish, as a future scene</label>
+        <div class="voice-field">
               <textarea id="wishInput" maxlength="600" placeholder="Picture it as if you are already there — where you are, the light, who is nearby."></textarea>
               <button type="button" class="mic-btn" id="wishMicBtn" aria-label="Record your wish by voice" aria-pressed="false" title="Voice input — tap the microphone"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="micGoldB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9e7ab"/><stop offset=".55" stop-color="#e9c96e"/><stop offset="1" stop-color="#b3852c"/></linearGradient></defs><path class="mic-arc" d="M2.9 9.6a5.2 5.2 0 0 0 0 4.8" stroke="#f0d48a" stroke-width="1.4" stroke-linecap="round" opacity=".5"/><path class="mic-arc" d="M21.1 9.6a5.2 5.2 0 0 1 0 4.8" stroke="#f0d48a" stroke-width="1.4" stroke-linecap="round" opacity=".5"/><g class="mic-core"><circle cx="12" cy="10.4" r="6.7" stroke="url(#micGoldB)" stroke-width="1.05" opacity=".85"/><path d="M12 .9l.58 1.3 1.3.58-1.3.58L12 4.66l-.58-1.3-1.3-.58 1.3-.58z" fill="url(#micGoldB)"/><rect x="9.7" y="4.9" width="4.6" height="8.2" rx="2.3" fill="url(#micGoldB)"/><path d="M9.95 7.4h4.1M9.85 9.5h4.3M9.95 11.6h4.1" stroke="#8a6414" stroke-width=".85" opacity=".55"/><path d="M10.65 5.9c-.32.85-.47 1.8-.47 2.85" stroke="#fff6d8" stroke-width="1" stroke-linecap="round" opacity=".8"/><path d="M7.45 10.3a4.55 4.55 0 0 0 9.1 0" stroke="url(#micGoldB)" stroke-width="1.25" stroke-linecap="round"/><path d="M12 15.4v2.7" stroke="url(#micGoldB)" stroke-width="1.35" stroke-linecap="round"/><rect x="8.8" y="18.6" width="6.4" height="1.35" rx=".67" fill="url(#micGoldB)"/><path d="M10.1 21.1h3.8" stroke="url(#micGoldB)" stroke-width="1.1" stroke-linecap="round" opacity=".7"/></g></svg></button>
             </div>
-          </div>
-        </div>
         <div class="voice-status" id="wishVoiceStatus" aria-live="polite" hidden></div>
         <div class="meta-row"><span id="wishCount">0 / 600</span></div>
         <div class="story-settings" id="storySettings" aria-label="Story direction settings">
@@ -7515,68 +7550,64 @@
 </script>
 <script>
 /* ——— Manifestation · Coffee on ten mattresses, and a crystal ball ———
-   The painted room, plus one canvas: the crystal ball swirls and brightens
-   while a wish is typed or spoken, and wish-sparkles drift up the mattress
-   stack to the sleeping cat. Tapping Create sends a burst up to her. */
+   The painted room fills the top of the page. Tap the big button and speak:
+   the view glides into the crystal ball, which swirls with the voice, and
+   wish-sparkles drift up the mattress stack to the sleeping cat. Create
+   turns the wish into its own view that unfolds in place, with a card. */
 (function(){
   var scene=document.getElementById('peaScene'); if(!scene) return;
-  var PEA={img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/10de4a82-92c5-4ea0-a2ac-b3e23504b6f4.webp',w:1100,h:1971,ball:{x:0.763,y:0.746,r:0.118},cat:{x:0.37,y:0.285},pea:{x:0.49,y:0.795},win:{x:0.49,y:0.135,r:0.11}};
-  var bg=document.getElementById('peaBg'), cv=document.getElementById('peaCanvas'), cx=cv.getContext('2d'), inp=document.getElementById('wishInput');
-  bg.style.backgroundImage='url('+PEA.img+')';
+  var PEA={img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/10de4a82-92c5-4ea0-a2ac-b3e23504b6f4.webp',w:1100,h:1971,ball:{x:0.763,y:0.746,r:0.118},cat:{x:0.37,y:0.285},pea:{x:0.49,y:0.795},win:{x:0.49,y:0.135,r:0.11},focus:{x0:0.04,x1:0.96,y0:0.16,y1:0.86}};
+  var art=document.getElementById('peaBg'), blur=document.getElementById('peaBlur'), zoom=document.getElementById('peaZoom'), cv=document.getElementById('peaCanvas'), cx=cv.getContext('2d'), inp=document.getElementById('wishInput');
+  var big=document.getElementById('peaMic'), small=document.getElementById('wishMicBtn'), status=document.getElementById('peaStatus');
+  art.style.backgroundImage=blur.style.backgroundImage='url('+PEA.img+')';
   var W=0,H=0,DPR=1, img={x:0,y:0,w:0,h:0}, energy=0, t0=performance.now(), parts=[], zs=[], running=false, raf=0, rec=false;
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function layout(){
-    var r=scene.getBoundingClientRect(); W=r.width; H=r.height; DPR=Math.min(2,window.devicePixelRatio||1);
+    var r=scene.getBoundingClientRect(); W=r.width; H=r.height; if(!W||!H) return; DPR=Math.min(2,window.devicePixelRatio||1);
     cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); cx.setTransform(DPR,0,0,DPR,0,0);
-    // background-size:cover, position center 30%
-    var s=Math.max(W/PEA.w,H/PEA.h), iw=PEA.w*s, ih=PEA.h*s;
-    img={x:(W-iw)/2, y:0, w:iw, h:ih};
+    // fit the band that holds the stack, the cat and the ball; fill the width when that is bigger
+    var f=PEA.focus, s=Math.min(H*0.9/((f.y1-f.y0)*PEA.h), W/((f.x1-f.x0)*PEA.w));
+    s=Math.max(s, Math.min(W/PEA.w, H*1.6/PEA.h));
+    var iw=PEA.w*s, ih=PEA.h*s, fcx=(f.x0+f.x1)/2*iw, fcy=(f.y0+f.y1)/2*ih;
+    var x=W/2-fcx, y=H*0.52-fcy;
+    if(iw>=W) x=Math.min(0,Math.max(W-iw,x)); if(ih>=H) y=Math.min(0,Math.max(H-ih,y));
+    img={x:x,y:y,w:iw,h:ih};
+    art.style.left=x+'px'; art.style.top=y+'px'; art.style.width=iw+'px'; art.style.height=ih+'px';
+    var b=P(PEA.ball); zoom.style.transformOrigin=b.x+'px '+b.y+'px';
   }
   function P(o){ return {x:img.x+o.x*img.w, y:img.y+o.y*img.h}; }
   function spark(burst){
-    var b=P(PEA.ball), c=P(PEA.cat), r=PEA.ball.r*img.w;
-    var a=Math.random()*Math.PI*2;
-    parts.push({x:b.x+Math.cos(a)*r*.5, y:b.y+Math.sin(a)*r*.5, sx:b.x, sy:b.y, tx:c.x+(Math.random()-.5)*60, ty:c.y+(Math.random()-.5)*30, t:0, d:(burst?1.4:2.4)+Math.random()*1.4, hue:Math.random()<.5?265:170, s:.8+Math.random()*1.6, wob:Math.random()*6});
+    var b=P(PEA.ball), c=P(PEA.cat), r=PEA.ball.r*img.w, a=Math.random()*Math.PI*2;
+    parts.push({x:b.x+Math.cos(a)*r*.5, y:b.y+Math.sin(a)*r*.5, tx:c.x+(Math.random()-.5)*60, ty:c.y+(Math.random()-.5)*30, t:0, d:(burst?1.4:2.4)+Math.random()*1.4, hue:Math.random()<.5?265:170, s:.8+Math.random()*1.6, wob:Math.random()*6});
   }
   function frame(now){
     raf=0; if(!running) return;
     var t=(now-t0)/1000; cx.clearRect(0,0,W,H);
     energy=Math.max(rec?0.75+0.25*Math.sin(t*6):0, energy*0.985);
     var b=P(PEA.ball), r=PEA.ball.r*img.w, e=energy;
-    // ball glow
     var g=cx.createRadialGradient(b.x,b.y,r*.2,b.x,b.y,r*(2.2+e*1.2));
     g.addColorStop(0,'rgba(200,180,255,'+(0.28+e*0.4)+')'); g.addColorStop(.5,'rgba(120,220,210,'+(0.1+e*0.18)+')'); g.addColorStop(1,'rgba(120,220,210,0)');
     cx.fillStyle=g; cx.beginPath(); cx.arc(b.x,b.y,r*(2.2+e*1.2),0,Math.PI*2); cx.fill();
-    // swirling mist inside the ball
-    cx.save(); cx.beginPath(); cx.arc(b.x,b.y,r*.93,0,Math.PI*2); cx.clip();
-    cx.globalCompositeOperation='lighter';
+    cx.save(); cx.beginPath(); cx.arc(b.x,b.y,r*.93,0,Math.PI*2); cx.clip(); cx.globalCompositeOperation='lighter';
     var sp=0.35+e*2.2;
     for(var k=0;k<5;k++){
-      var ang=t*sp*(k%2?1:-1)+k*1.3, rr=r*(0.25+0.12*Math.sin(t*0.7+k));
-      var mx=b.x+Math.cos(ang)*rr, my=b.y+Math.sin(ang*1.1)*rr*.8;
-      var mg=cx.createRadialGradient(mx,my,0,mx,my,r*(0.55+0.1*Math.sin(t+k)));
-      var col=k%3===0?'190,150,255':(k%3===1?'110,230,215':'255,190,240');
-      mg.addColorStop(0,'rgba('+col+','+(0.18+e*0.32)+')'); mg.addColorStop(1,'rgba('+col+',0)');
-      cx.fillStyle=mg; cx.beginPath(); cx.arc(mx,my,r,0,Math.PI*2); cx.fill();
+      var ang=t*sp*(k%2?1:-1)+k*1.3, rr=r*(0.25+0.12*Math.sin(t*0.7+k)), mx=b.x+Math.cos(ang)*rr, my=b.y+Math.sin(ang*1.1)*rr*.8;
+      var mg=cx.createRadialGradient(mx,my,0,mx,my,r*(0.55+0.1*Math.sin(t+k))), col=k%3===0?'190,150,255':(k%3===1?'110,230,215':'255,190,240');
+      mg.addColorStop(0,'rgba('+col+','+(0.18+e*0.32)+')'); mg.addColorStop(1,'rgba('+col+',0)'); cx.fillStyle=mg; cx.beginPath(); cx.arc(mx,my,r,0,Math.PI*2); cx.fill();
     }
+    if(e>0.4){ for(var q2=0;q2<3;q2++){ var la=t*3+q2*2.1, lx=b.x+Math.cos(la)*r*.5, ly=b.y+Math.sin(la)*r*.35; cx.fillStyle='rgba(255,255,255,'+(0.25*e)+')'; cx.beginPath(); cx.arc(lx,ly,1.6,0,Math.PI*2); cx.fill(); } }
     cx.restore(); cx.globalCompositeOperation='source-over';
-    // the pea, softly glowing
     var pe=P(PEA.pea), pg=cx.createRadialGradient(pe.x,pe.y,0,pe.x,pe.y,14+6*Math.sin(t*2));
     pg.addColorStop(0,'rgba(170,255,140,.55)'); pg.addColorStop(1,'rgba(170,255,140,0)'); cx.fillStyle=pg; cx.beginPath(); cx.arc(pe.x,pe.y,22,0,Math.PI*2); cx.fill();
-    // window stars twinkle
     var wn=P(PEA.win), wr=PEA.win.r*img.w;
-    for(var s=0;s<6;s++){ var sa=s*2.1, sx2=wn.x+Math.cos(sa)*wr*.6, sy2=wn.y+Math.sin(sa*1.3)*wr*.5, tw=.5+.5*Math.sin(t*2.3+s*1.7); cx.fillStyle='rgba(255,246,210,'+(0.15+tw*0.55)+')'; cx.beginPath(); cx.arc(sx2,sy2,1+tw*1.1,0,Math.PI*2); cx.fill(); }
-    // wish sparkles rising to the cat
+    for(var s2=0;s2<6;s2++){ var sa=s2*2.1, sx2=wn.x+Math.cos(sa)*wr*.6, sy2=wn.y+Math.sin(sa*1.3)*wr*.5, tw=.5+.5*Math.sin(t*2.3+s2*1.7); cx.fillStyle='rgba(255,246,210,'+(0.15+tw*0.55)+')'; cx.beginPath(); cx.arc(sx2,sy2,1+tw*1.1,0,Math.PI*2); cx.fill(); }
     if(!reduce&&Math.random()<e*0.28) spark(false);
     for(var i=parts.length-1;i>=0;i--){
       var q=parts[i]; q.t+=1/60/q.d; if(q.t>=1){ parts.splice(i,1); if(Math.random()<.35) zs.push({x:q.tx,y:q.ty,t:0}); continue; }
-      var u=q.t, ease=u*u*(3-2*u);
-      var x=q.x+(q.tx-q.x)*ease+Math.sin(u*Math.PI*3+q.wob)*20*(1-u), y=q.y+(q.ty-q.y)*ease-Math.sin(u*Math.PI)*40;
-      var al=Math.sin(u*Math.PI);
+      var u=q.t, ease=u*u*(3-2*u), x=q.x+(q.tx-q.x)*ease+Math.sin(u*Math.PI*3+q.wob)*20*(1-u), y=q.y+(q.ty-q.y)*ease-Math.sin(u*Math.PI)*40, al=Math.sin(u*Math.PI);
       cx.fillStyle='hsla('+q.hue+',90%,80%,'+al+')'; cx.beginPath(); cx.arc(x,y,q.s,0,Math.PI*2); cx.fill();
       cx.fillStyle='hsla('+q.hue+',90%,75%,'+(al*0.25)+')'; cx.beginPath(); cx.arc(x,y,q.s*3.2,0,Math.PI*2); cx.fill();
     }
-    // sleepy z's from Coffee
     var c=P(PEA.cat); if(Math.random()<0.006) zs.push({x:c.x+20,y:c.y-10,t:0});
     cx.font='italic 600 16px "Cormorant Garamond",serif';
     for(var j=zs.length-1;j>=0;j--){ var z=zs[j]; z.t+=1/60/2.6; if(z.t>=1){ zs.splice(j,1); continue; } cx.fillStyle='rgba(255,240,200,'+Math.sin(z.t*Math.PI)*0.85+')'; cx.fillText('z',z.x+z.t*26,z.y-z.t*40); }
@@ -7584,20 +7615,71 @@
   }
   function start(){ if(running) return; running=true; layout(); raf=requestAnimationFrame(frame); }
   function stop(){ running=false; if(raf) cancelAnimationFrame(raf); raf=0; }
-  window.addEventListener('resize',function(){ if(running) layout(); });
-  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting) start(); else stop(); }); },{threshold:0.05}).observe(scene); } else start();
+  /* Like the hearth: the room reaches up to the top of the page, under the
+     header and the collection buttons, which float over it. */
+  function place(){
+    if(scene.offsetParent===null){ scene.style.marginTop=''; return; }
+    scene.style.marginTop='0px';
+    var top=scene.getBoundingClientRect().top+window.scrollY;
+    scene.style.marginTop=(-top)+'px';
+    var strip=document.querySelector('.collect-strip')||document.querySelector('.mode-switch');
+    var hb=strip?strip.getBoundingClientRect().bottom+window.scrollY:0;
+    var hd=scene.querySelector('.pea-head'); if(hd) hd.style.paddingTop=Math.round(hb+12)+'px';
+    scene.style.height='';
+    var hh=scene.getBoundingClientRect().height; scene.style.height=Math.round(hh+top*0.6)+'px';
+    layout();
+  }
+  window.addEventListener('resize',function(){ place(); });
+  window.addEventListener('load',place); setTimeout(place,0); setTimeout(place,600);
+  ['modeDayBtn','modeNightBtn'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ setTimeout(place,40); setTimeout(place,400); }); });
+  document.addEventListener('dreamview',function(){ setTimeout(layout,50); });
+  ['modeDayBtn','modeNightBtn'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click',function(){ setTimeout(layout,60); setTimeout(layout,400); }); });
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting) start(); else stop(); }); },{threshold:0.02}).observe(scene); } else start();
+  var zh=function(){ return window.DREAM_LANG==='zh'; }, T=function(e,z){ return zh()?z:e; };
+  function setListening(on){
+    rec=on; scene.classList.toggle('listening',on); big.setAttribute('aria-pressed',on?'true':'false');
+    zoom.style.transform=on?'scale(1.75)':'';
+    status.textContent=on?T('Listening… tell the crystal ball your wish. Tap again when you’re done.','在听……把你的心愿告诉水晶球。说完再点一下。'):T('Tap and tell the crystal ball your wish','点一下，把心愿告诉水晶球');
+  }
+  big.addEventListener('click',function(){ if(small) small.click(); else if(inp) inp.focus(); });
+  if(small&&window.MutationObserver) new MutationObserver(function(){ setListening(small.getAttribute('aria-pressed')==='true'); }).observe(small,{attributes:true,attributeFilter:['aria-pressed']});
+  var vs=document.getElementById('wishVoiceStatus');
+  if(vs&&window.MutationObserver) new MutationObserver(function(){ if(!rec&&!vs.hidden&&vs.textContent.trim()) status.textContent=vs.textContent.trim(); }).observe(vs,{childList:true,characterData:true,subtree:true,attributes:true});
+  document.getElementById('peaType').addEventListener('click',function(){ if(inp){ inp.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(function(){ inp.focus({preventScroll:true}); },350); } });
   if(inp){
-    inp.addEventListener('input',function(){ energy=Math.min(1,energy+0.22); scene.classList.add('wishing'); clearTimeout(inp.__pt); inp.__pt=setTimeout(function(){ if(!rec) scene.classList.remove('wishing'); },1800); });
+    inp.addEventListener('input',function(){ energy=Math.min(1,energy+0.22); });
     inp.addEventListener('focus',function(){ energy=Math.max(energy,0.3); });
   }
-  var mic=document.getElementById('wishMicBtn');
-  if(mic&&window.MutationObserver) new MutationObserver(function(){ rec=mic.getAttribute('aria-pressed')==='true'; scene.classList.toggle('wishing',rec); }).observe(mic,{attributes:true,attributeFilter:['aria-pressed']});
-  var cb=document.getElementById('createDaydreamBtn');
+  // ——— Create: the wish becomes its own view, unfolding in place ———
+  var panel=document.getElementById('panelDay'), out=document.getElementById('dayOutput'), body=document.getElementById('dayOutputBody'), cb=document.getElementById('createDaydreamBtn');
   if(cb) cb.addEventListener('click',function(){ if(!inp||inp.value.trim().length<12) return; energy=1; for(var i=0;i<38;i++) setTimeout(function(){ spark(true); },i*28); },true);
+  if(out){
+    var back=document.createElement('button'); back.type='button'; back.className='day-back'; back.id='dayBack'; out.insertBefore(back,out.firstChild);
+    back.addEventListener('click',function(){ panel.classList.remove('day-reveal'); window.scrollTo({top:0}); setTimeout(layout,60); });
+    new MutationObserver(function(){ if(!out.hidden&&!panel.classList.contains('day-reveal')){ setTimeout(function(){ panel.classList.add('day-reveal'); window.scrollTo({top:0}); },700); } }).observe(out,{attributes:true,attributeFilter:['hidden']});
+  }
+  var shownFor='';
+  if(body&&window.MutationObserver) new MutationObserver(function(){
+    var sc=body.querySelector('.day-scene'); if(!sc) return;
+    var key=sc.textContent.slice(0,60); if(key===shownFor) return; shownFor=key;
+    body.classList.remove('unfold'); void body.offsetWidth; body.classList.add('unfold');
+    var seed=body.querySelector('.seed-box blockquote'), title=body.querySelector('.day-scene-title');
+    setTimeout(function(){ popCard(title?title.textContent:'', seed?seed.textContent:''); },1500);
+  }).observe(body,{childList:true});
+  function popCard(title,seed){
+    var old=document.querySelector('.pea-pop'); if(old) old.remove();
+    var d=document.createElement('div'); d.className='pea-pop'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true');
+    d.innerHTML='<div class="pea-pop-card"><div class="pp-orb" aria-hidden="true"></div><div class="pp-k">'+T('Your wish is a scene now','你的心愿，成了一个场景')+'</div><h4></h4>'+(seed?'<blockquote></blockquote>':'')+'<button type="button">'+T('Read & listen ✦','去读、去听 ✦')+'</button></div>';
+    d.querySelector('h4').textContent=title||T('Your daydream','你的白日梦'); if(seed) d.querySelector('blockquote').textContent=seed;
+    function close(){ d.remove(); }
+    d.querySelector('button').addEventListener('click',close); d.addEventListener('click',function(e){ if(e.target===d) close(); });
+    document.body.appendChild(d);
+  }
   function texts(){
-    var zh=window.DREAM_LANG==='zh', T=function(e,z){return zh?z:e;};
-    var k=document.getElementById('peaKicker'), ti=document.getElementById('peaTitle'), su=document.getElementById('peaSub');
+    var k=document.getElementById('peaKicker'), ti=document.getElementById('peaTitle'), su=document.getElementById('peaSub'), ty=document.getElementById('peaType'), fl=document.getElementById('peaFormLabel'), bk=document.getElementById('dayBack');
     if(k) k.textContent=T('Manifestation','造梦'); if(ti) ti.textContent=T('Whisper a wish into the crystal ball','对着水晶球，轻声说出一个心愿'); if(su) su.textContent=T('Coffee is asleep on ten mattresses, waiting to dream it with you.','可可睡在十层床垫上，等着和你一起把它梦出来。');
+    if(ty) ty.textContent=T('or type it below ↓','或者在下面写下来 ↓'); if(fl) fl.textContent=T('Your wish, as a future scene','你的心愿，写成未来的一个场景'); if(bk) bk.textContent=T('← Make another wish','← 再许一个愿');
+    if(!rec) status.textContent=T('Tap and tell the crystal ball your wish','点一下，把心愿告诉水晶球');
   }
   texts(); document.addEventListener('dreamlang',texts);
 })();
