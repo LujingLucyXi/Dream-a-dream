@@ -1234,8 +1234,12 @@
   .shelf2-page{flex:0 0 100%;scroll-snap-align:center;padding:0 4px}
   .shelf2-art{position:relative;width:100%;max-width:440px;margin:0 auto;aspect-ratio:3/4;background:url(https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/5d82b600-1b2a-4f8a-9b44-00e2752cdbf6.jpg) center/100% 100% no-repeat;border-radius:14px}
   .shelf2-row{position:absolute;left:15.5%;right:15.5%;display:flex;justify-content:space-around;align-items:flex-end;height:22%;transform:translateY(-100%)}
-  .shelf2-slot{flex:0 0 24%;display:flex;align-items:flex-end;justify-content:center;height:100%;background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .shelf2-slot svg{width:88%;height:auto;max-height:92%;filter:drop-shadow(0 6px 5px rgba(0,0,0,.55));transition:transform .25s ease}
+  .shelf2-slot{flex:0 0 40%;display:flex;align-items:flex-end;justify-content:center;height:100%;background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .shelf2-slot img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 6px 5px rgba(0,0,0,.55));transition:transform .25s ease}
+  .shelf2-slot.sel img{filter:drop-shadow(0 0 14px rgba(240,212,138,.75)) drop-shadow(0 6px 5px rgba(0,0,0,.5));transform:translateY(-4px)}
+  .shelf2-slot.arrive img{animation:shelfArrive 1.4s ease-out 2}
+  .dm-pop-illus img{width:100%;height:100%;object-fit:contain}
+  .shelf2-slot svg{width:70%;height:auto;max-height:92%;filter:drop-shadow(0 6px 5px rgba(0,0,0,.55));transition:transform .25s ease}
   .shelf2-slot.locked{cursor:default}
   .shelf2-slot.locked svg{opacity:.32;filter:grayscale(.7) drop-shadow(0 4px 4px rgba(0,0,0,.4));width:62%}
   .shelf2-slot.sel svg{filter:drop-shadow(0 0 14px rgba(240,212,138,.75)) drop-shadow(0 6px 5px rgba(0,0,0,.5));transform:translateY(-4px)}
@@ -1408,7 +1412,7 @@
   </div>
 
   <div class="collect-strip" role="group" aria-label="Your collections">
-    <button type="button" class="collect-btn" id="shelfOpenBtn"><span class="cb-ic" aria-hidden="true">✦</span><span id="shelfBtnLabel">Souvenir shelf</span><b id="shelfCount">0 of 100</b></button>
+    <button type="button" class="collect-btn" id="shelfOpenBtn"><span class="cb-ic" aria-hidden="true">✦</span><span id="shelfBtnLabel">Souvenir shelf</span><b id="shelfCount">0 of 50</b></button>
     <button type="button" class="collect-btn" id="passportOpenBtn"><span class="cb-ic" aria-hidden="true">☾</span><span id="passportBtnLabel">Dream passport</span><b id="passportCount">0 places visited</b></button>
   </div>
 
@@ -5351,6 +5355,7 @@
     moon:'<circle cx="36" cy="37" r="24" style="fill:var(--i2)"/><circle cx="36" cy="37" r="19.5" style="fill:none;stroke:var(--i3)" stroke-width="2.5"/><path style="fill:var(--i3)" d="M45 25a12.5 12.5 0 1 0 4 16.5A10 10 0 0 1 45 25z"/><path style="fill:var(--i3)" d="M24 20l1.2 2.9 2.9 1.2-2.9 1.2L24 28.2l-1.2-2.9-2.9-1.2 2.9-1.2z"/><path style="stroke:var(--i3)" stroke-width="3" fill="none" d="M29 13a7 7 0 0 1 14 0"/>'
   };
   function illusFor(g){
+    if(GIFT_IMG[g.id]) return '<img src="'+GIFT_IMG[g.id]+'" alt="" loading="lazy" decoding="async">';
     var p=PALETTES[g.id%PALETTES.length];
     return '<svg viewBox="0 0 72 72" aria-hidden="true" style="--i1:'+p[0]+';--i2:'+p[1]+';--i3:'+p[2]+'">'+(ILLUS[g.i]||ILLUS.moon)+'</svg>';
   }
@@ -5500,6 +5505,16 @@
     G('A small gold compass rose','一朵小小的金色罗盘花','compass','dawn',['compass rose','north','罗盘','北'],'Write your north in one line — the direction, not the destination — and put it where mornings can see it.','用一行字写下你的北——是方向，不是目的地——放在每个早晨能看见的地方。')
   ];
   GIFTS.forEach(function(g,i){ g.id=i; });
+  /* Fifty keepsakes, five per theme, each hand-painted. Ids stay stable;
+     the fifty retired keepsakes pass their words on to the closest kept
+     one in the same theme, and any saved on a shelf move there too. */
+  var KEEP={0:[6,10],1:[9],2:[4,7],3:[],5:[11,8],16:[12,15],17:[],14:[],13:[22,21],23:[20,18,19],24:[32],28:[31,26],29:[34],30:[],27:[35,33,25],36:[45],37:[42],38:[],43:[40,39],41:[44,46,47],48:[],49:[],52:[51,50],54:[56],53:[55,57],58:[67,63,64],59:[],60:[62],61:[],66:[65],68:[],69:[],70:[71,74],77:[75,76],73:[72],78:[],83:[],81:[82,85],84:[],80:[79],86:[92],88:[89],93:[],91:[87],90:[],94:[96],95:[],97:[],98:[],99:[]};
+  var RETIRED_TO={};
+  Object.keys(KEEP).forEach(function(k){ var to=+k; KEEP[k].forEach(function(r){ RETIRED_TO[r]=to; GIFTS[to].k=GIFTS[to].k.concat(GIFTS[r].k); GIFTS[r].retired=true; }); });
+  var LIVE=GIFTS.filter(function(g){ return !g.retired; });
+  var GIFT_TOTAL=LIVE.length;
+  var GIFT_IMG={};   /* gift id -> painted image URL */
+
   function giftName(g){ return window.DREAM_LANG==='zh'?g.z:g.n; }
   function giftTask(g){ return window.DREAM_LANG==='zh'?g.tz:g.t; }
 
@@ -5539,6 +5554,11 @@
   var lastReveal=null;     /* {giftId, fresh, newStamps:[placeIds], date} */
   var newShelf=false, newPass=false;
   function shelfEntry(id){ for(var i=0;i<shelf.length;i++) if(shelf[i].id===id) return shelf[i]; return null; }
+  function normalizeShelf(){
+    var seen={}, out=[];
+    shelf.forEach(function(e){ if(!e) return; var id=(RETIRED_TO[e.id]!=null)?RETIRED_TO[e.id]:e.id; if(seen[id]) return; seen[id]=1; if(id!==e.id){ e.id=id; } out.push(e); });
+    if(out.length!==shelf.length||out.some(function(e,i){ return e!==shelf[i]; })){ shelf.length=0; Array.prototype.push.apply(shelf,out); }
+  }
   function stampCount(){ return Object.keys(stamps).length; }
 
   /* Whole-word matching, so "car" no longer hides inside "scared",
@@ -5562,7 +5582,7 @@
   function pickGift(text,syms){
     syms=syms||[];
     var low=(' '+(text||'')+' ').toLowerCase();
-    var ranked=GIFTS.map(function(g){
+    var ranked=LIVE.map(function(g){
       var s=0, from=null;
       syms.forEach(function(sy){
         var nm=' '+String(sy.name||'').toLowerCase()+' ', sc=0;
@@ -5685,11 +5705,12 @@
 
   /* ——— The strip under the mode switch ——— */
   function renderStrip(){
+    normalizeShelf();
     var sc=$('shelfCount'), pc=$('passportCount'), sl=$('shelfBtnLabel'), pl=$('passportBtnLabel');
     var n=shelf.length, pn=stampCount();
     if(sl) sl.textContent=L('Souvenir shelf','纪念品架子');
     if(pl) pl.textContent=L('Dream passport','梦境护照');
-    if(sc) sc.textContent=window.DREAM_LANG==='zh'?(n+' / 100'):(n+' of 100');
+    if(sc) sc.textContent=window.DREAM_LANG==='zh'?(n+' / '+GIFT_TOTAL):(n+' of '+GIFT_TOTAL);
     if(pc) pc.textContent=window.DREAM_LANG==='zh'?('已到访 '+pn+' 处'):(pn+(pn===1?' place visited':' places visited'));
     var sb=$('shelfOpenBtn'), pb=$('passportOpenBtn');
     if(sb){ var b1=sb.querySelector('.cb-new'); if(newShelf&&!b1){ b1=document.createElement('span'); b1.className='cb-new'; b1.textContent=L('New','新'); sb.appendChild(b1); } if(!newShelf&&b1) b1.remove(); }
@@ -5704,21 +5725,22 @@
   function catOfGift(id){ for(var i=0;i<GIFTS.length;i++) if(GIFTS[i].id===id) return GIFTS[i].c; return null; }
   function renderShelf(){
     var body=$('shelfBody'); if(!body) return;
+    normalizeShelf();
     var n=shelf.length, doneN=shelf.filter(function(e){return e.taskDone;}).length;
     if(selectedGift!=null&&!shelfEntry(selectedGift)) selectedGift=null;
     var zh=window.DREAM_LANG==='zh';
     var html='<div class="kicker">Dreameri · '+L('Collection','收藏')+'</div>'
       +'<h2 class="coll-title">'+L('The Souvenir <em>Shelf</em>','纪念品<em>架子</em>')+'</h2>'
-      +'<div class="coll-count">'+(zh?('已收集 '+n+' / 100'):(n+' of 100 collected'))+(doneN?(' · '+(zh?('已完成 '+doneN+' 个小任务'):(doneN+(doneN===1?' task done':' tasks done')))):'')+'</div>'
-      +'<div class="coll-progress"><i style="width:'+n+'%"></i></div>';
+      +'<div class="coll-count">'+(zh?('已收集 '+n+' / '+GIFT_TOTAL):(n+' of '+GIFT_TOTAL+' collected'))+(doneN?(' · '+(zh?('已完成 '+doneN+' 个小任务'):(doneN+(doneN===1?' task done':' tasks done')))):'')+'</div>'
+      +'<div class="coll-progress"><i style="width:'+Math.round(n*100/GIFT_TOTAL)+'%"></i></div>';
     html+='<div class="shelf2-nav"><button type="button" class="shelf2-arrow" id="shelfPrev" aria-label="'+L('Previous shelf','上一个架子')+'">‹</button><div class="shelf2-label" id="shelfLabel"></div><button type="button" class="shelf2-arrow" id="shelfNext" aria-label="'+L('Next shelf','下一个架子')+'">›</button></div>';
     html+='<div class="shelf2-track" id="shelfTrack">';
     CAT_ORDER.forEach(function(cat){
-      var items=GIFTS.filter(function(g){ return g.c===cat; });
+      var items=LIVE.filter(function(g){ return g.c===cat; });
       var detail='';
       html+='<section class="shelf2-page" data-cat="'+cat+'" aria-label="'+esc(zh?CATS[cat].labelZh:CATS[cat].labelEn)+'"><div class="shelf2-art">';
       for(var r=0;r<3;r++){
-        var row=items.slice(r*4,r*4+4); if(!row.length) continue;
+        var row=items.slice(r*2,r===2?r*2+(items.length-4):r*2+2); if(!row.length) continue;
         html+='<div class="shelf2-row" style="top:'+(PLANK_Y[r]*100)+'%">';
         row.forEach(function(g){
           var e=shelfEntry(g.id);
@@ -5745,7 +5767,7 @@
     var track=$('shelfTrack');
     function label(){
       var cat=CAT_ORDER[shelfIdx], c=CATS[cat];
-      var got=GIFTS.filter(function(g){ return g.c===cat&&shelfEntry(g.id); }).length, all=GIFTS.filter(function(g){ return g.c===cat; }).length;
+      var got=LIVE.filter(function(g){ return g.c===cat&&shelfEntry(g.id); }).length, all=LIVE.filter(function(g){ return g.c===cat; }).length;
       $('shelfLabel').innerHTML='<b>'+esc(zh?c.labelZh:c.labelEn)+'</b><span>'+(zh?('第 '+(shelfIdx+1)+' / '+CAT_ORDER.length+' 层 · 找到 '+got+' / '+all):('Shelf '+(shelfIdx+1)+' of '+CAT_ORDER.length+' · '+got+' of '+all+' found'))+'</span>';
       $('shelfPrev').disabled=shelfIdx===0; $('shelfNext').disabled=shelfIdx===CAT_ORDER.length-1;
       Array.prototype.forEach.call($('shelfDots').children,function(d,i){ d.setAttribute('aria-current',i===shelfIdx?'true':'false'); });
