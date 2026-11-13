@@ -1122,6 +1122,21 @@
   #storySettings .plan-bar{margin-top:10px;padding:8px 11px}
   #storySettings .weave-box{margin-top:10px;padding-top:9px}
   #daydream .day-cta{margin-top:12px}
+
+  /* ——— Accounts · 账户 ——— */
+  .acct .acct-email{margin-top:2px}
+  .acct .acct-plan{color:var(--gold2);font-weight:800}
+  .acct .acct-err{color:#f3b3a6}
+  .acct .acct-del{border-color:rgba(243,179,166,.45);color:#f3c4ba}
+  .acct .acct-del.armed{background:rgba(243,120,100,.18);border-color:#f3b3a6;color:#ffe3dc}
+  .acct-keep{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;max-width:calc(100% - 24px);background:rgba(20,27,52,.96);border:1px solid rgba(240,212,138,.45);border-radius:999px;padding:8px 8px 8px 16px;box-shadow:0 14px 34px rgba(2,4,12,.5);color:#eef0ff;font-size:13.5px;animation:acctUp .35s ease-out}
+  .acct-keep-go{flex:none;background:var(--gold2);color:#221a05;border:none;border-radius:999px;padding:8px 13px;font-weight:900;font-size:13px}
+  .acct-keep-x{flex:none;background:transparent;border:none;color:#b9c0da;font-size:20px;line-height:1;padding:2px 8px}
+  @media(max-width:520px){.acct-keep{border-radius:18px;flex-wrap:wrap;padding:12px 12px 12px 16px}.acct-keep>span{flex:1 1 100%}}
+  .acct-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;z-index:61;background:rgba(20,27,52,.96);border:1px solid rgba(240,212,138,.4);color:#eef0ff;border-radius:999px;padding:10px 16px;font-size:13.5px;transition:opacity .25s,transform .25s;pointer-events:none;max-width:calc(100% - 24px)}
+  .acct-toast.show{opacity:1;transform:translate(-50%,0)}
+  @keyframes acctUp{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+  @media(prefers-reduced-motion:reduce){.acct-keep{animation:none}.acct-toast{transition:none}}
 </style>
 </head>
 <body>
@@ -1136,6 +1151,12 @@
 
   <section class="byok-panel" id="byokPanel" hidden aria-label="Settings">
     <div class="settings-head"><h3 class="settings-title">Settings</h3><button type="button" class="settings-close" id="byokClose" aria-label="Close settings">×</button></div>
+
+    <div class="acct" id="acctSection" hidden>
+      <p class="settings-label" id="acctLabel">Your account</p>
+      <div id="acctBody"></div>
+    </div>
+    <hr class="settings-sep" id="acctSep" hidden />
 
     <p class="settings-label">Your plan</p>
     <h4 class="byok-title">Free version</h4>
@@ -2608,6 +2629,8 @@
     body.innerHTML=html;
   }
   window.renderDreamJourney=renderJourney;
+  /* Accounts read and restore the journal through this (see the Accounts script). */
+  window.__dreamJournalIO={get:function(){ return journal.slice(); },set:function(a){ journal.length=0; Array.prototype.push.apply(journal,Array.isArray(a)?a:[]); try{ renderJourney(); }catch(e){} if(typeof refreshWeaveList==='function'){ try{ refreshWeaveList(); }catch(e){} } }};
   /* ——— The ONE completion path · 唯一的完成路径 ———
      Every finished reading — cloud or built-in, English or Chinese,
      first or repeat — lands here, and here only. It always, without
@@ -4948,7 +4971,7 @@
     if(st&&(st.textContent==='No story yet.'||st.textContent==='还没有故事。')) st.textContent=(lang==='zh'?'还没有故事。':'No story yet.');
   }
   function setLang(lang){
-    window.DREAM_LANG=lang;
+    window.DREAM_LANG=lang; try{ document.dispatchEvent(new CustomEvent('dreamlang',{detail:lang})); }catch(e){}
     if(window.renderDreamJourney){ try{ window.renderDreamJourney(); }catch(e){} }
     if(window.renderCollections){ try{ window.renderCollections(); }catch(e){} }
     document.documentElement.lang=(lang==='zh'?'zh-CN':'en');
@@ -5484,10 +5507,272 @@
   var pc2=$('passportClose'); if(pc2) pc2.addEventListener('click',function(){ closePage($('passportPage')); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closePage($('shelfPage')); closePage($('passportPage')); } });
 
+  /* Accounts read and restore the shelf and passport through this (see the Accounts script). */
+  window.__dreamCollectionsIO={get:function(){ return {shelf:JSON.parse(JSON.stringify(shelf)),stamps:JSON.parse(JSON.stringify(stamps))}; },set:function(o){ o=o||{}; shelf.length=0; Array.prototype.push.apply(shelf,Array.isArray(o.shelf)?o.shelf:[]); stamps=(o.stamps&&typeof o.stamps==='object')?o.stamps:{}; lastReveal=null; newShelf=false; newPass=false; }};
   window.renderCollections=function(){ renderStrip(); renderReveal(true); if($('shelfPage').classList.contains('open')) renderShelf(); if($('passportPage').classList.contains('open')) renderPassport(); };
   renderStrip();
 })();
 </script>
 
+<script src="vendor/supabase-js-2.119.0.js"></script>
+<script>
+/* ——— Accounts · 账户 ———
+   Sign in with an email link (no password) so the souvenir shelf, dream
+   passport and dream journey are kept across nights and devices.
+   - Anyone can use the app signed out, exactly as before. After the first
+     thing they collect, a gentle note offers to keep it by signing in.
+   - On sign-in, what was collected this visit is merged into what was saved
+     before; from then on every change is saved automatically.
+   - The Account section at the top of Settings shows the email, a display
+     name, the plan, Sign out and Delete account.
+   Data lives in the Supabase tables dream_profiles and dream_user_state
+   (supabase/migrations/*_dream_accounts.sql); each person can read and write
+   only their own rows. The publishable key below is meant to be public.
+   If the key is empty or the library fails to load, nothing here shows and
+   the app behaves exactly as it did before accounts. */
+(function(){
+  var SUPABASE_URL='https://jlvlmuyegirglbyrnfbl.supabase.co';
+  var SUPABASE_KEY='sb_publishable_9o7Xw_nHYbbl6065PWzOIg_cSVlbdBY'; /* publishable key: safe to be public; access is enforced by Row Level Security */
+  var STATE_VERSION=1, JOURNAL_KEEP=200, SAVE_EVERY_MS=4000;
+  /* The email link opens in a new tab, which starts empty. So what was
+     collected before asking for the link is held on this device until the
+     link is opened, then merged in and erased. Kept at most a day. */
+  var PENDING_KEY='dream-a-dream.pending-collections.v1', PENDING_MAX_MS=24*3600*1000;
+  function holdPending(st){ try{ if(!isEmpty(st)) localStorage.setItem(PENDING_KEY,JSON.stringify({t:Date.now(),st:st})); }catch(e){} }
+  function takePending(){ try{ var raw=localStorage.getItem(PENDING_KEY); localStorage.removeItem(PENDING_KEY); if(!raw) return null; var p=JSON.parse(raw); return (p&&p.st&&Date.now()-p.t<PENDING_MAX_MS)?p.st:null; }catch(e){ return null; } }
+
+  function $(id){ return document.getElementById(id); }
+  function T(en,zh){ return window.DREAM_LANG==='zh'?zh:en; }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function jIO(){ return window.__dreamJournalIO; }
+  function cIO(){ return window.__dreamCollectionsIO; }
+
+  var section=$('acctSection'), sep=$('acctSep');
+  var onFile=location.protocol==='file:';
+  if(!section) return;
+  if(!SUPABASE_KEY||!window.supabase||!window.supabase.createClient||!jIO()||!cIO()) return;
+
+  var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'implicit'}});
+  var user=null, profile=null, view='idle', note='', busy=false, deleteArmed=false;
+  var synced=false, lastSaved=null, langTouched=false, prompted=false;
+
+  /* ——— Saved state ——— */
+  function snapshot(){
+    var c=cIO().get();
+    return {v:STATE_VERSION,journal:jIO().get().slice(0,JOURNAL_KEEP),shelf:c.shelf||[],stamps:c.stamps||{}};
+  }
+  function isEmpty(st){ return !(st.journal&&st.journal.length)&&!(st.shelf&&st.shelf.length)&&!Object.keys(st.stamps||{}).length; }
+  function applyState(st){
+    st=st||{};
+    jIO().set(Array.isArray(st.journal)?st.journal:[]);
+    cIO().set({shelf:Array.isArray(st.shelf)?st.shelf:[],stamps:(st.stamps&&typeof st.stamps==='object')?st.stamps:{}});
+    if(window.renderCollections){ try{ window.renderCollections(); }catch(e){} }
+  }
+  /* What was collected this visit (before signing in) joins what was saved
+     before: souvenirs by id, newest dreams first, and for stamps the higher
+     visit count. Merging the same thing twice changes nothing, so two tabs
+     signing in at once can never double anything up. */
+  function merge(saved,local){
+    saved=saved||{}; local=local||{};
+    var shelf=[], seen={};
+    (local.shelf||[]).concat(saved.shelf||[]).forEach(function(e){
+      if(!e||e.id==null) return;
+      if(seen[e.id]){ if(e.taskDone) seen[e.id].taskDone=true; return; }
+      var c={}; for(var k in e) c[k]=e[k]; seen[e.id]=c; shelf.push(c);
+    });
+    var stamps={}, k2;
+    for(k2 in (saved.stamps||{})){ stamps[k2]=JSON.parse(JSON.stringify(saved.stamps[k2])); }
+    for(k2 in (local.stamps||{})){
+      var l=local.stamps[k2];
+      if(!stamps[k2]){ stamps[k2]=JSON.parse(JSON.stringify(l)); continue; }
+      stamps[k2].count=Math.max(stamps[k2].count||0,l.count||0);
+      stamps[k2].last=l.last||stamps[k2].last;
+      if(!stamps[k2].label&&l.label) stamps[k2].label=l.label;
+    }
+    var journal=[], jseen={};
+    (local.journal||[]).concat(saved.journal||[]).forEach(function(j){
+      var key=(j&&j.title||'')+'|'+(j&&j.snippet||'');
+      if(jseen[key]) return; jseen[key]=1; journal.push(j);
+    });
+    return {v:STATE_VERSION,journal:journal.slice(0,JOURNAL_KEEP),shelf:shelf,stamps:stamps};
+  }
+  function loadAndMerge(){
+    return sb.from('dream_user_state').select('data').eq('user_id',user.id).maybeSingle().then(function(res){
+      if(res.error) throw res.error;
+      var saved=res.data&&res.data.data;
+      var held=takePending(), local=snapshot();
+      if(held) local=merge(held,local);
+      var next=saved?(isEmpty(local)?saved:merge(saved,local)):local;
+      applyState(next);
+      synced=true; lastSaved=saved?JSON.stringify(saved):null;
+      return saveNow();
+    });
+  }
+  function saveNow(){
+    if(!user||!synced) return Promise.resolve();
+    var st=snapshot(), json=JSON.stringify(st);
+    if(json===lastSaved) return Promise.resolve();
+    return sb.from('dream_user_state').upsert({user_id:user.id,data:st,updated_at:new Date().toISOString()},{onConflict:'user_id'}).then(function(res){
+      if(!res.error) lastSaved=json;
+    });
+  }
+  setInterval(function(){
+    if(user&&synced){ saveNow(); return; }
+    if(!user&&view==='sent') holdPending(snapshot());
+    if(!user&&!prompted&&!onFile&&!isEmpty(snapshot())){ prompted=true; showKeepNote(); }
+  },SAVE_EVERY_MS);
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') saveNow(); });
+
+  /* ——— Profile ——— */
+  function loadProfile(){
+    return sb.from('dream_profiles').select('display_name,lang,plan').eq('user_id',user.id).maybeSingle().then(function(res){
+      if(res.error) throw res.error;
+      if(res.data){ profile=res.data; return; }
+      var lang=window.DREAM_LANG==='zh'?'zh':'en';
+      return sb.from('dream_profiles').insert({user_id:user.id,lang:lang}).select('display_name,lang,plan').single().then(function(r2){
+        profile=r2.data||{display_name:null,lang:lang,plan:'free'};
+      });
+    }).then(function(){
+      if(profile&&profile.lang&&profile.lang!==window.DREAM_LANG&&!langTouched&&window.setDreamLang){ window.setDreamLang(profile.lang); }
+    });
+  }
+  document.addEventListener('dreamlang',function(e){
+    langTouched=true; render();
+    if(user&&profile&&e.detail&&profile.lang!==e.detail){
+      profile.lang=e.detail;
+      sb.from('dream_profiles').update({lang:e.detail,updated_at:new Date().toISOString()}).eq('user_id',user.id).then(function(){});
+    }
+  });
+
+  /* ——— Sign-in state ——— */
+  var handled=null;
+  sb.auth.onAuthStateChange(function(event,session){
+    var u=session&&session.user||null;
+    if(u&&handled===u.id){ user=u; return; }            /* token refresh: nothing to redo */
+    if(u){
+      handled=u.id; user=u; view='in'; note=''; render();
+      Promise.all([loadProfile(),loadAndMerge()]).then(function(){
+        if(event==='SIGNED_IN'&&/access_token|type=magiclink/.test(location.hash+location.search)) toastNote(T('Signed in — your shelf, passport and dreams are kept now ✦','已登录——你的纪念品架子、护照和梦都会被保存 ✦'));
+        render();
+      }).catch(function(){ note=T('Signed in, but your saved dreams could not be loaded just now. They are safe — try again in a moment.','已登录，但暂时没能载入你保存的梦。它们是安全的——稍后再试。'); render(); });
+      hideKeepNote();
+    } else {
+      var was=user; user=null; profile=null; handled=null; synced=false; lastSaved=null; view='idle'; deleteArmed=false;
+      if(was){ applyState({}); }                           /* leave nothing personal on a shared device */
+      render();
+    }
+  });
+
+  /* ——— Account section in Settings ——— */
+  function planLabel(){ return profile&&profile.plan==='full'?T('Full version','完整版'):T('Free version','免费版'); }
+  function render(){
+    section.hidden=false; if(sep) sep.hidden=false;
+    var lab=$('acctLabel'); if(lab) lab.textContent=T('Your account','你的账户');
+    var body=$('acctBody'); if(!body) return;
+    var h='';
+    if(onFile){
+      h='<p class="byok-intro">'+T('Sign-in works on the website version of Dreameri, not on a file opened from this computer.','登录只在网站版的“解梦 · 造梦”里可用，从电脑上直接打开的文件里不行。')+'</p>';
+    } else if(!user){
+      if(view==='sent'){
+        h='<h4 class="byok-title">'+T('Check your inbox','去收件箱看看')+'</h4>'
+         +'<p class="byok-intro">'+T('We sent a sign-in link to ','登录链接已发到 ')+'<b>'+esc(note)+'</b>'+T('. Open it on this device to sign in — no password needed.','。在这台设备上打开它就能登录——不需要密码。')+'</p>'
+         +'<div class="byok-actions"><button type="button" class="byok-btn" id="acctAgain">'+T('Use a different email','换一个邮箱')+'</button></div>';
+      } else {
+        h='<h4 class="byok-title">'+T('Keep your dreams','把你的梦留下来')+'</h4>'
+         +'<p class="byok-intro">'+T('Sign in to keep your souvenir shelf, passport stamps and dream journey from night to night — on any device. No password: we email you a link.','登录后，你的纪念品架子、护照印章和梦之旅程会一夜一夜留下来——换设备也在。不需要密码：我们会把链接发到你的邮箱。')+'</p>'
+         +'<label class="byok-label" for="acctEmail">'+T('Email','邮箱')+'</label>'
+         +'<div class="byok-field"><input type="email" id="acctEmail" placeholder="you@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" /></div>'
+         +(view==='error'?'<p class="byok-status acct-err" role="status">'+esc(note)+'</p>':'')
+         +'<div class="byok-actions"><button type="button" class="byok-save" id="acctSend"'+(busy?' disabled':'')+'>'+(busy?T('Sending…','发送中…'):T('Email me a sign-in link','把登录链接发给我'))+'</button></div>';
+      }
+    } else {
+      var name=profile&&profile.display_name||'';
+      h='<h4 class="byok-title">'+(name?esc(name):T('Signed in','已登录'))+'</h4>'
+       +'<p class="byok-intro acct-email">'+esc(user.email||'')+' · <span class="acct-plan">'+planLabel()+'</span></p>'
+       +(note?'<p class="byok-status" role="status">'+esc(note)+'</p>':'')
+       +'<label class="byok-label" for="acctName">'+T('Your name in the app','你在应用里的名字')+'</label>'
+       +'<div class="byok-field"><input type="text" id="acctName" maxlength="60" value="'+esc(name)+'" placeholder="'+T('Optional','可不填')+'" autocomplete="nickname" /><button type="button" class="byok-show" id="acctNameSave">'+T('Save','保存')+'</button></div>'
+       +'<p class="byok-help">'+(synced?T('Your shelf, passport and dream journey are saved automatically.','你的纪念品架子、护照和梦之旅程会自动保存。'):T('Loading what you saved…','正在载入你保存的内容…'))+'</p>'
+       +'<div class="byok-actions"><button type="button" class="byok-btn" id="acctOut">'+T('Sign out','退出登录')+'</button>'
+       +'<button type="button" class="byok-btn acct-del'+(deleteArmed?' armed':'')+'" id="acctDel"'+(busy?' disabled':'')+'>'+(deleteArmed?T('Tap again to delete everything','再点一次，删除全部'):T('Delete my account','删除我的账户'))+'</button></div>'
+       +(deleteArmed?'<p class="byok-help acct-err">'+T('This deletes your account, your souvenirs, stamps and saved dreams for good. It cannot be undone.','这会永久删除你的账户、纪念品、印章和保存的梦，无法恢复。')+'</p>':'');
+    }
+    body.innerHTML=h;
+    wire();
+  }
+  function wire(){
+    var send=$('acctSend'), email=$('acctEmail');
+    if(send) send.addEventListener('click',function(){
+      var v=(email&&email.value||'').trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ view='error'; note=T('That email does not look right — check it and try again.','这个邮箱看起来不对——检查一下再试。'); render(); var e2=$('acctEmail'); if(e2){ e2.value=v; e2.focus(); } return; }
+      busy=true; render(); holdPending(snapshot());
+      sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}}).then(function(res){
+        busy=false;
+        if(res.error){ view='error'; note=/rate|seconds|limit/i.test(res.error.message||'')?T('Too many links were sent just now — wait a minute, then try again.','刚才发了太多链接——等一分钟再试。'):T('The link could not be sent just now — try again in a moment.','链接暂时没能发出——稍后再试。'); render(); var e3=$('acctEmail'); if(e3) e3.value=v; return; }
+        view='sent'; note=v; render();
+      });
+    });
+    if(email) email.addEventListener('keydown',function(e){ if(e.key==='Enter'&&send) send.click(); });
+    var again=$('acctAgain'); if(again) again.addEventListener('click',function(){ view='idle'; note=''; render(); });
+    var save=$('acctNameSave'), nameEl=$('acctName');
+    if(save) save.addEventListener('click',function(){
+      var v=(nameEl&&nameEl.value||'').trim().slice(0,60)||null;
+      sb.from('dream_profiles').update({display_name:v,updated_at:new Date().toISOString()}).eq('user_id',user.id).then(function(res){
+        if(res.error){ note=T('Your name could not be saved just now — try again.','名字暂时没能保存——再试一次。'); }
+        else { if(profile) profile.display_name=v; note=T('Saved.','已保存。'); }
+        render();
+      });
+    });
+    var out=$('acctOut'); if(out) out.addEventListener('click',function(){ saveNow().then(function(){ return sb.auth.signOut(); }).then(function(){ toastNote(T('Signed out.','已退出登录。')); }); });
+    var del=$('acctDel'); if(del) del.addEventListener('click',function(){
+      if(!deleteArmed){ deleteArmed=true; render(); return; }
+      busy=true; render();
+      sb.auth.getSession().then(function(r){
+        var token=r&&r.data&&r.data.session&&r.data.session.access_token;
+        return fetch(SUPABASE_URL+'/functions/v1/dream-account',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':SUPABASE_KEY},body:JSON.stringify({action:'delete'})});
+      }).then(function(res){
+        busy=false; deleteArmed=false;
+        if(!res||!res.ok) throw new Error('delete');
+        synced=false; lastSaved=null;
+        return sb.auth.signOut().then(function(){ toastNote(T('Your account and everything in it has been deleted.','你的账户和里面的一切都已删除。')); });
+      }).catch(function(){ busy=false; deleteArmed=false; note=T('Your account could not be deleted just now — please try again.','账户暂时没能删除——请再试一次。'); render(); });
+    });
+  }
+
+  /* ——— Gentle "keep this" note, once per visit, after the first thing collected ——— */
+  var keepEl=null;
+  function showKeepNote(){
+    if(keepEl) return;
+    keepEl=document.createElement('div'); keepEl.className='acct-keep'; keepEl.setAttribute('role','status');
+    keepEl.innerHTML='<span>'+T('Want to keep tonight’s souvenir and stamps?','想把今晚的纪念品和印章留下来吗？')+'</span>'
+      +'<button type="button" class="acct-keep-go">'+T('Sign in to keep them','登录保存')+'</button>'
+      +'<button type="button" class="acct-keep-x" aria-label="'+T('Not now','以后再说')+'">×</button>';
+    document.body.appendChild(keepEl);
+    keepEl.querySelector('.acct-keep-go').addEventListener('click',function(){ hideKeepNote(); openAccount(); });
+    keepEl.querySelector('.acct-keep-x').addEventListener('click',hideKeepNote);
+    /* It floats over the bottom of the screen, so it never stays in the way:
+       it steps aside as soon as someone starts typing, and after 15 seconds. */
+    keepTimer=setTimeout(hideKeepNote,15000);
+    document.addEventListener('focusin',keepOnFocus,true);
+  }
+  var keepTimer=null;
+  function keepOnFocus(e){ var t=e.target; if(t&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!(keepEl&&keepEl.contains(t))) hideKeepNote(); }
+  function hideKeepNote(){ clearTimeout(keepTimer); document.removeEventListener('focusin',keepOnFocus,true); if(keepEl){ keepEl.remove(); keepEl=null; } }
+  function openAccount(){
+    var panel=$('byokPanel'), tog=$('byokToggle');
+    if(panel&&panel.hidden&&tog) tog.click();
+    setTimeout(function(){ section.scrollIntoView({behavior:'smooth',block:'start'}); var e=$('acctEmail'); if(e) e.focus({preventScroll:true}); },60);
+  }
+  window.openDreamAccount=openAccount;
+
+  var toastT=null;
+  function toastNote(msg){
+    var t=$('acctToast'); if(!t){ t=document.createElement('div'); t.id='acctToast'; t.className='acct-toast'; t.setAttribute('role','status'); document.body.appendChild(t); }
+    t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('show'); },3200);
+  }
+
+  render();
+})();
+</script>
 </body>
 </html>
