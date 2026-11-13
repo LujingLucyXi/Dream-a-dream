@@ -172,6 +172,7 @@ Deno.serve(async (req: Request) => {
     }
     return reply(req, 400, { error: "unknown action" });
   } catch (e) {
+    console.error("billing", body.action, String((e as Error)?.message || e));
     return reply(req, 502, { error: String((e as Error)?.message || e) });
   }
 });
