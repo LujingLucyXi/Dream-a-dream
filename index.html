@@ -1221,6 +1221,32 @@
   .hearth-open-btn .hof{font-size:20px;filter:hue-rotate(140deg) saturate(1.4)}
   @media(max-width:520px){.hearth-title{font-size:30px}.hearth-spacer{min-height:20vh}}
   @media(prefers-reduced-motion:reduce){.hearth,.hearth-card{transition:none;animation:none}.hearth-mic.rec .hearth-mic-ring{animation:none}}
+
+  /* ——— Souvenir shelf, v2: one hand-painted shelf per theme, swiped ——— */
+  .shelf2-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 8px}
+  .shelf2-arrow{width:40px;height:40px;flex:none;border-radius:50%;border:1px solid rgba(240,212,138,.4);background:rgba(240,212,138,.08);color:var(--gold2);font-size:20px;line-height:1}
+  .shelf2-arrow:disabled{opacity:.3}
+  .shelf2-label{text-align:center;flex:1;min-width:0}
+  .shelf2-label b{display:block;font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;color:#f3e9c8;line-height:1.1}
+  .shelf2-label span{font-size:12px;color:#9aa6d1;font-weight:700;letter-spacing:.04em}
+  .shelf2-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -4px}
+  .shelf2-track::-webkit-scrollbar{display:none}
+  .shelf2-page{flex:0 0 100%;scroll-snap-align:center;padding:0 4px}
+  .shelf2-art{position:relative;width:100%;max-width:440px;margin:0 auto;aspect-ratio:3/4;background:url(https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/5d82b600-1b2a-4f8a-9b44-00e2752cdbf6.jpg) center/100% 100% no-repeat;border-radius:14px}
+  .shelf2-row{position:absolute;left:15.5%;right:15.5%;display:flex;justify-content:space-around;align-items:flex-end;height:22%;transform:translateY(-100%)}
+  .shelf2-slot{flex:0 0 24%;display:flex;align-items:flex-end;justify-content:center;height:100%;background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .shelf2-slot svg{width:88%;height:auto;max-height:92%;filter:drop-shadow(0 6px 5px rgba(0,0,0,.55));transition:transform .25s ease}
+  .shelf2-slot.locked{cursor:default}
+  .shelf2-slot.locked svg{opacity:.32;filter:grayscale(.7) drop-shadow(0 4px 4px rgba(0,0,0,.4));width:62%}
+  .shelf2-slot.sel svg{filter:drop-shadow(0 0 14px rgba(240,212,138,.75)) drop-shadow(0 6px 5px rgba(0,0,0,.5));transform:translateY(-4px)}
+  .shelf2-slot.arrive svg{animation:shelfArrive 1.4s ease-out 2}
+  @keyframes shelfArrive{0%{transform:translateY(-18px) scale(1.15);filter:drop-shadow(0 0 24px rgba(240,212,138,1))}60%{transform:translateY(0) scale(1)}100%{transform:none}}
+  .shelf2-dots{display:flex;justify-content:center;gap:6px;margin:12px 0 4px}
+  .shelf2-dots button{width:8px;height:8px;border-radius:50%;border:none;padding:0;background:rgba(240,212,138,.25)}
+  .shelf2-dots button[aria-current="true"]{background:var(--gold2);width:20px;border-radius:999px}
+  .shelf2-detail{max-width:440px;margin:12px auto 0}
+  .shelf2-hint{text-align:center;font-size:12.5px;color:#8e95b3;margin:10px 0 0}
+  @media(prefers-reduced-motion:reduce){.shelf2-slot.arrive svg{animation:none}.shelf2-track{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -5563,40 +5589,64 @@
   /* ——— The Shelf page: a bookcase. Collected keepsakes stand on
      the planks as drawn objects; the rest wait under cloth. Tap a
      keepsake and its small task opens beneath its plank. ——— */
+  var PLANK_Y=[0.366,0.615,0.864];      /* top edge of each painted plank, as a fraction of the painting */
+  var shelfIdx=0, arriveGift=null;
+  function catOfGift(id){ for(var i=0;i<GIFTS.length;i++) if(GIFTS[i].id===id) return GIFTS[i].c; return null; }
   function renderShelf(){
     var body=$('shelfBody'); if(!body) return;
     var n=shelf.length, doneN=shelf.filter(function(e){return e.taskDone;}).length;
     if(selectedGift!=null&&!shelfEntry(selectedGift)) selectedGift=null;
+    var zh=window.DREAM_LANG==='zh';
     var html='<div class="kicker">Dreameri · '+L('Collection','收藏')+'</div>'
       +'<h2 class="coll-title">'+L('The Souvenir <em>Shelf</em>','纪念品<em>架子</em>')+'</h2>'
-      +'<p class="coll-lede">'+L('Every dream leaves one keepsake on the shelf. Tap one to see it up close.','每一个梦都会在架子上留下一件纪念品。点一件，看看它。')+'</p>'
-      +'<div class="coll-count">'+(window.DREAM_LANG==='zh'?('已收集 '+n+' / 100'):(n+' of 100 collected'))+(doneN?(' · '+(window.DREAM_LANG==='zh'?('已完成 '+doneN+' 个小任务'):(doneN+(doneN===1?' task done':' tasks done')))):'')+'</div>'
+      +'<div class="coll-count">'+(zh?('已收集 '+n+' / 100'):(n+' of 100 collected'))+(doneN?(' · '+(zh?('已完成 '+doneN+' 个小任务'):(doneN+(doneN===1?' task done':' tasks done')))):'')+'</div>'
       +'<div class="coll-progress"><i style="width:'+n+'%"></i></div>';
-    if(!n) html+='<p class="coll-lede">'+L('Nothing here yet. Read a dream, and its first keepsake will be standing on this shelf.','这里还空着。读一个梦，它的第一件纪念品就会站在这架子上。')+'</p>';
-    html+='<div class="shelf-unit">';
+    html+='<div class="shelf2-nav"><button type="button" class="shelf2-arrow" id="shelfPrev" aria-label="'+L('Previous shelf','上一个架子')+'">‹</button><div class="shelf2-label" id="shelfLabel"></div><button type="button" class="shelf2-arrow" id="shelfNext" aria-label="'+L('Next shelf','下一个架子')+'">›</button></div>';
+    html+='<div class="shelf2-track" id="shelfTrack">';
     CAT_ORDER.forEach(function(cat){
-      var c=CATS[cat];
-      html+='<div class="shelf-cat">'+esc(window.DREAM_LANG==='zh'?c.labelZh:c.labelEn)+'</div><div class="shelf-row">';
+      var items=GIFTS.filter(function(g){ return g.c===cat; });
       var detail='';
-      GIFTS.forEach(function(g){
-        if(g.c!==cat) return;
-        var e=shelfEntry(g.id);
-        if(e){
-          html+='<button type="button" class="shelf-item'+(selectedGift===g.id?' sel':'')+'" data-gift="'+g.id+'" aria-label="'+esc(giftName(g))+'"><span class="item-stage">'+illusFor(g)+'</span><span class="item-name">'+esc(giftName(g))+'</span><span class="item-date">'+esc(e.date)+'</span></button>';
-          if(selectedGift===g.id){
-            detail='<div class="shelf-detail"><b>'+esc(giftName(g))+'</b>'
-              +'<span class="gift-from">'+L('From the dream of ','来自 ')+esc(e.date)+(e.title?(' · '+esc(e.title)):'')+'</span>'
-              +'<div style="margin-top:9px"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p>'
-              +'<button type="button" class="task-btn'+(e.taskDone?' done':'')+'" data-task="'+g.id+'">'+(e.taskDone?('✓ '+L('Done','已完成')):L('Mark done','标记完成'))+'</button></div></div>';
+      html+='<section class="shelf2-page" data-cat="'+cat+'" aria-label="'+esc(zh?CATS[cat].labelZh:CATS[cat].labelEn)+'"><div class="shelf2-art">';
+      for(var r=0;r<3;r++){
+        var row=items.slice(r*4,r*4+4); if(!row.length) continue;
+        html+='<div class="shelf2-row" style="top:'+(PLANK_Y[r]*100)+'%">';
+        row.forEach(function(g){
+          var e=shelfEntry(g.id);
+          if(e){
+            html+='<button type="button" class="shelf2-slot'+(selectedGift===g.id?' sel':'')+(arriveGift===g.id?' arrive':'')+'" data-gift="'+g.id+'" aria-label="'+esc(giftName(g))+'">'+illusFor(g)+'</button>';
+            if(selectedGift===g.id){
+              detail='<div class="shelf-detail shelf2-detail"><b>'+esc(giftName(g))+'</b>'
+                +'<span class="gift-from">'+L('From the dream of ','来自 ')+esc(e.date)+(e.title?(' · '+esc(e.title)):'')+'</span>'
+                +'<div style="margin-top:9px"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p>'
+                +'<button type="button" class="task-btn'+(e.taskDone?' done':'')+'" data-task="'+g.id+'">'+(e.taskDone?('✓ '+L('Done','已完成')):L('Mark done','标记完成'))+'</button></div></div>';
+            }
+          } else {
+            html+='<span class="shelf2-slot locked" aria-label="'+L('Undiscovered','尚未发现')+'">'+COVER_SVG+'</span>';
           }
-        } else {
-          html+='<div class="shelf-item locked"><span class="item-stage">'+COVER_SVG+'</span><span class="item-name">'+L('Undiscovered','尚未发现')+'</span><span class="item-date">'+L('Dreams '+c.hintEn+' may leave this one','关于'+c.hintZh+'的梦，也许会留下这一件')+'</span></div>';
-        }
-      });
-      html+='</div><div class="plank"></div>'+detail;
+        });
+        html+='</div>';
+      }
+      html+='</div>'+(detail||'<p class="shelf2-hint">'+L('Dreams '+CATS[cat].hintEn+' leave keepsakes here. Tap one to see it up close.','关于'+CATS[cat].hintZh+'的梦，会把纪念品留在这里。点一件看看。')+'</p>')+'</section>';
     });
+    html+='</div><div class="shelf2-dots" id="shelfDots">';
+    CAT_ORDER.forEach(function(cat,i){ html+='<button type="button" data-shelf-go="'+i+'" aria-label="'+esc(zh?CATS[cat].labelZh:CATS[cat].labelEn)+'"></button>'; });
     html+='</div>';
     body.innerHTML=html;
+    var track=$('shelfTrack');
+    function label(){
+      var cat=CAT_ORDER[shelfIdx], c=CATS[cat];
+      var got=GIFTS.filter(function(g){ return g.c===cat&&shelfEntry(g.id); }).length, all=GIFTS.filter(function(g){ return g.c===cat; }).length;
+      $('shelfLabel').innerHTML='<b>'+esc(zh?c.labelZh:c.labelEn)+'</b><span>'+(zh?('第 '+(shelfIdx+1)+' / '+CAT_ORDER.length+' 层 · 找到 '+got+' / '+all):('Shelf '+(shelfIdx+1)+' of '+CAT_ORDER.length+' · '+got+' of '+all+' found'))+'</span>';
+      $('shelfPrev').disabled=shelfIdx===0; $('shelfNext').disabled=shelfIdx===CAT_ORDER.length-1;
+      Array.prototype.forEach.call($('shelfDots').children,function(d,i){ d.setAttribute('aria-current',i===shelfIdx?'true':'false'); });
+    }
+    function go(i,smooth){ shelfIdx=Math.max(0,Math.min(CAT_ORDER.length-1,i)); track.scrollTo({left:shelfIdx*track.clientWidth,behavior:smooth?'smooth':'auto'}); label(); }
+    track.addEventListener('scroll',function(){ var i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth)); if(i!==shelfIdx){ shelfIdx=i; label(); } },{passive:true});
+    $('shelfPrev').addEventListener('click',function(){ go(shelfIdx-1,true); });
+    $('shelfNext').addEventListener('click',function(){ go(shelfIdx+1,true); });
+    Array.prototype.forEach.call($('shelfDots').children,function(d){ d.addEventListener('click',function(){ go(parseInt(d.getAttribute('data-shelf-go'),10),true); }); });
+    requestAnimationFrame(function(){ go(shelfIdx,false); });
+    arriveGift=null;
   }
 
   /* ——— The Dreamland Passport: a book. Velvet cover, a holder
@@ -5640,7 +5690,7 @@
   /* ——— Pages: open / close, like the plans page ——— */
   function openPage(page){ page.classList.add('open'); page.scrollTop=0; document.body.style.overflow='hidden'; }
   function closePage(page){ page.classList.remove('open'); document.body.style.overflow=''; }
-  function openShelf(){ newShelf=false; renderStrip(); renderShelf(); openPage($('shelfPage')); }
+  function openShelf(){ newShelf=false; if(selectedGift!=null){ var c=catOfGift(selectedGift); if(c){ shelfIdx=CAT_ORDER.indexOf(c); arriveGift=selectedGift; } } renderStrip(); openPage($('shelfPage')); renderShelf(); }
   function openPassport(){ newPass=false; renderStrip(); renderPassport(); openPage($('passportPage')); }
   window.openShelfPage=openShelf; window.openPassportPage=openPassport;
 
