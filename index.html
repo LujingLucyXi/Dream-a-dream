@@ -1326,6 +1326,63 @@
   .site-head,.mode-switch,.collect-strip{position:relative;z-index:5}
   .hearth.inline .hearth-zoom{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%)}
   .hearth.inline .hearth-bg::after{background:linear-gradient(180deg,rgba(5,7,15,.78) 0%,rgba(5,7,15,.35) 18%,rgba(5,7,15,0) 34%,rgba(5,7,15,0) 58%,rgba(5,7,15,.82) 100%)}
+
+  /* ——— The gift card: velvet, gold corners, a floating keepsake, a stamp pressed on paper ——— */
+  .dm-pop{background:radial-gradient(ellipse at 50% 38%,rgba(40,70,90,.5),rgba(3,5,12,.9) 70%);transition:opacity .3s ease}
+  .dm-pop.closing{opacity:0}
+  .dm-pop.closing .dm-pop-card{transform:translateY(12px) scale(.97);transition:transform .3s ease}
+  .dm-pop-card{overflow:hidden;padding:26px 22px 20px;border-radius:26px;background:radial-gradient(90% 60% at 50% 18%,rgba(127,231,214,.16),transparent 70%),radial-gradient(120% 80% at 50% 120%,rgba(120,90,200,.18),transparent 60%),linear-gradient(180deg,#1a2244,#0d1128);box-shadow:0 0 0 1px rgba(240,212,138,.28),0 0 0 6px rgba(240,212,138,.05),0 0 80px rgba(127,231,214,.14),0 40px 80px rgba(0,0,0,.65)}
+  .dm-corner{position:absolute;width:26px;height:26px;border:2px solid rgba(240,212,138,.6);pointer-events:none}
+  .dm-corner.tl{top:10px;left:10px;border-right:none;border-bottom:none;border-radius:10px 0 0 0}
+  .dm-corner.tr{top:10px;right:10px;border-left:none;border-bottom:none;border-radius:0 10px 0 0}
+  .dm-corner.bl{bottom:10px;left:10px;border-right:none;border-top:none;border-radius:0 0 0 10px}
+  .dm-corner.br{bottom:10px;right:10px;border-left:none;border-top:none;border-radius:0 0 10px 0}
+  .dm-sparks{position:absolute;inset:0;pointer-events:none}
+  .dm-sparks i{position:absolute;width:4px;height:4px;border-radius:50%;background:#f8e3a8;box-shadow:0 0 8px 2px rgba(248,227,168,.7);opacity:0;animation:dmTwinkle 3.2s ease-in-out infinite}
+  @keyframes dmTwinkle{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:.9;transform:scale(1)}}
+  .dm-pop-kicker{position:relative;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;letter-spacing:.02em;text-transform:none;font-weight:600;color:#f0d48a}
+  .dm-pop-illus{position:relative;width:150px;height:150px;margin:8px auto 2px;filter:none}
+  .dm-pop-illus img,.dm-pop-illus svg{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5));animation:dmFloat 4s ease-in-out infinite}
+  .dm-halo{position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,rgba(240,212,138,0),rgba(240,212,138,.35),rgba(127,231,214,.3),rgba(240,212,138,0) 60%);filter:blur(10px);animation:dmSpin 9s linear infinite}
+  @keyframes dmFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes dmSpin{to{transform:rotate(360deg)}}
+  .dm-pop-card h3{position:relative;font-size:29px}
+  .dm-pop-task{position:relative;background:rgba(255,255,255,.04);border:none;border-left:2px solid rgba(240,212,138,.55);border-radius:4px 12px 12px 4px}
+  .dm-pop-paper{position:relative;margin:4px -4px 10px;padding:16px 10px;border-radius:14px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.5),transparent 40%),repeating-linear-gradient(0deg,rgba(138,109,47,.05) 0 2px,transparent 2px 5px),#efe4c8;box-shadow:inset 0 0 30px rgba(138,109,47,.25),0 8px 20px rgba(0,0,0,.35)}
+  .dm-pop-paper .pstamp{background:transparent;animation:dmPress .7s cubic-bezier(.3,1.6,.5,1) .5s both}
+  @keyframes dmPress{0%{transform:scale(1.7) rotate(calc(var(--rot) - 8deg));opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(var(--rot));opacity:1}}
+  .pm6.pstamp{animation-name:dmPress6}
+  @keyframes dmPress6{0%{transform:scale(1.7) rotate(calc(var(--rot) + 37deg));opacity:0}100%{transform:scale(1) rotate(calc(var(--rot) + 45deg));opacity:1}}
+  .dm-pop-sep{position:relative}
+  .dm-pop-go{position:relative;background:linear-gradient(180deg,#f7e2a6,#e0bb63);box-shadow:0 6px 18px rgba(240,212,138,.25),inset 0 1px 0 rgba(255,255,255,.6)}
+  @media(prefers-reduced-motion:reduce){.dm-sparks i,.dm-halo,.dm-pop-illus img,.dm-pop-illus svg,.dm-pop-paper .pstamp{animation:none;opacity:1}}
+  /* reading: appears in place, no movement */
+  .unfold-hide{opacity:0!important;transform:none!important}
+  .unfold-in{transition:opacity .6s ease}
+
+  /* ——— Passport pages that feel like a real passport: security-print paper ——— */
+  .pp-pages{position:relative;overflow:hidden;background-color:#efe5cb;background-image:
+     radial-gradient(circle at 15% 10%,rgba(255,255,255,.55),transparent 35%),
+     radial-gradient(circle at 85% 90%,rgba(160,130,70,.18),transparent 40%),
+     repeating-radial-gradient(circle at 50% 120%,rgba(51,84,158,.07) 0 1px,transparent 1px 9px),
+     repeating-linear-gradient(115deg,rgba(160,61,85,.045) 0 1px,transparent 1px 7px),
+     repeating-linear-gradient(65deg,rgba(46,125,107,.045) 0 1px,transparent 1px 7px);
+     background-size:auto;box-shadow:0 18px 40px rgba(2,4,12,.45),inset 0 0 40px rgba(138,109,47,.22),inset 14px 0 18px -12px rgba(90,70,30,.35)}
+  .pp-pages::after{content:"DREAMLAND · 梦境 · DREAMLAND · 梦境";position:absolute;right:-30px;bottom:18px;transform:rotate(-90deg);transform-origin:right bottom;font-size:9px;letter-spacing:.4em;color:rgba(51,84,158,.18);font-weight:900;pointer-events:none;white-space:nowrap}
+  .pp-pages::before{content:"";position:absolute;left:50%;top:50%;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(51,84,158,.05) 0 3deg,transparent 3deg 9deg);pointer-events:none}
+  .pp-pages>*{position:relative}
+  .pstamp.just-pressed{animation:dmPress .8s cubic-bezier(.3,1.6,.5,1) .35s both}
+  .pm6.pstamp.just-pressed{animation-name:dmPress6}
+  .dm-pop-places{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .dm-pop-place{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.04);color:#f3e9c8;border:1px solid rgba(240,212,138,.35);border-radius:14px;padding:11px 10px;font-weight:800;font-size:13.5px}
+  .dm-pop-place .ic{color:var(--gold2);font-size:15px}
+
+  .gift-sprite{display:block;aspect-ratio:1/1;background-repeat:no-repeat;background-size:500% 1000%}
+  .shelf2-slot .gift-sprite{height:100%;width:auto;max-width:100%;filter:drop-shadow(0 6px 5px rgba(0,0,0,.55));transition:transform .25s ease}
+  .shelf2-slot.sel .gift-sprite{filter:drop-shadow(0 0 14px rgba(240,212,138,.75)) drop-shadow(0 6px 5px rgba(0,0,0,.5));transform:translateY(-4px)}
+  .shelf2-slot.arrive .gift-sprite{animation:shelfArrive 1.4s ease-out 2}
+  .dm-pop-illus .gift-sprite{position:relative;z-index:1;width:100%;height:100%;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5));animation:dmFloat 4s ease-in-out infinite}
+  .gift-illus .gift-sprite{width:100%;height:100%}
 </style>
 </head>
 <body>
@@ -5384,7 +5441,7 @@
     moon:'<circle cx="36" cy="37" r="24" style="fill:var(--i2)"/><circle cx="36" cy="37" r="19.5" style="fill:none;stroke:var(--i3)" stroke-width="2.5"/><path style="fill:var(--i3)" d="M45 25a12.5 12.5 0 1 0 4 16.5A10 10 0 0 1 45 25z"/><path style="fill:var(--i3)" d="M24 20l1.2 2.9 2.9 1.2-2.9 1.2L24 28.2l-1.2-2.9-2.9-1.2 2.9-1.2z"/><path style="stroke:var(--i3)" stroke-width="3" fill="none" d="M29 13a7 7 0 0 1 14 0"/>'
   };
   function illusFor(g){
-    if(GIFT_IMG[g.id]) return '<img src="'+GIFT_IMG[g.id]+'" alt="" loading="lazy" decoding="async">';
+    if(GIFT_CELL[g.id]!=null){ var ci=GIFT_CELL[g.id], col=ci%5, row=Math.floor(ci/5); return '<span class="gift-sprite" role="img" aria-hidden="true" style="background-image:url('+GIFT_SPRITE+');background-position:'+(col*25)+'% '+(row*100/9).toFixed(3)+'%"></span>'; }
     var p=PALETTES[g.id%PALETTES.length];
     return '<svg viewBox="0 0 72 72" aria-hidden="true" style="--i1:'+p[0]+';--i2:'+p[1]+';--i3:'+p[2]+'">'+(ILLUS[g.i]||ILLUS.moon)+'</svg>';
   }
@@ -5542,7 +5599,10 @@
   Object.keys(KEEP).forEach(function(k){ var to=+k; KEEP[k].forEach(function(r){ RETIRED_TO[r]=to; GIFTS[to].k=GIFTS[to].k.concat(GIFTS[r].k); GIFTS[r].retired=true; }); });
   var LIVE=GIFTS.filter(function(g){ return !g.retired; });
   var GIFT_TOTAL=LIVE.length;
-  var GIFT_IMG={};   /* gift id -> painted image URL */
+  /* All fifty painted keepsakes live in one sprite sheet (5 across, 10 down). */
+  var GIFT_SPRITE='https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/34a620c1-7456-434d-add3-63bd3f2ed610.webp';
+  var GIFT_CELL={0:0,1:1,2:2,3:3,5:4,16:5,17:6,14:7,13:8,23:9,24:10,28:11,29:12,30:13,27:14,36:15,37:16,38:17,43:18,41:19,48:20,49:21,52:22,54:23,53:24,58:25,59:26,60:27,61:28,66:29,68:30,69:31,70:32,77:33,73:34,78:35,83:36,81:37,84:38,80:39,86:40,88:41,93:42,91:43,90:44,94:45,95:46,97:47,98:48,99:49};
+  var GIFT_IMG={};
 
   function giftName(g){ return window.DREAM_LANG==='zh'?g.z:g.n; }
   function giftTask(g){ return window.DREAM_LANG==='zh'?g.tz:g.t; }
@@ -5690,9 +5750,10 @@
   function renderReveal(){ var box=$('collectReveal'); if(box){ box.hidden=true; box.innerHTML=''; } }
   function popup(html,wire){
     var o=document.createElement('div'); o.className='dm-pop'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true');
-    o.innerHTML='<div class="dm-pop-card">'+html+'</div>';
+    var sp=''; for(var i=0;i<14;i++){ sp+='<i style="left:'+(6+Math.random()*88)+'%;top:'+(4+Math.random()*60)+'%;animation-delay:'+(Math.random()*3).toFixed(2)+'s"></i>'; }
+    o.innerHTML='<div class="dm-pop-card"><span class="dm-corner tl"></span><span class="dm-corner tr"></span><span class="dm-corner bl"></span><span class="dm-corner br"></span><div class="dm-sparks" aria-hidden="true">'+sp+'</div>'+html+'</div>';
     document.body.appendChild(o);
-    function close(){ o.remove(); setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },400); }
+    function close(){ o.classList.add('closing'); setTimeout(function(){ o.remove(); if(window.__giftDone){ var f=window.__giftDone; window.__giftDone=null; f(); } setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300); },320); }
     o.addEventListener('click',function(ev){ if(ev.target===o) o.querySelector('[data-pop-next]')&&o.querySelector('[data-pop-next]').click(); });
     wire(o,close);
     var f=o.querySelector('.dm-pop-go'); if(f) setTimeout(function(){ f.focus(); },50);
@@ -5705,7 +5766,7 @@
     if(!lastReveal) return;
     var g=GIFTS[lastReveal.giftId], entry=shelfEntry(g.id);
     var html='<div class="dm-pop-kicker">✦ '+(lastReveal.fresh?L('Your dream left you a souvenir','你的梦给你留下了一件纪念品'):L('A keepsake returns','一件纪念品又回来了'))+'</div>'
-      +'<div class="dm-pop-illus">'+illusFor(g)+'</div>'
+      +'<div class="dm-pop-illus"><span class="dm-halo" aria-hidden="true"></span>'+illusFor(g)+'</div>'
       +'<h3>'+esc(giftName(g))+'</h3>'
       +'<p class="dm-pop-from">'+(lastReveal.from?(L('Left by the sign ','由这个征兆留下：')+'<b>“'+esc(lastReveal.from)+'”</b>'):L('Left behind by this dream.','这个梦留下的。'))+'</p>'
       +'<div class="dm-pop-task"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p></div>';
@@ -5714,18 +5775,18 @@
     if(p&&st){
       var isNew=lastReveal.newStamps.indexOf(p.id)!==-1;
       html+='<div class="dm-pop-sep">☾ '+(isNew?L('New passport stamp','护照新印章'):L('Stamped again','又盖了一次'))+'</div>'
-        +'<div class="dm-pop-stamp">'+stampHTML(p,st,true)+'</div>'
-        +'<p class="dm-pop-from"><b style="color:#f3e9c8">'+esc(placeName(p))+'</b>'+(st.label?(' · '+L('your dream took you here: ','你的梦带你到了这里：')+'“'+esc(st.label)+'”'):'')
-        +(isNew?'':' · '+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次'):('visit '+st.count)))+'</p>';
+        +'<div class="dm-pop-paper"><div class="dm-pop-stamp">'+stampHTML(p,st,false)+'</div></div>'
+        +(isNew?'':'<p class="dm-pop-from">'+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次来到这里'):('Visit '+st.count+' to this place'))+'</p>');
     }
     html+='<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+L('Keep them','收下')+'</button></div>'
-      +'<div class="dm-pop-links"><button type="button" data-pop-shelf>'+L('See the shelf','看看架子')+'</button>'
-      +(p&&st?'<button type="button" data-pop-pass>'+L('Open the passport','打开护照')+'</button>':'')
+      +'<div class="dm-pop-places"><button type="button" class="dm-pop-place" data-pop-shelf><span class="ic">✦</span>'+L('Place on my shelf','放上我的架子')+'</button>'
+      +(p&&st?'<button type="button" class="dm-pop-place" data-pop-pass><span class="ic">☾</span>'+L('Stamp my passport','盖进我的护照')+'</button>':'')+'</div>'
+      +'<div class="dm-pop-links">'
       +'<button type="button" data-task="'+g.id+'"'+(entry&&entry.taskDone?' disabled':'')+'>'+(entry&&entry.taskDone?('✓ '+L('Task done','任务完成')):L('Mark the task done','标记任务完成'))+'</button></div>';
     popup(html,function(o,close){
       o.querySelector('[data-pop-next]').addEventListener('click',close);
       o.querySelector('[data-pop-shelf]').addEventListener('click',function(){ close(); selectedGift=g.id; openShelf(); });
-      var pp=o.querySelector('[data-pop-pass]'); if(pp) pp.addEventListener('click',function(){ close(); openPassport(); });
+      var pp=o.querySelector('[data-pop-pass]'); if(pp) pp.addEventListener('click',function(){ close(); openPassport(p.id); });
       var t=o.querySelector('[data-task]'); if(t) t.addEventListener('click',function(){ setTimeout(function(){ t.disabled=true; t.textContent='✓ '+L('Task done','任务完成'); },0); });
     });
   };
@@ -5850,7 +5911,17 @@
   function openPage(page){ page.classList.add('open'); page.scrollTop=0; document.body.style.overflow='hidden'; }
   function closePage(page){ page.classList.remove('open'); document.body.style.overflow=''; }
   function openShelf(){ newShelf=false; if(selectedGift!=null){ var c=catOfGift(selectedGift); if(c){ shelfIdx=CAT_ORDER.indexOf(c); arriveGift=selectedGift; } } renderStrip(); openPage($('shelfPage')); renderShelf(); }
-  function openPassport(){ newPass=false; renderStrip(); renderPassport(); openPage($('passportPage')); }
+  function openPassport(focusId){
+    newPass=false; renderStrip(); renderPassport(); openPage($('passportPage'));
+    if(typeof focusId==='string'){
+      var idx=0; PP.forEach(function(x,i){ if(x.id===focusId) idx=i; });
+      setTimeout(function(){
+        var all=document.querySelectorAll('#passportBody .visa-flow .pstamp'), order=PP.filter(function(x){ return stamps[x.id]; }), k=order.findIndex(function(x){ return x.id===focusId; });
+        var el=all[k]; if(!el) return;
+        el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.remove('just-pressed'); void el.offsetWidth; el.classList.add('just-pressed');
+      },120);
+    }
+  }
   window.openShelfPage=openShelf; window.openPassportPage=openPassport;
 
   /* Task toggles, wherever they appear (reveal card + shelf). */
@@ -6348,7 +6419,7 @@
     cx.setTransform(DPR,0,0,DPR,0,0);
     var s=Math.max(W/IMG_W,H/IMG_H), dw=IMG_W*s, dh=IMG_H*s;
     var ox=(W-dw)/2, oy=(H-dh)*BG_Y;
-    bx=ox+FIRE.x*dw; by=oy+FIRE.y*dh; bw=FIRE.w*dw; zox=bx; zoy=by-bw*.55;
+    bx=ox+FIRE.x*dw; by=oy+FIRE.y*dh; bw=FIRE.w*dw; zox=bx; zoy=Math.min(H*.97,by+Math.max(bw*1.6,(H-by)*.95));
     lx=ox+SC.lantern.x*dw; ly=oy+SC.lantern.y*dh; lr=SC.lantern.r*dw; wx=ox+SC.win.x*dw; wy=oy+SC.win.y*dh; wr=SC.win.r*dw; imgOx=ox; imgOy=oy; imgS=s;
     applyZoom();
   }
@@ -6473,35 +6544,43 @@
     }
     cx.globalAlpha=1; cx.globalCompositeOperation='source-over';
   }
-  var waveFade=0, micX=0, micY=0;
+  var waveFade=0, micX=0, micY=0, micR=40;
   function micPoint(){
     var b=$('hearthMic').getBoundingClientRect(), r=el.getBoundingClientRect();
-    micX=b.left-r.left+b.width/2; micY=b.top-r.top+b.height*.2;
+    micX=b.left-r.left+b.width/2; micY=b.top-r.top-8; micR=b.width/2;
   }
   function pathAt(t){
-    var c1x=micX+(fx-micX)*.15+fw*.6, c1y=micY+(fy-micY)*.55;
-    var u=1-t;
-    return {x:u*u*micX+2*u*t*c1x+t*t*fx, y:u*u*micY+2*u*t*c1y+t*t*(fy-fw*.05)};
+    var side=Math.max(fw*1.4,micR*2.2,70), ex=fx, ey=fy-fw*.12;
+    var c1x=micX+side, c1y=micY-(micY-ey)*.15, c2x=ex+side*.9, c2y=ey+(micY-ey)*.25, u=1-t;
+    return {x:u*u*u*micX+3*u*u*t*c1x+3*u*t*t*c2x+t*t*t*ex, y:u*u*u*micY+3*u*u*t*c1y+3*u*t*t*c2y+t*t*t*ey};
   }
+  /* The voice as an electrified string: it leaves the mic, arcs out to the
+     side so it is never hidden behind the button, and crackles up into
+     the fire — jagged where the voice is loud, glowing all along. */
   function drawWave(t){
-    var N=70, strands=3;
+    var N=90, strands=3, seed=Math.floor(t*24);
+    function rnd(i,s){ var x=Math.sin(i*12.9898+s*78.233+seed*3.7)*43758.5453; return x-Math.floor(x); }
+    cx.save(); cx.lineJoin='round'; cx.lineCap='round';
     for(var s=0;s<strands;s++){
       cx.beginPath();
       for(var i=0;i<=N;i++){
         var u=i/N, p=pathAt(u), p2=pathAt(Math.min(1,u+.01));
         var dx=p2.x-p.x, dy=p2.y-p.y, len=Math.sqrt(dx*dx+dy*dy)||1, nx=-dy/len, ny=dx/len;
-        var h=hist[Math.min(hist.length-1,Math.floor(u*(hist.length-1)))];
-        var taper=Math.pow(Math.sin(Math.PI*Math.min(1,u*1.05)),.7)*(1-u*.55);
-        var amp=(6+h*70)*taper*waveFade;
-        var off=Math.sin(u*18-t*7+s*2.1)*amp*(1-s*.25);
+        var hh=hist[Math.min(hist.length-1,Math.floor(u*(hist.length-1)))];
+        var taper=Math.pow(Math.sin(Math.PI*Math.min(1,u*1.02)),.6)*(1-u*.4);
+        var amp=(5+hh*60)*taper*waveFade;
+        var off=Math.sin(u*22-t*9+s*2.1)*amp*(1-s*.3)+(rnd(i,s)-.5)*amp*(.6+hh);
         var x=p.x+nx*off, y=p.y+ny*off;
         if(i) cx.lineTo(x,y); else cx.moveTo(x,y);
       }
       var g=cx.createLinearGradient(micX,micY,fx,fy);
-      g.addColorStop(0,'rgba(240,212,138,'+(.75*waveFade)+')'); g.addColorStop(.6,'rgba(110,240,215,'+(.8*waveFade)+')'); g.addColorStop(1,'rgba(150,255,235,'+(.35*waveFade)+')');
-      cx.strokeStyle=g; cx.lineWidth=s?1.4:2.4; cx.stroke();
+      g.addColorStop(0,'rgba(255,226,150,'+(.95*waveFade)+')'); g.addColorStop(.5,'rgba(150,255,235,'+(.95*waveFade)+')'); g.addColorStop(1,'rgba(200,255,245,'+(.6*waveFade)+')');
+      cx.shadowColor='rgba(120,255,225,.9)'; cx.shadowBlur=s?6:14;
+      cx.strokeStyle=g; cx.lineWidth=s?1.2:2.6; cx.stroke();
     }
+    cx.restore();
   }
+
   function loop(on){ var v=$('hearthLoop'); if(!v) return; if(on&&!reduce&&!(navigator.connection&&navigator.connection.saveData)){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else { try{ v.pause(); }catch(e){} } }
   function start(){ if(running) return; running=true; layout(); micPoint(); t0=performance.now(); raf=requestAnimationFrame(frame); loop(true); }
   function stopAnim(){ running=false; cancelAnimationFrame(raf); parts.length=0; sparks.length=0; loop(false); }
@@ -6746,21 +6825,22 @@
   }
   function finish(){
     clearTimeout(timer); timer=null;
-    queue.forEach(function(n){ n.classList.remove('unfold-hide'); });
+    queue.forEach(function(n){ n.classList.add('unfold-in'); n.classList.remove('unfold-hide'); });
     queue=[]; $('revealSkip').hidden=true;
-    setTimeout(function(){ if(window.showCollectPopups) window.showCollectPopups(); setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300); },reduce?100:700);
+    setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300);
   }
   function step(){
     var n=queue.shift(); if(!n){ finish(); return; }
     n.classList.add('unfold-in'); n.classList.remove('unfold-hide');
-    try{ n.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}); }catch(e){}
-    timer=setTimeout(step, n.matches('#symbols > *')?1100:1500);
+    timer=setTimeout(step,220);
   }
+  function fadeIn(){ if(reduce){ finish(); return; } $('revealSkip').hidden=false; clearTimeout(timer); timer=setTimeout(step,150); }
   document.addEventListener('dreamread',function(){
     document.body.classList.add('reveal-busy');
     view('reveal');
     $('revealBackT').textContent=T('Tell another dream','再讲一个梦');
     $('revealSkip').textContent=T('Show all','全部显示');
+    (function(){
     var L3=window.DREAM_LENSES||[], cur=window.__dreamLens||'zhougong', row=$('lensRow');
     if(row){
       row.innerHTML='';
@@ -6770,12 +6850,14 @@
         b.addEventListener('click',function(){ window.__dreamLens=x[0]; window.__dreamAnswers=window.__dreamLastAnswers||null; window.__dreamAsked=true; var rb=$('readBtn'); if(rb) rb.click(); });
         row.appendChild(b); });
     }
+    })();
     window.scrollTo({top:Math.max(0,panel.getBoundingClientRect().top+window.scrollY-10),behavior:'auto'});
     queue=parts();
-    if(reduce){ finish(); return; }
-    queue.forEach(function(n){ n.classList.add('unfold-hide'); });
-    $('revealSkip').hidden=false;
-    clearTimeout(timer); timer=setTimeout(step,400);
+    queue.forEach(function(n){ n.classList.remove('unfold-in'); n.classList.add('unfold-hide'); });
+    /* The gift card opens at once; the reading then appears in place,
+       part by part, without moving the page. */
+    if(window.showCollectPopups){ window.__giftDone=fadeIn; window.showCollectPopups(); if(!document.querySelector('.dm-pop')){ window.__giftDone=null; fadeIn(); } }
+    else fadeIn();
   });
   $('revealSkip').addEventListener('click',finish);
   $('revealBack').addEventListener('click',function(){
