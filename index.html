@@ -6348,7 +6348,7 @@
     cx.setTransform(DPR,0,0,DPR,0,0);
     var s=Math.max(W/IMG_W,H/IMG_H), dw=IMG_W*s, dh=IMG_H*s;
     var ox=(W-dw)/2, oy=(H-dh)*BG_Y;
-    bx=ox+FIRE.x*dw; by=oy+FIRE.y*dh; bw=FIRE.w*dw; zox=bx; zoy=by-bw*.55;
+    bx=ox+FIRE.x*dw; by=oy+FIRE.y*dh; bw=FIRE.w*dw; zox=bx; zoy=Math.min(H*.97,by+Math.max(bw*1.6,(H-by)*.95));
     lx=ox+SC.lantern.x*dw; ly=oy+SC.lantern.y*dh; lr=SC.lantern.r*dw; wx=ox+SC.win.x*dw; wy=oy+SC.win.y*dh; wr=SC.win.r*dw; imgOx=ox; imgOy=oy; imgS=s;
     applyZoom();
   }
@@ -6473,35 +6473,43 @@
     }
     cx.globalAlpha=1; cx.globalCompositeOperation='source-over';
   }
-  var waveFade=0, micX=0, micY=0;
+  var waveFade=0, micX=0, micY=0, micR=40;
   function micPoint(){
     var b=$('hearthMic').getBoundingClientRect(), r=el.getBoundingClientRect();
-    micX=b.left-r.left+b.width/2; micY=b.top-r.top+b.height*.2;
+    micX=b.left-r.left+b.width/2; micY=b.top-r.top-8; micR=b.width/2;
   }
   function pathAt(t){
-    var c1x=micX+(fx-micX)*.15+fw*.6, c1y=micY+(fy-micY)*.55;
-    var u=1-t;
-    return {x:u*u*micX+2*u*t*c1x+t*t*fx, y:u*u*micY+2*u*t*c1y+t*t*(fy-fw*.05)};
+    var side=Math.max(fw*1.4,micR*2.2,70), ex=fx, ey=fy-fw*.12;
+    var c1x=micX+side, c1y=micY-(micY-ey)*.15, c2x=ex+side*.9, c2y=ey+(micY-ey)*.25, u=1-t;
+    return {x:u*u*u*micX+3*u*u*t*c1x+3*u*t*t*c2x+t*t*t*ex, y:u*u*u*micY+3*u*u*t*c1y+3*u*t*t*c2y+t*t*t*ey};
   }
+  /* The voice as an electrified string: it leaves the mic, arcs out to the
+     side so it is never hidden behind the button, and crackles up into
+     the fire — jagged where the voice is loud, glowing all along. */
   function drawWave(t){
-    var N=70, strands=3;
+    var N=90, strands=3, seed=Math.floor(t*24);
+    function rnd(i,s){ var x=Math.sin(i*12.9898+s*78.233+seed*3.7)*43758.5453; return x-Math.floor(x); }
+    cx.save(); cx.lineJoin='round'; cx.lineCap='round';
     for(var s=0;s<strands;s++){
       cx.beginPath();
       for(var i=0;i<=N;i++){
         var u=i/N, p=pathAt(u), p2=pathAt(Math.min(1,u+.01));
         var dx=p2.x-p.x, dy=p2.y-p.y, len=Math.sqrt(dx*dx+dy*dy)||1, nx=-dy/len, ny=dx/len;
-        var h=hist[Math.min(hist.length-1,Math.floor(u*(hist.length-1)))];
-        var taper=Math.pow(Math.sin(Math.PI*Math.min(1,u*1.05)),.7)*(1-u*.55);
-        var amp=(6+h*70)*taper*waveFade;
-        var off=Math.sin(u*18-t*7+s*2.1)*amp*(1-s*.25);
+        var hh=hist[Math.min(hist.length-1,Math.floor(u*(hist.length-1)))];
+        var taper=Math.pow(Math.sin(Math.PI*Math.min(1,u*1.02)),.6)*(1-u*.4);
+        var amp=(5+hh*60)*taper*waveFade;
+        var off=Math.sin(u*22-t*9+s*2.1)*amp*(1-s*.3)+(rnd(i,s)-.5)*amp*(.6+hh);
         var x=p.x+nx*off, y=p.y+ny*off;
         if(i) cx.lineTo(x,y); else cx.moveTo(x,y);
       }
       var g=cx.createLinearGradient(micX,micY,fx,fy);
-      g.addColorStop(0,'rgba(240,212,138,'+(.75*waveFade)+')'); g.addColorStop(.6,'rgba(110,240,215,'+(.8*waveFade)+')'); g.addColorStop(1,'rgba(150,255,235,'+(.35*waveFade)+')');
-      cx.strokeStyle=g; cx.lineWidth=s?1.4:2.4; cx.stroke();
+      g.addColorStop(0,'rgba(255,226,150,'+(.95*waveFade)+')'); g.addColorStop(.5,'rgba(150,255,235,'+(.95*waveFade)+')'); g.addColorStop(1,'rgba(200,255,245,'+(.6*waveFade)+')');
+      cx.shadowColor='rgba(120,255,225,.9)'; cx.shadowBlur=s?6:14;
+      cx.strokeStyle=g; cx.lineWidth=s?1.2:2.6; cx.stroke();
     }
+    cx.restore();
   }
+
   function loop(on){ var v=$('hearthLoop'); if(!v) return; if(on&&!reduce&&!(navigator.connection&&navigator.connection.saveData)){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else { try{ v.pause(); }catch(e){} } }
   function start(){ if(running) return; running=true; layout(); micPoint(); t0=performance.now(); raf=requestAnimationFrame(frame); loop(true); }
   function stopAnim(){ running=false; cancelAnimationFrame(raf); parts.length=0; sparks.length=0; loop(false); }
