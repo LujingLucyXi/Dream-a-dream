@@ -1247,6 +1247,52 @@
   .shelf2-detail{max-width:440px;margin:12px auto 0}
   .shelf2-hint{text-align:center;font-size:12.5px;color:#8e95b3;margin:10px 0 0}
   @media(prefers-reduced-motion:reduce){.shelf2-slot.arrive svg{animation:none}.shelf2-track{scroll-behavior:auto}}
+
+  /* ——— Dream Decipher, v3: the fire is the page; the reading is its own view ——— */
+  .hearth.inline{position:relative;inset:auto;z-index:1;height:min(calc(100svh - 150px),780px);min-height:560px;border-radius:24px;border:1px solid rgba(95,227,207,.22);box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  .hearth.inline .hearth-x{display:none}
+  .hearth.inline .hearth-ui{max-width:none;padding:18px 16px 18px}
+  .hearth.inline .hearth-card{max-width:520px;margin:0 auto}
+  .hearth.inline .hearth-stage{max-width:520px;margin:0 auto}
+  #panelNight .layout{display:block}
+  #panelNight .input-panel{max-width:760px;margin:0 auto;padding:0;background:none;border:none;box-shadow:none}
+  #panelNight.night-intake .reveal-section{display:none}
+  #panelNight.night-reveal .input-panel{display:none}
+  .reveal-section{max-width:640px;margin:0 auto}
+  .reveal-top{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+  .reveal-back{background:transparent;border:1px solid rgba(240,212,138,.4);color:#f3e9c8;border-radius:999px;padding:9px 14px;font-weight:800;font-size:14px}
+  .reveal-skip{background:transparent;border:none;color:#9aa6d1;font-size:13.5px;text-decoration:underline;text-underline-offset:3px}
+  .reveal-skip[hidden]{display:none}
+  .unfold-hide{opacity:0!important;transform:translateY(16px)}
+  .unfold-in{transition:opacity .7s ease,transform .7s ease}
+  #collectReveal{display:none!important}
+  /* popups: souvenir, then stamp */
+  .dm-pop{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px;background:rgba(4,6,14,.72);backdrop-filter:blur(3px);animation:dmFade .3s ease-out}
+  .dm-pop-card{position:relative;width:100%;max-width:400px;max-height:calc(100svh - 36px);overflow-y:auto;background:linear-gradient(180deg,#18203d,#0f1429);border:1px solid rgba(240,212,138,.45);border-radius:22px;padding:22px 20px 18px;text-align:center;color:#eef0ff;box-shadow:0 30px 70px rgba(0,0,0,.6);animation:dmUp .45s cubic-bezier(.2,.9,.3,1.2)}
+  .dm-pop-kicker{font-size:11.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
+  .dm-pop-illus{width:132px;height:132px;margin:10px auto 4px;display:grid;place-items:center;filter:drop-shadow(0 0 22px rgba(240,212,138,.45))}
+  .dm-pop-illus svg{width:100%;height:100%}
+  .dm-pop-card h3{font-family:"Cormorant Garamond",serif;font-size:27px;line-height:1.1;font-weight:600;margin:6px 0 6px;color:#f3e9c8}
+  .dm-pop-from{font-size:13.5px;color:#c9cee3;margin:0 0 12px;line-height:1.45}
+  .dm-pop-from b{color:#7fe7d6;font-weight:800}
+  .dm-pop-task{text-align:left;background:rgba(240,212,138,.07);border:1px solid rgba(240,212,138,.28);border-radius:14px;padding:11px 13px;margin:0 0 14px}
+  .dm-pop-task p{margin:4px 0 0;font-size:13.5px;line-height:1.5;color:#dde3f5}
+  .dm-pop-stamp{display:flex;justify-content:center;margin:12px 0 8px}
+  .dm-pop-actions{display:flex;flex-direction:column;gap:8px}
+  .dm-pop-go{background:var(--gold2);color:#221a05;border:none;border-radius:999px;padding:13px 16px;font-weight:900;font-size:15px}
+  .dm-pop-alt{background:transparent;color:#f3e9c8;border:1px solid rgba(240,212,138,.4);border-radius:999px;padding:11px 16px;font-weight:800;font-size:14px}
+  .dm-pop-alt[disabled]{opacity:.7}
+  @keyframes dmFade{from{opacity:0}to{opacity:1}}
+  @keyframes dmUp{from{transform:translateY(30px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+  @media(prefers-reduced-motion:reduce){.unfold-in{transition:none}.dm-pop,.dm-pop-card{animation:none}}
+
+  .hearth-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 58%;opacity:0;transition:opacity .8s ease}
+  .hearth-bg video.on{opacity:1}
+  .hearth-lens{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 4px}
+  .sym-souv{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#221a05;background:var(--gold2);border-radius:999px;padding:2px 8px;vertical-align:2px}
+  .lens-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 4px;font-size:13px;color:#9aa6d1}
+  .lens-row button{background:transparent;border:1px solid rgba(240,212,138,.4);color:#f3e9c8;border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px}
+  .lens-tag{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#7fe7d6;margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -1276,49 +1322,6 @@
       <button type="button" class="landing-link" id="landBack" style="display:block;margin:8px auto 0">Back</button>
     </form>
     <p class="landing-fine" id="landFine">Free to start: a dream reading every night, sleep stories and your own dream passport.</p>
-  </div>
-</div>
-<div class="hearth" id="hearth" hidden role="dialog" aria-modal="true" aria-labelledby="hearthTitle">
-  <div class="hearth-bg" id="hearthBg" aria-hidden="true"></div>
-  <canvas class="hearth-canvas" id="hearthCanvas" aria-hidden="true"></canvas>
-  <div class="hearth-ui">
-    <div class="hearth-top">
-      <button type="button" class="hearth-x" id="hearthClose" aria-label="Close">×</button>
-    </div>
-    <div class="hearth-head">
-      <h2 class="hearth-title" id="hearthTitle">Tell Coffee your dream</h2>
-      <p class="hearth-sub" id="hearthSub">Speak it into the fire. Where you were, who was there, what happened, how it felt.</p>
-    </div>
-    <div class="hearth-spacer"></div>
-
-    <div class="hearth-stage" id="hsSpeak">
-      <p class="hearth-status" id="hearthStatus" role="status" aria-live="polite"></p>
-      <button type="button" class="hearth-mic" id="hearthMic" aria-pressed="false" aria-label="Start telling your dream"><span class="hearth-mic-ring" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
-      <p class="hearth-hint" id="hearthHint">Tap to begin · tap again when you’re done</p>
-      <button type="button" class="hearth-link" id="hearthType">or write it instead</button>
-    </div>
-
-    <div class="hearth-card" id="hsHeard" hidden>
-      <h3 id="hhTitle">What the fire heard</h3>
-      <textarea id="hearthText" maxlength="900" rows="5"></textarea>
-      <p class="hearth-small" id="hhFeelL">How did you wake up feeling?</p>
-      <div class="hearth-chips" id="hearthFeel"></div>
-      <div class="hearth-row">
-        <button type="button" class="hearth-ghost" id="hearthMore">Speak more</button>
-        <button type="button" class="hearth-go" id="hearthNext">Continue</button>
-      </div>
-    </div>
-
-    <div class="hearth-card" id="hsAsk" hidden>
-      <div class="hearth-coffee"><span class="hearth-dot" aria-hidden="true">☾</span><span id="haWho">Coffee asks</span><span class="hearth-step" id="haStep"></span></div>
-      <h3 id="haQ"></h3>
-      <div class="hearth-chips" id="haChips"></div>
-      <input type="text" id="haText" maxlength="200" autocomplete="off" />
-      <div class="hearth-row">
-        <button type="button" class="hearth-ghost" id="haSkip">Skip</button>
-        <button type="button" class="hearth-go" id="haNext">Next</button>
-      </div>
-    </div>
   </div>
 </div>
 <div class="sky" aria-hidden="true"><img class="sky-stars" src="assets/sky-stars-3f7764a7.webp" alt="" /><img class="sky-moon" src="assets/sky-moon-c82e905d.webp" alt="" /><img class="mist mist-a" src="assets/mist-soft-b1e0853c.webp" alt="" /><img class="mist mist-b" src="assets/mist-soft-b1e0853c.webp" alt="" /></div>
@@ -1409,12 +1412,55 @@
     <button type="button" class="collect-btn" id="passportOpenBtn"><span class="cb-ic" aria-hidden="true">☾</span><span id="passportBtnLabel">Dream passport</span><b id="passportCount">0 places visited</b></button>
   </div>
 
-  <main id="panelNight" role="tabpanel" aria-label="Dream Decipher — night dream reading">
+  <main id="panelNight" class="night-intake" role="tabpanel" aria-label="Dream Decipher — night dream reading">
   <div class="layout" id="reader">
-    <section class="input-panel" aria-label="Write your dream">
-      <h1>What did you<br>dream <em>last night?</em></h1>
+    <section class="input-panel" aria-label="Tell your dream">
+<div class="hearth inline" id="hearth" role="region" aria-labelledby="hearthTitle">
+  <div class="hearth-bg" id="hearthBg" aria-hidden="true"><video id="hearthLoop" muted loop playsinline preload="none" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/1b292961-93e2-403f-a5e5-a8f23fc49a4c.mp4"></video></div>
+  <canvas class="hearth-canvas" id="hearthCanvas" aria-hidden="true"></canvas>
+  <div class="hearth-ui">
+    <div class="hearth-top">
+      <button type="button" class="hearth-x" id="hearthClose" aria-label="Close">×</button>
+    </div>
+    <div class="hearth-head">
+      <h2 class="hearth-title" id="hearthTitle">Tell Coffee your dream</h2>
+      <p class="hearth-sub" id="hearthSub">Speak it into the fire. Where you were, who was there, what happened, how it felt.</p>
+    </div>
+    <div class="hearth-spacer"></div>
 
-      <button type="button" class="hearth-open-btn" id="hearthOpenBtn"><span class="hof" aria-hidden="true">🔥</span> Speak your dream by the fire</button>
+    <div class="hearth-stage" id="hsSpeak">
+      <p class="hearth-status" id="hearthStatus" role="status" aria-live="polite"></p>
+      <button type="button" class="hearth-mic" id="hearthMic" aria-pressed="false" aria-label="Start telling your dream"><span class="hearth-mic-ring" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></button>
+      <p class="hearth-hint" id="hearthHint">Tap to begin · tap again when you’re done</p>
+      <button type="button" class="hearth-link" id="hearthType">or write it instead</button>
+    </div>
+
+    <div class="hearth-card" id="hsHeard" hidden>
+      <h3 id="hhTitle">What the fire heard</h3>
+      <textarea id="hearthText" maxlength="900" rows="5"></textarea>
+      <p class="hearth-small" id="hhFeelL">How did you wake up feeling?</p>
+      <div class="hearth-chips" id="hearthFeel"></div>
+      <p class="hearth-small" id="hhLensL">Read it through</p>
+      <div class="hearth-chips hearth-lens" id="hearthLens"></div>
+      <div class="hearth-row">
+        <button type="button" class="hearth-ghost" id="hearthMore">Speak more</button>
+        <button type="button" class="hearth-go" id="hearthNext">Continue</button>
+      </div>
+    </div>
+
+    <div class="hearth-card" id="hsAsk" hidden>
+      <div class="hearth-coffee"><span class="hearth-dot" aria-hidden="true">☾</span><span id="haWho">Coffee asks</span><span class="hearth-step" id="haStep"></span></div>
+      <h3 id="haQ"></h3>
+      <div class="hearth-chips" id="haChips"></div>
+      <input type="text" id="haText" maxlength="200" autocomplete="off" />
+      <div class="hearth-row">
+        <button type="button" class="hearth-ghost" id="haSkip">Skip</button>
+        <button type="button" class="hearth-go" id="haNext">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="night-legacy" hidden>
       <label class="field-label" for="dreamInput">Your dream <span>At least 20 words</span></label>
       <div class="couch-scene">
         <button type="button" class="cat-perch" data-pose="sleep" title="Tap the cat — it changes pose" aria-label="The cat is sleeping. Tap to change its pose">
@@ -1444,9 +1490,11 @@
 
       <button class="cta" id="readBtn"><span id="readBtnLabel">Read my dream</span> <span>→</span></button>
       <p class="hook-note">Every reading opens with one bright sign and one warning sign — both free, in full. The deeper part of the reading stays locked, until you want it.</p>
+      </div>
     </section>
 
-    <section aria-label="Your dream card">
+    <section aria-label="Your dream card" class="reveal-section" id="revealSection">
+      <div class="reveal-top"><button type="button" class="reveal-back" id="revealBack">← <span id="revealBackT">Tell another dream</span></button><button type="button" class="reveal-skip" id="revealSkip" hidden>Show all</button></div><div class="lens-row" id="lensRow"></div>
       <div class="card-wrap" id="cardWrap">
       <div class="veil" id="readingVeil" aria-live="polite"><div><div class="wait-scene" aria-hidden="true"><span class="wait-star" style="left:4%;top:14%">✦</span><span class="wait-star sm" style="right:8%;top:6%;animation-delay:.55s">✦</span><span class="wait-star" style="right:2%;top:46%;animation-delay:1.05s">✦</span><span class="wait-star sm" style="left:12%;top:54%;animation-delay:1.45s">✦</span><div class="wait-moon">☾</div><img class="wait-cat" src="assets/cat-sleep-0f293551.webp" alt="" /><div class="wait-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></div></div><b>Reading your dream…</b><div class="steps" id="veilStep">Listening to your dream</div><div class="wait-dots" aria-hidden="true"><span></span><span></span><span></span></div></div></div>
       <article class="share-card" id="shareCard">
@@ -2165,6 +2213,12 @@
   }
   var lifeMomentAnswer='';
   var activeDaydream=null;
+  var LENS_RULES={
+    zhougong:'LENS FOR THIS READING — 周公解梦 (the Zhou Gong folk dream book). This lens outranks the method above where they differ. Lead with the traditional folk meaning of each sign as a sign of the heart and of what is coming in the dreamer\u2019s life — auspicious, or asking for care — in the plain, poetic voice of the old book. Name the folk meaning briefly (e.g. water as feeling and fortune, a key as a door opening), always grounded in the dreamer\u2019s own words, never fearful, never fatalistic.',
+    freud:'LENS FOR THIS READING — Freud. This lens outranks the method above where they differ. Read the dream as a disguised wish: the dream as told (manifest) carries a hidden wish (latent); notice condensation and displacement. Name, gently and as a possibility, the wish each sign may be carrying. Warm and plain, never clinical, never a fixed sexual reading.',
+    jung:'LENS FOR THIS READING — Jung. This lens outranks the method above where they differ. Read the signs as images from the dreamer\u2019s own psyche: archetypes (the shadow, the wise elder, the child, the threshold, the house as the self), and what the dream may be balancing in their waking attitude. Point toward who they are becoming. Warm and plain, never academic.'
+  };
+  function lensBlock(){ var k=window.__dreamLens||'zhougong'; return LENS_RULES[k]?'\n\n'+LENS_RULES[k]:''; }
   /* Answers the dreamer gave Coffee by the fire before the reading. They
      shape the reading so it speaks to the dreamer's real life right now. */
   function followupBlock(){
@@ -2177,7 +2231,7 @@
     if(activeDaydream){
       dd='\n\nThe dreamer has an ACTIVE DAYDREAM — a wish written as a future scene:\nWISH: """'+activeDaydream.wish+'"""\nSCENE: """'+activeDaydream.scene+'"""\nSEED LINE: "'+activeDaydream.seed+'"\nRead the night dream beside this daydream, using ONLY what is in the two texts. Add two extra JSON fields: "daydreamLink":"2-3 sentences in the same voice of the old dream books — name a person, place or feeling that is ACTUALLY in the night dream, say plainly how the night dream sits beside the wish (it pictured it, echoed part of it, or showed something else entirely), and end by pointing toward the wished-for life. Never invent an image that is not in the night dream." and "daydreamAction":"ONE forward-looking gift, prefixed with either Refined daydream: or Today, one small step: — a sharper version of the wish in present tense, or one small kind action for today, under 20 words." Make the "closing" field a tonight seed built from that forward gift, in the closing format below — never a phrase from the painful past.';
     }
-    return 'You are Dreameri, writing a dream reading in the voice of the old Chinese dream books — the Zhou Gong folk tradition — warm, plain, poetic, specific. BREVITY — STRICT: every field is short and easy to read on a phone; no field runs longer than its limit; cut every word that does not move the dreamer. Leave the dreamer feeling seen, heard and quietly inspired. You speak directly to the dreamer as "you". You READ THE DREAM in front of you: its people, its places, its feelings, in that order of importance.\n\nREAD, DO NOT EXPLAIN YOURSELF — STRICT BAN: Never talk about readings, writing, language, interpretation, or yourself. Never use any of these patterns or anything like them: "the point is not…", "it is not what this foretells", "what this gives you language for", "not a prediction", "not a hidden code", "this reading…", "the reading shows…", "no symbol has been added", "in your own words", "as you told it". Every sentence must be ABOUT THE DREAM AND THE DREAMER\u2019S LIFE — never about the text, the method, or the reading itself. Do NOT generate any five-elements weather, omen-timing or timing section.\n\nHOW TO READ — FREUD AS CRAFT, NEVER AS DIAGNOSIS (after Freud, The Interpretation of Dreams): a dream is a DISGUISED FULFILMENT OF A WISH the dreamer may not say out loud by day — the wish is real, the disguise is what makes it a dream. The MANIFEST content is the dream exactly as told; the LATENT content is the hidden wish or feeling moving underneath it, and interpretation runs BACKWARDS, from manifest to latent: take the dream as told and ask of each image, gently, what wish or feeling it might be carrying. The disguise is made by the DREAM-WORK: CONDENSATION — several thoughts, people or times compressed into one image, so one figure may stand for many; DISPLACEMENT — emotional weight shifted off what truly matters onto something small or trivial, so the dream’s centre of gravity is misleading and the loudest feeling may not sit on the real sore point; SYMBOLISATION — a wish shown as a picture instead of said in words; SECONDARY REVISION — the fragments smoothed, on waking, into a story that almost makes sense, so read through the smoothing, not just the surface. NO FIXED SYMBOL DICTIONARY — ABSOLUTE: free association takes precedence over symbol interpretation, always. A meaning is only true here if it grows out of the dreamer’s own words, their own associations inside the text, and the feeling they woke with; if a dictionary or traditional meaning and the dreamer’s own words disagree, the dreamer’s words win. Offer the latent layer as a POSSIBILITY (‘it may be carrying…’, ‘perhaps underneath…’), never as a verdict: never diagnose, never use clinical language, never impose a fixed sexual reading, never predict. Freud here is a way of LISTENING, not a claim about the dreamer’s mind — and the latent wish you name points forward, toward the life the dreamer wants.\n\nGROUNDING RULE — ABSOLUTE: Use ONLY the people, places, objects, actions and feelings the dreamer actually wrote. NEVER invent a symbol, image or detail that is not in the dream. If there is no water in the dream, never mention water. If there is no door, light, cat, train or chase, never mention those. If you cannot trace a sentence to the dream below, do not write it.\n\nSYMBOLS — EXACTLY 4, NEVER FEWER, NEVER EMPTY: Break the dream into its four most important signs — people first, then places, then actions or turns, then feelings. Split compound sentences apart: each distinct person, place and turn is its own symbol. EXAMPLE (follow this exactly in spirit): for the dream "my ex and I were together in a familiar road trip place, and his new girlfriend was there too. We all became friends", the four symbols are: 1) "The familiar road trip place", 2) "My ex", 3) "His new girlfriend", 4) "Becoming friends". Each symbol\u2019s "meaning" is ONE short sentence (at most 18 words) in the voice of the old dream books, saying what that sign means IN THIS DREAM — what it shows about the dreamer\u2019s heart, what is loosening, returning, or opening. A meaning that only restates the dream, or talks about wording, is a failure. READ EACH SYMBOL BACKWARDS: its meaning asks what WISH or FEELING this image might be carrying — watch for condensation (one image quietly standing for several people or times, when the dreamer’s own words fold them together) and for displacement (the strongest feeling sitting on a small, trivial detail while the true sore point stays quiet). The meaning must come from the dreamer’s own associations in their text — never decoded from a dictionary of symbols, never a universal ’X always means Y’.\n\nTHE LINE AND TONIGHT\u2019S SEED — FORWARD ONLY, STRICT: "line" is one line to remember, under 16 words. "closing" is tonight\u2019s seed, written exactly like: Tonight, as you fall asleep, hold this: "<a forward-looking line>". BOTH lines must point FORWARD — toward peace, openness, and the life the dreamer wants to feel close to: a steady love, a calmer home, work that fits, people who are truly theirs. NEVER build either line out of a painful phrase from the dream. NEVER tell the dreamer to hold onto an ex, a former partner, a rival, a loss, or any painful scene as they fall asleep. Even when the dream is about an ex, the line leaves the ex behind: e.g. for the example dream above, a good line is "I can be at peace with what was, and walk toward the love that is truly mine." — the past is named only as something being laid down, the direction is forward.\n\nNARRATIVE: 3 short sentences (at most 60 words in all) that actually read the dream, travelling from MANIFEST to LATENT: the dream as told is the surface; underneath it, name — gently, as a possibility, in the voice of the old dream books — the wish or feeling it may be carrying, the disguised fulfilment the dream-work was hiding. Name its people, places and feelings plainly, in the dreamer\u2019s own terms. Say what each part shows: why the ex appears, why the new girlfriend is there, why the dream ends in friendship instead of conflict — in the voice of the old dream books, as signs about the dreamer\u2019s heart, not as claims about what those real people think or will do. Name the waking feeling ('+feel+') and what it is attached to in the dream. End the narrative looking forward, toward the life the dreamer wants.\n\nReturn ONLY valid JSON with this shape:\n{"title":"short title built ONLY from words/people/places in the dream, max 5 words","symbols":[{"name":"one distinct person, place, action or feeling EXACTLY from the dream","meaning":"ONE short sentence, at most 18 words, of real old-book reading of that sign in this dream","icon":"choose ONLY if it matches an item actually in the dream, one of: water,cat,door,house,bag,fly,moon,sea,mirror,train,dragon,fish,fruit,snake,flower,gem,key,letter,bridge,candle,seed,compass,scale,heart,photo,teeth,chase — otherwise use moon"},{"name":"second symbol","meaning":"…","icon":"moon"},{"name":"third symbol","meaning":"…","icon":"moon"},{"name":"fourth symbol","meaning":"…","icon":"moon"}],"mood":"two-word mood grounded in the waking feeling, second word can be italicised with *","moodTags":"short tags separated by ·, each naming a person, place, turn or feeling actually in the dream","meter":0-100,"narrative":"3 short sentences, at most 60 words reading the dream itself, per the rules above","line":"forward-looking line to remember, under 16 words, per the strict forward-only rule","closing":"Tonight, as you fall asleep, hold this: \\"<forward-looking line>\\" — followed by one short warm sentence picturing the life it points toward","insight":"ONE short sentence for the chosen life-moment lens, grounded only in the dream\u2019s actual people, places and feelings, or empty string","daydreamLink":"only when a daydream is given below, else empty string","daydreamAction":"only when a daydream is given below, else empty string","why":"1 sentence naming the four signs this card was built from","brightSign":{"name":"the ONE sign in this dream that is opening, loosening or turning toward light — exactly from the dream","meaning":"ONE short sentence reading it as the dream bright sign"},"warningSign":{"name":"the ONE sign in this dream that asks for care — a knot, a closing, a return — exactly from the dream","meaning":"ONE short sentence reading it as the dream warning sign, gentle and caring"}}\n\nSIGNS — ONE BRIGHT, ONE WARNING: From the dream\u2019s own signs, choose the ONE bright sign (what is opening, loosening, turning toward light) and the ONE warning sign (what asks for care) and return them as brightSign and warningSign, each grounded only in the dream. Frame both as signs about the dreamer\u2019s own heart in the folk tradition — never as predictions about what another person will do.\n\nFinal checks before you answer: symbols array has EXACTLY 4 entries, none empty; no sentence explains what a reading is; the line and the seed quote no painful past phrase and name no ex to hold onto; every image appears in the dream; the narrative moves from the manifest dream to the latent wish underneath it; no meaning comes from a fixed symbol dictionary; nothing is diagnosed, no fixed sexual reading is imposed, and nothing is predicted. For pregnancy dreams (taimeng), traditional symbolism may be mentioned ONLY for a symbol that actually appears in the dream, and only as folklore — never medical fact. Never promise a wish will come true. Dream: """'+text+'""" Theme: '+THEMES[theme].label+' ('+theme+') Mood on waking: '+feel+' Life moment answer: '+(lifeMomentAnswer||THEMES[theme].tag)+dd+followupBlock()+aiLang('reading');
+    return 'You are Dreameri, writing a dream reading in the voice of the old Chinese dream books — the Zhou Gong folk tradition — warm, plain, poetic, specific. BREVITY — STRICT: every field is short and easy to read on a phone; no field runs longer than its limit; cut every word that does not move the dreamer. Leave the dreamer feeling seen, heard and quietly inspired. You speak directly to the dreamer as "you". You READ THE DREAM in front of you: its people, its places, its feelings, in that order of importance.\n\nREAD, DO NOT EXPLAIN YOURSELF — STRICT BAN: Never talk about readings, writing, language, interpretation, or yourself. Never use any of these patterns or anything like them: "the point is not…", "it is not what this foretells", "what this gives you language for", "not a prediction", "not a hidden code", "this reading…", "the reading shows…", "no symbol has been added", "in your own words", "as you told it". Every sentence must be ABOUT THE DREAM AND THE DREAMER\u2019S LIFE — never about the text, the method, or the reading itself. Do NOT generate any five-elements weather, omen-timing or timing section.\n\nHOW TO READ — FREUD AS CRAFT, NEVER AS DIAGNOSIS (after Freud, The Interpretation of Dreams): a dream is a DISGUISED FULFILMENT OF A WISH the dreamer may not say out loud by day — the wish is real, the disguise is what makes it a dream. The MANIFEST content is the dream exactly as told; the LATENT content is the hidden wish or feeling moving underneath it, and interpretation runs BACKWARDS, from manifest to latent: take the dream as told and ask of each image, gently, what wish or feeling it might be carrying. The disguise is made by the DREAM-WORK: CONDENSATION — several thoughts, people or times compressed into one image, so one figure may stand for many; DISPLACEMENT — emotional weight shifted off what truly matters onto something small or trivial, so the dream’s centre of gravity is misleading and the loudest feeling may not sit on the real sore point; SYMBOLISATION — a wish shown as a picture instead of said in words; SECONDARY REVISION — the fragments smoothed, on waking, into a story that almost makes sense, so read through the smoothing, not just the surface. NO FIXED SYMBOL DICTIONARY — ABSOLUTE: free association takes precedence over symbol interpretation, always. A meaning is only true here if it grows out of the dreamer’s own words, their own associations inside the text, and the feeling they woke with; if a dictionary or traditional meaning and the dreamer’s own words disagree, the dreamer’s words win. Offer the latent layer as a POSSIBILITY (‘it may be carrying…’, ‘perhaps underneath…’), never as a verdict: never diagnose, never use clinical language, never impose a fixed sexual reading, never predict. Freud here is a way of LISTENING, not a claim about the dreamer’s mind — and the latent wish you name points forward, toward the life the dreamer wants.\n\nGROUNDING RULE — ABSOLUTE: Use ONLY the people, places, objects, actions and feelings the dreamer actually wrote. NEVER invent a symbol, image or detail that is not in the dream. If there is no water in the dream, never mention water. If there is no door, light, cat, train or chase, never mention those. If you cannot trace a sentence to the dream below, do not write it.\n\nSYMBOLS — EXACTLY 4, NEVER FEWER, NEVER EMPTY: Break the dream into its four most important signs — people first, then places, then actions or turns, then feelings. Split compound sentences apart: each distinct person, place and turn is its own symbol. EXAMPLE (follow this exactly in spirit): for the dream "my ex and I were together in a familiar road trip place, and his new girlfriend was there too. We all became friends", the four symbols are: 1) "The familiar road trip place", 2) "My ex", 3) "His new girlfriend", 4) "Becoming friends". Each symbol\u2019s "meaning" is ONE short sentence (at most 18 words) in the voice of the old dream books, saying what that sign means IN THIS DREAM — what it shows about the dreamer\u2019s heart, what is loosening, returning, or opening. A meaning that only restates the dream, or talks about wording, is a failure. READ EACH SYMBOL BACKWARDS: its meaning asks what WISH or FEELING this image might be carrying — watch for condensation (one image quietly standing for several people or times, when the dreamer’s own words fold them together) and for displacement (the strongest feeling sitting on a small, trivial detail while the true sore point stays quiet). The meaning must come from the dreamer’s own associations in their text — never decoded from a dictionary of symbols, never a universal ’X always means Y’.\n\nTHE LINE AND TONIGHT\u2019S SEED — FORWARD ONLY, STRICT: "line" is one line to remember, under 16 words. "closing" is tonight\u2019s seed, written exactly like: Tonight, as you fall asleep, hold this: "<a forward-looking line>". BOTH lines must point FORWARD — toward peace, openness, and the life the dreamer wants to feel close to: a steady love, a calmer home, work that fits, people who are truly theirs. NEVER build either line out of a painful phrase from the dream. NEVER tell the dreamer to hold onto an ex, a former partner, a rival, a loss, or any painful scene as they fall asleep. Even when the dream is about an ex, the line leaves the ex behind: e.g. for the example dream above, a good line is "I can be at peace with what was, and walk toward the love that is truly mine." — the past is named only as something being laid down, the direction is forward.\n\nNARRATIVE: 3 short sentences (at most 60 words in all) that actually read the dream, travelling from MANIFEST to LATENT: the dream as told is the surface; underneath it, name — gently, as a possibility, in the voice of the old dream books — the wish or feeling it may be carrying, the disguised fulfilment the dream-work was hiding. Name its people, places and feelings plainly, in the dreamer\u2019s own terms. Say what each part shows: why the ex appears, why the new girlfriend is there, why the dream ends in friendship instead of conflict — in the voice of the old dream books, as signs about the dreamer\u2019s heart, not as claims about what those real people think or will do. Name the waking feeling ('+feel+') and what it is attached to in the dream. End the narrative looking forward, toward the life the dreamer wants.\n\nReturn ONLY valid JSON with this shape:\n{"title":"short title built ONLY from words/people/places in the dream, max 5 words","symbols":[{"name":"one distinct person, place, action or feeling EXACTLY from the dream","meaning":"ONE short sentence, at most 18 words, of real old-book reading of that sign in this dream","icon":"choose ONLY if it matches an item actually in the dream, one of: water,cat,door,house,bag,fly,moon,sea,mirror,train,dragon,fish,fruit,snake,flower,gem,key,letter,bridge,candle,seed,compass,scale,heart,photo,teeth,chase — otherwise use moon"},{"name":"second symbol","meaning":"…","icon":"moon"},{"name":"third symbol","meaning":"…","icon":"moon"},{"name":"fourth symbol","meaning":"…","icon":"moon"}],"mood":"two-word mood grounded in the waking feeling, second word can be italicised with *","moodTags":"short tags separated by ·, each naming a person, place, turn or feeling actually in the dream","meter":0-100,"narrative":"3 short sentences, at most 60 words reading the dream itself, per the rules above","line":"forward-looking line to remember, under 16 words, per the strict forward-only rule","closing":"Tonight, as you fall asleep, hold this: \\"<forward-looking line>\\" — followed by one short warm sentence picturing the life it points toward","insight":"ONE short sentence for the chosen life-moment lens, grounded only in the dream\u2019s actual people, places and feelings, or empty string","daydreamLink":"only when a daydream is given below, else empty string","daydreamAction":"only when a daydream is given below, else empty string","why":"1 sentence naming the four signs this card was built from","brightSign":{"name":"the ONE sign in this dream that is opening, loosening or turning toward light — exactly from the dream","meaning":"ONE short sentence reading it as the dream bright sign"},"warningSign":{"name":"the ONE sign in this dream that asks for care — a knot, a closing, a return — exactly from the dream","meaning":"ONE short sentence reading it as the dream warning sign, gentle and caring"}}\n\nPLACE — FOR THE DREAMER\u2019S PASSPORT: add a JSON field "place":{"id":"…","words":"…"}. id is the ONE place where the dream mainly happens, chosen ONLY from this list: water, sea, home, childhood, mountains, forest, city, school, work, road, train, sky, wedding, market, table, hospital, hotel, temple, library, stage, park, boat, abroad, moon — and ONLY if the dreamer\u2019s own words actually put the dream there; otherwise id is "none". words is the short phrase from the dream that names that place (max 8 words), or empty. Never guess a place the dream does not name.\n\nSIGNS — ONE BRIGHT, ONE WARNING: From the dream\u2019s own signs, choose the ONE bright sign (what is opening, loosening, turning toward light) and the ONE warning sign (what asks for care) and return them as brightSign and warningSign, each grounded only in the dream. Frame both as signs about the dreamer\u2019s own heart in the folk tradition — never as predictions about what another person will do.\n\nFinal checks before you answer: symbols array has EXACTLY 4 entries, none empty; no sentence explains what a reading is; the line and the seed quote no painful past phrase and name no ex to hold onto; every image appears in the dream; the narrative moves from the manifest dream to the latent wish underneath it; no meaning comes from a fixed symbol dictionary; nothing is diagnosed, no fixed sexual reading is imposed, and nothing is predicted. For pregnancy dreams (taimeng), traditional symbolism may be mentioned ONLY for a symbol that actually appears in the dream, and only as folklore — never medical fact. Never promise a wish will come true. Dream: """'+text+'""" Theme: '+THEMES[theme].label+' ('+theme+') Mood on waking: '+feel+' Life moment answer: '+(lifeMomentAnswer||THEMES[theme].tag)+dd+followupBlock()+lensBlock()+aiLang('reading');
   }
   function buildDaydreamPrompt(wish){
     return 'You are Dreameri making a DAYDREAM — manifestation as a dream scene, not a goal plan. Voice: warm, vivid, hopeful, sensory, present tense, second person (you). Never corporate, never hustle language, never a list of steps, never promise the wish will come true.\n\nReturn ONLY valid JSON:\n{"title":"short evocative scene title, max 5 words","scene":"A short EXPANDED STORY in miniature, NOT a summary of the wish and NOT a description of it: 6-10 SHORT paragraphs separated by \\n\\n, present tense, second person. Open mid-moment — a sound, a door opening, a first line of dialogue — never with an announcement of what day or event this is. Unfold it like a storyteller: a few concrete details from the wish, lived in order (an arrival, a small exchange of real dialogue in quotation marks, a small hitch or laugh, the moment itself), plus invented everyday details around them that the wish never mentioned — the scene must GROW beyond the wish, warmly and a little inspiring, never merely restate it. RHYTHM AND PAUSES — WRITE IT THE WAY A STORYTELLER TELLS IT: sentences VARY — some long and flowing, some three or four words; short paragraphs stand alone as beats; a line of dialogue often gets its own paragraph; let there be rests before the turns and after the tender lines. Uniform medium sentences, one after another at the same length, are the AI voice — never write that way. DESCRIBED EVENTS — STRICT: every concrete event the wish names must HAPPEN in the scene as lived action, never replaced by a generic ordinary moment near it: if the wish says she is getting married to her boyfriend, the wedding happens on the page — she walks in, the vows are said aloud, the ring goes on the hand — with the people from the wish living it. An event the dreamer described that is missing, or only implied, is a failure. NEVER ANNOUNCE THE FACT — STRICT BAN: no sentence may emphasise, clarify or point at the event itself or at the wish: banned shapes include \u201Cthis is the day itself\u201D, \u201Cyour wedding day \u2014 not a thought, it is happening\u201D, \u201Cthe one you described\u201D, \u201Cit became true\u201D, and in Chinese 就是这一天本身 / 不是念头里的，是正在发生的 / 它成了真的 / 礼成，你们结婚了 as narration. The event is simply happening; the text never explains that it is happening. CHINESE, WHEN THE LANGUAGE IS CHINESE — WRITE NATIVE CHINESE, NEVER TRANSLATED CHINESE: no calques of English phrasing (never 站在新郎等人的地方 for \u201Cwaiting where grooms wait\u201D, never 忘了整理表情, never 滑上手指 for a ring) — write the scene the way a Chinese storyteller would write it first-hand, in living spoken-and-written Chinese: 他站在红毯那头等你 / 他看着你，眼睛都红了 / 他把戒指慢慢套上你的手指.","seed":"ONE short seed line for tonight (入睡种子), under 14 words, present tense, image-led, to hold while falling asleep. FORWARD-LOOKING ONLY: it pictures the wished-for life the dreamer wants to feel close to — never a painful memory, never a person from the past they are letting go of. e.g. The window is open, and my life is already breathing in that room."}\n\nCORE, CONTEXT AND CRAFT — STRICT, THIS GOVERNS THE SCENE: Before writing, identify SILENTLY (never print it): (1) the CORE — the one central moment, event or feeling the wish describes — and the MAIN CHARACTERS, exactly the people the wish names; (2) the SETTING AND THE TIME — where it happens, what hour and season it breathes. Then build in this order: (a) a PRE-STORY of 1-2 short paragraphs that sets the tone and leads INTO the core — the approach, the just-before, the world of the core warming up — invented only from the core’s own world; (b) the CORE itself, unfolded detail by detail; (c) everything after still ORBITING the core — same world, same people, same place; any drift that cannot trace back to the core is cut. STAY IN THE VERTICAL of the described scenario: a snow-mountain ski trip stays a snow-mountain ski trip. EXPAND, NEVER REPEAT: no sentence copies the wish’s wording word-for-word (names and single key nouns excepted); every described detail becomes a lived moment with NEW texture — what it sounds like, feels like, who says what, what happens in the next breath. If the description is thin, imagine modestly, only to fill gaps in THIS story — the core world’s own weather, tools and ordinary next moments — never irrelevant invention. CREATIVE CRAFT: lay the scene on a causal spine — once… / every day… / but this time… / because of that… / because of that… / until finally the core moment lands… / and ever since then… — each beat CAUSES the next, never ’and then, and then’. One character, one want, one GENTLE obstacle (a hesitation, a small fear, a wrong turn — never a villain), one change by the end. Every sentence must reveal character or advance the action, or be cut; start as close to the core as the pre-story allows. SHOW, DON’T TELL: scenes in real time with action, dialogue and senses; summary only for transitions; never name a feeling an action or a spoken line can show. SCENE TEST: each paragraph carries a small goal, a gentle obstacle, a choice and a consequence, or it is compressed into a sentence. SETTING DOES WORK: 1-2 sensory details per paragraph, chosen to ground place, time and mood — never wallpaper.\n\nWish, written as a future scene: """'+wish+'"""'+aiLang('scene');
@@ -2317,7 +2371,7 @@
       // the English format, rebuild it in Chinese around the line.
       if(window.DREAM_LANG==='zh'&&/^Tonight, as you fall asleep/i.test(closingTxt)) closingTxt='今晚，临睡前，把这一句轻轻握住：“'+lineTxt.replace(/[“”"]/g,'')+'”想一想它指向的生活——不慌不忙，温暖，已经在开始了。';
       if(activeDaydream&&raw.daydreamAction&&!bannedReadingCheck(raw.daydreamAction)) closingTxt=window.DREAM_LANG==='zh'?('今晚，临睡前，把这一句轻轻握住：“'+lineTxt+'”'+zhT(ddAct||'')):('Tonight, as you fall asleep, hold this: \u201C'+lineTxt+'\u201D '+String(raw.daydreamAction));
-      return {titleHTML:titleHTML,symbols:syms,moodHTML:moodHtml,moodTags:raw.moodTags?zhT(String(raw.moodTags)):fallback.moodTags,meter:Math.max(8,Math.min(94,parseInt(raw.meter,10)||fallback.meter)),line:lineTxt,narrative:narrativeTxt,closing:closingTxt,source:L('Written by cloud AI','云端 AI 所写'),why:(raw.why&&!bannedReadingCheck(raw.why)?esc(zhT(String(raw.why))):fallback.why),insight:raw.insight&&!bannedReadingCheck(raw.insight)?'<p>'+esc(zhT(String(raw.insight)))+'</p>':fallback.insight,insightTitle:THEMES[theme].insightTitle,daydreamLink:ddLink,brightSign:(raw.brightSign&&raw.brightSign.name&&!bannedReadingCheck(raw.brightSign.meaning||''))?{name:zhT(String(raw.brightSign.name)),meaning:zhT(String(raw.brightSign.meaning||''))}:null,warningSign:(raw.warningSign&&raw.warningSign.name&&!bannedReadingCheck(raw.warningSign.meaning||''))?{name:zhT(String(raw.warningSign.name)),meaning:zhT(String(raw.warningSign.meaning||''))}:null};
+      return {place:(raw.place&&typeof raw.place==='object')?raw.place:null,titleHTML:titleHTML,symbols:syms,moodHTML:moodHtml,moodTags:raw.moodTags?zhT(String(raw.moodTags)):fallback.moodTags,meter:Math.max(8,Math.min(94,parseInt(raw.meter,10)||fallback.meter)),line:lineTxt,narrative:narrativeTxt,closing:closingTxt,source:L('Written by cloud AI','云端 AI 所写'),why:(raw.why&&!bannedReadingCheck(raw.why)?esc(zhT(String(raw.why))):fallback.why),insight:raw.insight&&!bannedReadingCheck(raw.insight)?'<p>'+esc(zhT(String(raw.insight)))+'</p>':fallback.insight,insightTitle:THEMES[theme].insightTitle,daydreamLink:ddLink,brightSign:(raw.brightSign&&raw.brightSign.name&&!bannedReadingCheck(raw.brightSign.meaning||''))?{name:zhT(String(raw.brightSign.name)),meaning:zhT(String(raw.brightSign.meaning||''))}:null,warningSign:(raw.warningSign&&raw.warningSign.name&&!bannedReadingCheck(raw.warningSign.meaning||''))?{name:zhT(String(raw.warningSign.name)),meaning:zhT(String(raw.warningSign.meaning||''))}:null};
     }catch(e){return null}
   }
   function fetchCloudReading(text,feel){
@@ -2863,6 +2917,7 @@
     try{ refreshWeaveList(); }catch(e){}
     // 4 · Collections: souvenir + passport stamps, same captured text.
     if(window.collectFromDream){ try{ window.collectFromDream(r,text); }catch(e){} }
+    try{ document.dispatchEvent(new CustomEvent('dreamread')); }catch(e){}
     return r;
   }
   window.completeDreamReading=completeReading;
@@ -2892,7 +2947,7 @@
     var cloudPromise;
     try{ cloudPromise=fetchCloudReading(text,feelAtTap); }
     catch(e){ cloudPromise=Promise.resolve(null); }
-    window.__dreamAsked=false; window.__dreamAnswers=null;
+    window.__dreamLastAnswers=window.__dreamAnswers||window.__dreamLastAnswers; window.__dreamAsked=false; window.__dreamAnswers=null;
     Promise.resolve(cloudPromise).then(function(ai){
       var elapsed=Date.now()-started; var minWait=AI_ENDPOINT?0:1100;
       return wait(Math.max(0,minWait-elapsed)).then(function(){return ai});
@@ -5486,18 +5541,44 @@
   function shelfEntry(id){ for(var i=0;i<shelf.length;i++) if(shelf[i].id===id) return shelf[i]; return null; }
   function stampCount(){ return Object.keys(stamps).length; }
 
+  /* Whole-word matching, so "car" no longer hides inside "scared",
+     "ship" inside "relationship" or "sea" inside "season". Chinese
+     keys have no word breaks and stay substring matches. */
+  function hasKey(hay,key){
+    key=String(key||'').toLowerCase(); if(!key) return false;
+    if(/[\u3400-\u9fff]/.test(key)) return hay.indexOf(key)!==-1;
+    var esc2=key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+');
+    return new RegExp('(^|[^a-z])'+esc2+'(s|es)?(?![a-z])').test(hay);
+  }
   function scoreGift(g,hay){
     var s=0;
-    for(var i=0;i<g.k.length;i++){ if(hay.indexOf(g.k[i].toLowerCase())!==-1) s++; }
+    for(var i=0;i<g.k.length;i++){ if(hasKey(hay,g.k[i])) s++; }
     return s;
   }
-  function pickGift(text,symNames){
-    var hay=(' '+(text||'')+' · '+(symNames||'')+' ').toLowerCase();
-    var ranked=GIFTS.map(function(g){ return {g:g,s:scoreGift(g,hay)}; }).sort(function(a,b){ return (b.s-a.s)||(a.g.id-b.g.id); });
+  /* The souvenir comes from the dream's SIGNS first: a gift whose drawing
+     matches a sign's icon, or whose words appear in a sign's name, wins
+     over one only matched somewhere in the dream text. The sign that
+     left it is remembered, so the popup can say which sign it came from. */
+  function pickGift(text,syms){
+    syms=syms||[];
+    var low=(' '+(text||'')+' ').toLowerCase();
+    var ranked=GIFTS.map(function(g){
+      var s=0, from=null;
+      syms.forEach(function(sy){
+        var nm=' '+String(sy.name||'').toLowerCase()+' ', sc=0;
+        if(sy.icon&&sy.icon!=='moon'&&sy.icon===g.i) sc+=3;
+        sc+=2*scoreGift(g,nm);
+        if(sc>0&&(!from||sc>from.sc)) from={sc:sc,name:sy.name};
+        s+=sc;
+      });
+      s+=scoreGift(g,low);
+      return {g:g,s:s,from:from&&from.name};
+    }).sort(function(a,b){ return (b.s-a.s)||(a.g.id-b.g.id); });
     var i, r;
-    for(i=0;i<ranked.length;i++){ r=ranked[i]; if(r.s>0 && !shelfEntry(r.g.id)) return {gift:r.g,fresh:true}; }
-    for(i=0;i<ranked.length;i++){ r=ranked[i]; if(!shelfEntry(r.g.id)) return {gift:r.g,fresh:true}; }
-    return {gift:ranked[0].g,fresh:false};
+    for(i=0;i<ranked.length;i++){ r=ranked[i]; if(r.s>0 && !shelfEntry(r.g.id)) return {gift:r.g,fresh:true,from:r.from}; }
+    for(i=0;i<ranked.length;i++){ r=ranked[i]; if(r.s>0) return {gift:r.g,fresh:false,from:r.from}; }
+    for(i=0;i<ranked.length;i++){ r=ranked[i]; if(!shelfEntry(r.g.id)) return {gift:r.g,fresh:true,from:syms[0]&&syms[0].name}; }
+    return {gift:ranked[0].g,fresh:false,from:null};
   }
 
   /* Called by the reader's ONE completion path the moment a reading
@@ -5507,34 +5588,44 @@
      the passport. */
   window.collectFromDream=function(r,dreamText){
     var ta=$('dreamInput'); var text=(typeof dreamText==='string'&&dreamText)?dreamText:(ta?ta.value:'');
-    var symNames=(r.symbols||[]).map(function(s){return s.name;}).join(' · ');
-    var pick=pickGift(text,symNames);
+    var pick=pickGift(text,r.symbols||[]);
     var date=todayStr();
     var title=String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
     if(pick.fresh){ shelf.unshift({id:pick.gift.id,date:date,title:title,taskDone:false}); newShelf=true; }
-    // Stamps are matched against the dreamer's own words — the dream
-    // text plus the symbol names, which are fragments of that same
-    // text — so a place carried by a symbol still earns its stamp.
-    var low=' '+(String(text||'')+' · '+symNames).toLowerCase()+' ', newIds=[];
-    var rawLow=String(text||'').toLowerCase();
-    PP.forEach(function(p,pi){
-      var hit=false, hitKey='';
-      for(var i=0;i<p.keys.length;i++){ if(low.indexOf(p.keys[i])!==-1){ hit=true; hitKey=p.keys[i]; break; } }
-      if(!hit) return;
-      // The stamp carries the place in the dreamer's own words: a
-      // short phrase lifted from the dream text itself, around the
-      // words that named the place ("…back in my childhood home…").
-      var label='';
-      var ki=rawLow.indexOf(hitKey);
-      if(ki!==-1){
-        var seg=String(text).slice(Math.max(0,ki-26),ki+hitKey.length+26).replace(/\s+/g,' ').trim().replace(/^[.,;:!?，。；：！？、…—–-]+|[.,;:!?，。；：！？、…—–-]+$/g,'');
-        label=seg.length>44?seg.slice(0,44).replace(/\s+\S*$/,'')+'…':seg;
+    /* ONE stamp per dream, for the place the dream mainly happens — and
+       only when the dreamer's own words name a place. The reading names
+       it when it can (chosen from the passport's places); otherwise the
+       dream text is searched word by word, and the place mentioned
+       earliest wins. No place in the dream, no stamp. */
+    var rawLow=' '+String(text||'').toLowerCase()+' ', place=null, hitKey='', words='';
+    var ai=r.place&&r.place.id&&r.place.id!=='none'?String(r.place.id):'';
+    if(ai){ PP.forEach(function(p){ if(p.id===ai) place=p; }); words=String(r.place.words||'').slice(0,60); }
+    if(!place){
+      var best=null;
+      PP.forEach(function(p){
+        p.keys.forEach(function(k){
+          if(!hasKey(rawLow,k)) return;
+          var at=rawLow.indexOf(k.toLowerCase());
+          if(!best||at<best.at) best={p:p,at:at,k:k};
+        });
+      });
+      if(best){ place=best.p; hitKey=best.k; }
+    }
+    var newIds=[];
+    if(place){
+      var label=words;
+      if(!label&&hitKey){
+        var ki=rawLow.indexOf(hitKey.toLowerCase())-1;
+        if(ki>=0){ var seg=String(text).slice(Math.max(0,ki-26),ki+hitKey.length+26).replace(/\s+/g,' ').trim().replace(/^[.,;:!?，。；：！？、…—–-]+|[.,;:!?，。；：！？、…—–-]+$/g,''); label=seg.length>44?seg.slice(0,44).replace(/\s+\S*$/,'')+'…':seg; }
       }
-      if(!stamps[p.id]){ stamps[p.id]={count:1,first:date,last:date,label:label,model:pi%10,ink:pi%INKS.length}; newIds.push(p.id); }
-      else { stamps[p.id].count++; stamps[p.id].last=date; if(!stamps[p.id].label&&label) stamps[p.id].label=label; if(stamps[p.id].model==null){ stamps[p.id].model=pi%10; stamps[p.id].ink=pi%INKS.length; } }
-    });
+      var pi=PP.indexOf(place);
+      if(!stamps[place.id]){ stamps[place.id]={count:1,first:date,last:date,label:label,model:pi%10,ink:pi%INKS.length}; newIds.push(place.id); }
+      else { stamps[place.id].count++; stamps[place.id].last=date; if(!stamps[place.id].label&&label) stamps[place.id].label=label; }
+    }
     if(newIds.length) newPass=true;
-    lastReveal={giftId:pick.gift.id,fresh:pick.fresh,newStamps:newIds,date:date};
+    lastReveal={giftId:pick.gift.id,fresh:pick.fresh,from:pick.from||'',newStamps:newIds,place:place?place.id:'',date:date};
+    if(pick.from){ setTimeout(function(){ Array.prototype.forEach.call(document.querySelectorAll('#symbols .symbol'),function(d){ var b=d.querySelector('b'); if(b&&b.textContent===pick.from&&!d.querySelector('.sym-souv')){ var t=document.createElement('span'); t.className='sym-souv'; t.textContent=L('✦ left a souvenir','✦ 留下了纪念品'); b.appendChild(t); } }); },0); }
+    if(pick.fresh){ var se=shelfEntry(pick.gift.id); if(se) se.from=pick.from||''; }
     renderReveal();
     renderStrip();
   };
@@ -5543,35 +5634,54 @@
      as a drawn object and the new stamps as ink stamps — and the
      moment it lands, the view centres on it, so collecting is never
      something you have to scroll down to find. ——— */
-  function renderReveal(noScroll){
-    var box=$('collectReveal'); if(!box) return;
-    if(!lastReveal){ box.hidden=true; box.innerHTML=''; return; }
-    var g=GIFTS[lastReveal.giftId], entry=shelfEntry(g.id);
-    var html='<div class="cr-kicker"><span>✦ '+(lastReveal.fresh?L('New souvenir','新纪念品'):L('A keepsake returns','一件纪念品又回来了'))+'</span><span>'+esc(lastReveal.date)+'</span></div>'
-      +'<div class="cr-gift"><div class="gift-illus">'+illusFor(g)+'</div><div><b>'+esc(giftName(g))+'</b>'
-      +'<span class="cr-from">'+(lastReveal.fresh?L('Left behind by this dream — it is on your shelf now.','这个梦留下的——它已经在你的架子上了。'):L('This dream led back to a keepsake already on your shelf.','这个梦，又把你带回了架子上的一件纪念品。'))+'</span></div></div>'
-      +'<div class="cr-task"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p></div>'
-      +'<div class="cr-actions">'
-      +(entry&&entry.taskDone
-        ? '<button type="button" class="cr-btn done" disabled>✓ '+L('Task done','任务完成')+'</button>'
-        : '<button type="button" class="cr-btn" data-task="'+g.id+'">'+L('Mark the task done','把任务标记为完成')+'</button>')
-      +'<button type="button" class="cr-btn solid" id="crShelfBtn">'+L('See it on the shelf','去架子上看它')+'</button>'
-      +'</div>';
-    if(lastReveal.newStamps.length){
-      html+='<div class="cr-stamps"><span class="gt-label">☾ '+(lastReveal.newStamps.length===1?L('New passport stamp','护照新印章'):L('New passport stamps','护照新印章'))+'</span><div class="cr-stamp-row">'
-        +lastReveal.newStamps.map(function(id){ var p=null; PP.forEach(function(x){ if(x.id===id) p=x; }); return p?stampHTML(p,stamps[p.id],true):''; }).join('')
-        +'<button type="button" class="cr-btn" id="crPassBtn">'+L('Open the passport','打开护照')+'</button></div></div>';
-    }
-    box.innerHTML=html; box.hidden=false;
-    var sb=$('crShelfBtn'); if(sb) sb.addEventListener('click',function(){ selectedGift=g.id; openShelf(); });
-    var pb=$('crPassBtn'); if(pb) pb.addEventListener('click',openPassport);
-    if(!noScroll){
-      setTimeout(function(){
-        try{ box.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){}
-        box.classList.remove('pulse'); void box.offsetWidth; box.classList.add('pulse');
-      },500);
-    }
+  /* The reveal is no longer a section under the card: after the reading
+     has unfolded, the new souvenir arrives as a popup, then the passport
+     stamp as a second one. renderReveal is kept (other code calls it to
+     refresh) but only empties the old box. */
+  function renderReveal(){ var box=$('collectReveal'); if(box){ box.hidden=true; box.innerHTML=''; } }
+  function popup(html,wire){
+    var o=document.createElement('div'); o.className='dm-pop'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true');
+    o.innerHTML='<div class="dm-pop-card">'+html+'</div>';
+    document.body.appendChild(o);
+    function close(){ o.remove(); setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },400); }
+    o.addEventListener('click',function(ev){ if(ev.target===o) o.querySelector('[data-pop-next]')&&o.querySelector('[data-pop-next]').click(); });
+    wire(o,close);
+    var f=o.querySelector('.dm-pop-go'); if(f) setTimeout(function(){ f.focus(); },50);
+    return o;
   }
+  function stampPopup(){
+    if(!lastReveal||!lastReveal.place) return;
+    var p=null; PP.forEach(function(x){ if(x.id===lastReveal.place) p=x; }); if(!p) return;
+    var st=stamps[p.id]; if(!st) return;
+    var isNew=lastReveal.newStamps.indexOf(p.id)!==-1;
+    var html='<div class="dm-pop-kicker">☾ '+(isNew?L('New passport stamp','护照新印章'):L('Stamped again','又盖了一次'))+'</div>'
+      +'<div class="dm-pop-stamp">'+stampHTML(p,st,true)+'</div>'
+      +'<h3>'+esc(placeName(p))+'</h3>'
+      +'<p class="dm-pop-from">'+(st.label?(L('Your dream took you here: ','你的梦带你到了这里：')+'<b>“'+esc(st.label)+'”</b>'):L('The place your dream happened.','你的梦发生的地方。'))
+      +(isNew?'':'<br>'+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次来到这里'):('Visit '+st.count+' to this place')))+'</p>'
+      +'<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+L('Done','好的')+'</button><button type="button" class="dm-pop-alt" data-pop-pass>'+L('Open the passport','打开护照')+'</button></div>';
+    popup(html,function(o,close){
+      o.querySelector('[data-pop-next]').addEventListener('click',close);
+      o.querySelector('[data-pop-pass]').addEventListener('click',function(){ close(); openPassport(); });
+    });
+  }
+  window.showCollectPopups=function(){
+    if(!lastReveal) return;
+    var g=GIFTS[lastReveal.giftId], entry=shelfEntry(g.id);
+    var html='<div class="dm-pop-kicker">✦ '+(lastReveal.fresh?L('A new souvenir','新的纪念品'):L('A keepsake returns','一件纪念品又回来了'))+'</div>'
+      +'<div class="dm-pop-illus">'+illusFor(g)+'</div>'
+      +'<h3>'+esc(giftName(g))+'</h3>'
+      +'<p class="dm-pop-from">'+(lastReveal.from?(L('Left by the sign ','由这个梦的征兆留下：')+'<b>“'+esc(lastReveal.from)+'”</b>'):L('Left behind by this dream.','这个梦留下的。'))+'</p>'
+      +'<div class="dm-pop-task"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p></div>'
+      +'<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+(lastReveal.place?L('Continue','继续'):L('Done','好的'))+'</button>'
+      +'<button type="button" class="dm-pop-alt" data-pop-shelf>'+L('See it on the shelf','去架子上看它')+'</button>'
+      +'<button type="button" class="dm-pop-alt" data-task="'+g.id+'"'+(entry&&entry.taskDone?' disabled':'')+'>'+(entry&&entry.taskDone?('✓ '+L('Task done','任务完成')):L('Mark the task done','把任务标记为完成'))+'</button></div>';
+    popup(html,function(o,close){
+      o.querySelector('[data-pop-next]').addEventListener('click',function(){ close(); stampPopup(); });
+      o.querySelector('[data-pop-shelf]').addEventListener('click',function(){ close(); selectedGift=g.id; openShelf(); });
+      var t=o.querySelector('[data-task]'); if(t) t.addEventListener('click',function(){ setTimeout(function(){ t.disabled=true; t.textContent='✓ '+L('Task done','任务完成'); },0); });
+    });
+  };
 
   /* ——— The strip under the mode switch ——— */
   function renderStrip(){
@@ -5616,7 +5726,7 @@
             html+='<button type="button" class="shelf2-slot'+(selectedGift===g.id?' sel':'')+(arriveGift===g.id?' arrive':'')+'" data-gift="'+g.id+'" aria-label="'+esc(giftName(g))+'">'+illusFor(g)+'</button>';
             if(selectedGift===g.id){
               detail='<div class="shelf-detail shelf2-detail"><b>'+esc(giftName(g))+'</b>'
-                +'<span class="gift-from">'+L('From the dream of ','来自 ')+esc(e.date)+(e.title?(' · '+esc(e.title)):'')+'</span>'
+                +'<span class="gift-from">'+L('From the dream of ','来自 ')+esc(e.date)+(e.title?(' · '+esc(e.title)):'')+(e.from?(' · '+L('left by the sign ','由征兆 ')+'“'+esc(e.from)+'”'):'')+'</span>'
                 +'<div style="margin-top:9px"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p>'
                 +'<button type="button" class="task-btn'+(e.taskDone?' done':'')+'" data-task="'+g.id+'">'+(e.taskDone?('✓ '+L('Done','已完成')):L('Mark done','标记完成'))+'</button></div></div>';
             }
@@ -5835,7 +5945,7 @@
   setInterval(function(){
     if(user&&synced){ saveNow(); return; }
     if(!user&&view==='sent') holdPending(snapshot());
-    if(!user&&!prompted&&!onFile&&!isEmpty(snapshot())){ prompted=true; showKeepNote(); }
+    if(!user&&!prompted&&!onFile&&!isEmpty(snapshot())&&!document.body.classList.contains('reveal-busy')){ prompted=true; showKeepNote(); }
   },SAVE_EVERY_MS);
   document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') saveNow(); });
 
@@ -6128,11 +6238,11 @@
   /* ——— Words: everything the dreamer sees, in both languages ——— */
   function texts(){
     $('hearthClose').setAttribute('aria-label',T('Close','关闭'));
-    $('hearthTitle').textContent=mode==='ask'?T('Coffee has a few questions','咖啡想问你几个问题'):T('Tell Coffee your dream','对咖啡讲讲你的梦');
+    $('hearthTitle').textContent=mode==='ask'?T('Coffee has a few questions','咖啡想问你几个问题'):T('What did you dream last night?','昨晚你梦见了什么？');
     $('hearthSub').textContent=mode==='ask'?T('Short answers are perfect. They help the reading speak to your life right now.','简短回答就好。它们会让解读贴近你现在的生活。'):T('Speak it into the fire. Where you were, who was there, what happened, how it felt.','对着炉火说出来：你在哪里，谁在，发生了什么，感觉如何。');
     $('hearthHint').textContent=rec?T('Tap again when you’re done','说完再点一下'):T('Tap to begin · tap again when you’re done','点一下开始 · 说完再点一下');
     $('hearthType').textContent=T('or write it instead','或者改为打字');
-    $('hhTitle').textContent=T('What the fire heard','炉火听到的');
+    $('hhTitle').textContent=typed?T('Write your dream','写下你的梦'):T('What the fire heard','炉火听到的');
     $('hhFeelL').textContent=T('How did you wake up feeling?','醒来时，你感觉如何？');
     $('hearthMore').textContent=T('Speak more','再说一些');
     $('hearthNext').textContent=T('Continue','继续');
@@ -6140,7 +6250,20 @@
     $('haSkip').textContent=T('Skip','跳过');
     $('haText').placeholder=T('Or say it in your own words…','或者用你自己的话说…');
     $('hearthMic').setAttribute('aria-label',rec?T('Stop','停止'):T('Start telling your dream','开始讲你的梦'));
-    renderFeels(); if(mode==='ask'&&questions.length) renderQ();
+    renderFeels(); renderLens(); if(mode==='ask'&&questions.length) renderQ();
+  }
+  var LENSES=[['zhougong','Zhou Gong · 周公解梦','周公解梦'],['freud','Freud · wishes','弗洛伊德 · 愿望'],['jung','Jung · archetypes','荣格 · 原型']];
+  window.DREAM_LENSES=LENSES;
+  if(!window.__dreamLens) window.__dreamLens='zhougong';
+  function renderLens(){
+    var box=$('hearthLens'); if(!box) return; box.innerHTML='';
+    LENSES.forEach(function(l){
+      var b=document.createElement('button'); b.type='button'; b.textContent=zh()?l[2]:l[1];
+      b.setAttribute('aria-pressed',window.__dreamLens===l[0]?'true':'false');
+      b.addEventListener('click',function(){ window.__dreamLens=l[0]; renderLens(); flare(.5); });
+      box.appendChild(b);
+    });
+    var lb=$('hhLensL'); if(lb) lb.textContent=T('Read it through','用哪一派来读');
   }
   function renderFeels(){
     var box=$('hearthFeel'); box.innerHTML='';
@@ -6257,8 +6380,9 @@
       cx.strokeStyle=g; cx.lineWidth=s?1.4:2.4; cx.stroke();
     }
   }
-  function start(){ if(running) return; running=true; layout(); micPoint(); t0=performance.now(); raf=requestAnimationFrame(frame); }
-  function stopAnim(){ running=false; cancelAnimationFrame(raf); parts.length=0; sparks.length=0; }
+  function loop(on){ var v=$('hearthLoop'); if(!v) return; if(on&&!reduce&&!(navigator.connection&&navigator.connection.saveData)){ v.addEventListener('playing',function(){ v.classList.add('on'); },{once:true}); var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else { try{ v.pause(); }catch(e){} } }
+  function start(){ if(running) return; running=true; layout(); micPoint(); t0=performance.now(); raf=requestAnimationFrame(frame); loop(true); }
+  function stopAnim(){ running=false; cancelAnimationFrame(raf); parts.length=0; sparks.length=0; loop(false); }
   window.addEventListener('resize',function(){ if(!el.hidden){ layout(); micPoint(); } });
 
   /* ——— Listening ——— */
@@ -6329,7 +6453,7 @@
       var text=String(d&&(d.text||d.transcript)||'').replace(/\s+/g,' ').trim();
       if(!text){ status(T('Didn’t catch that — try again.','没听清——再试一次。')); return; }
       var ta=$('hearthText'); ta.value=(ta.value?ta.value.replace(/\s+$/,'')+' ':'')+text;
-      status(''); stage('heard'); flare(.8);
+      typed=false; status(''); stage('heard'); texts(); flare(.8);
     }).catch(function(){
       if(timer) clearTimeout(timer);
       busy=false; setMic();
@@ -6338,8 +6462,11 @@
   }
   $('hearthMic').addEventListener('click',function(){ if(busy) return; if(rec) finish(); else begin(); });
   $('hearthMore').addEventListener('click',function(){ stage('speak'); status(''); begin(); });
+  var typed=false;
   $('hearthType').addEventListener('click',function(){
-    close(); var i=$('dreamInput'); if(i){ setTimeout(function(){ i.focus(); i.scrollIntoView({block:'center',behavior:'smooth'}); },350); }
+    typed=true; $('hearthText').value=''; status(''); stage('heard'); texts();
+    $('hearthText').placeholder=T('Where you were, who was there, what happened, how it felt — at least 20 words.','你在哪里，谁在，发生了什么，感觉如何——至少 20 个字。');
+    setTimeout(function(){ $('hearthText').focus(); },60);
   });
 
   /* ——— From the fire to the reading ——— */
@@ -6391,7 +6518,7 @@
   }
   function ask(text,f){
     mode='ask'; questions=[]; qi=0; answers=[]; pickedOpt='';
-    if(el.hidden) open('ask');
+    if(el.hidden&&!inline) open('ask');
     texts(); stage('ask');
     $('haQ').textContent=T('Coffee is thinking…','咖啡在想…'); $('haChips').innerHTML=''; $('haStep').textContent=''; $('haText').value='';
     $('haNext').disabled=true; $('haSkip').disabled=true;
@@ -6405,7 +6532,7 @@
     if(qi<questions.length){ renderQ(); return; }
     window.__dreamAnswers=answers.slice(); window.__dreamAsked=true;
     flare(1.6);
-    setTimeout(function(){ close(); var b=$('readBtn'); if(b) b.click(); },500);
+    setTimeout(function(){ if(!inline) close(); var b=$('readBtn'); if(b) b.click(); resetIntake(); },500);
   }
   $('haNext').addEventListener('click',function(){ nextQ(false); });
   $('haSkip').addEventListener('click',function(){ nextQ(true); });
@@ -6426,7 +6553,7 @@
     setTimeout(function(){ el.hidden=true; el.classList.remove('leaving'); stopAnim(); },480);
   }
   $('hearthClose').addEventListener('click',close);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!el.hidden) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!el.hidden&&!el.classList.contains('inline')) close(); });
   document.addEventListener('dreamlang',function(){ if(!el.hidden) texts(); });
 
   /* Ways in: the fire button above the couch, and the couch's own mic. */
@@ -6436,7 +6563,85 @@
   if(mic){ mic.addEventListener('click',function(e){ e.stopImmediatePropagation(); e.preventDefault(); open('speak'); },true); }
   document.addEventListener('dreamlang',function(){ var b=$('hearthOpenBtn'); if(b) b.lastChild.textContent=' '+T('Speak your dream by the fire','对着炉火讲你的梦'); });
   window.dreamHearthAsk=function(text,f){ feel=f||feel; ask(text,feel); };
+  /* Inline: the hearth IS the Dream Decipher page. Its fire burns while
+     it is on screen and rests when it is not. */
+  var inline=el.classList.contains('inline');
+  function resetIntake(){ mode='speak'; typed=false; $('hearthText').value=''; $('hearthText').placeholder=''; stage('speak'); status(''); texts(); }
+  window.resetDreamIntake=resetIntake;
+  if(inline){
+    if(HEARTH_IMG.indexOf('__')!==0) $('hearthBg').style.backgroundImage='url('+HEARTH_IMG+')';
+    stage('speak'); texts();
+    var vis=false;
+    function sync(){ var on=vis&&!el.closest('[hidden]')&&el.offsetParent!==null; if(on) start(); else if(running) stopAnim(); }
+    if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ vis=es[0].isIntersecting; sync(); },{threshold:.05}).observe(el); }
+    else { vis=true; sync(); }
+    document.addEventListener('dreamview',sync);
+    setInterval(sync,1500);
+  }
   window.openDreamHearth=open;
+})();
+</script>
+<script>
+/* ——— Dream Decipher views: tell (the fire) → reveal (the reading) ———
+   The reading opens as its own view and unfolds part by part: title,
+   each sign, the bright and warning signs, the reading, the line to
+   keep. Then the souvenir popup, then the stamp popup. */
+(function(){
+  var panel=document.getElementById('panelNight'); if(!panel) return;
+  function $(id){ return document.getElementById(id); }
+  function T(en,z){ return window.DREAM_LANG==='zh'?z:en; }
+  var reduce=false; try{ reduce=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  var timer=null, queue=[];
+  function view(name){
+    panel.classList.toggle('night-intake',name==='intake'); panel.classList.toggle('night-reveal',name==='reveal');
+    try{ document.dispatchEvent(new CustomEvent('dreamview',{detail:name})); }catch(e){}
+  }
+  function parts(){
+    var list=[], q=function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+    list=list.concat(q('#shareCard .card-art'), q('#shareCard .card-body > .section-label'), q('#symbols > *'), q('#signsHook'), q('#readingStory'), q('#deepHook'), q('#shareCard .remember'), q('#shareCard .card-foot'), q('#revealSection .card-actions'));
+    return list.filter(function(n){ return n&&n.offsetParent!==null; });
+  }
+  function finish(){
+    clearTimeout(timer); timer=null;
+    queue.forEach(function(n){ n.classList.remove('unfold-hide'); });
+    queue=[]; $('revealSkip').hidden=true;
+    setTimeout(function(){ if(window.showCollectPopups) window.showCollectPopups(); setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300); },reduce?100:700);
+  }
+  function step(){
+    var n=queue.shift(); if(!n){ finish(); return; }
+    n.classList.add('unfold-in'); n.classList.remove('unfold-hide');
+    try{ n.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}); }catch(e){}
+    timer=setTimeout(step, n.matches('#symbols > *')?1100:1500);
+  }
+  document.addEventListener('dreamread',function(){
+    document.body.classList.add('reveal-busy');
+    view('reveal');
+    $('revealBackT').textContent=T('Tell another dream','再讲一个梦');
+    $('revealSkip').textContent=T('Show all','全部显示');
+    var L3=window.DREAM_LENSES||[], cur=window.__dreamLens||'zhougong', row=$('lensRow');
+    if(row){
+      row.innerHTML='';
+      var nm=function(k){ var f=L3.filter(function(x){ return x[0]===k; })[0]; return f?(window.DREAM_LANG==='zh'?f[2]:f[1]):k; };
+      var lab=document.createElement('span'); lab.textContent=T('Read through ','这次用 ')+nm(cur)+T(' · try:',' 来读 · 换一派：'); row.appendChild(lab);
+      L3.forEach(function(x){ if(x[0]===cur) return; var b=document.createElement('button'); b.type='button'; b.textContent=nm(x[0]);
+        b.addEventListener('click',function(){ window.__dreamLens=x[0]; window.__dreamAnswers=window.__dreamLastAnswers||null; window.__dreamAsked=true; var rb=$('readBtn'); if(rb) rb.click(); });
+        row.appendChild(b); });
+    }
+    window.scrollTo({top:Math.max(0,panel.getBoundingClientRect().top+window.scrollY-10),behavior:'auto'});
+    queue=parts();
+    if(reduce){ finish(); return; }
+    queue.forEach(function(n){ n.classList.add('unfold-hide'); });
+    $('revealSkip').hidden=false;
+    clearTimeout(timer); timer=setTimeout(step,400);
+  });
+  $('revealSkip').addEventListener('click',finish);
+  $('revealBack').addEventListener('click',function(){
+    clearTimeout(timer); queue.forEach(function(n){ n.classList.remove('unfold-hide'); }); queue=[];
+    if(window.resetDreamIntake) window.resetDreamIntake();
+    view('intake');
+    window.scrollTo({top:Math.max(0,panel.getBoundingClientRect().top+window.scrollY-10),behavior:'smooth'});
+  });
+  view('intake');
 })();
 </script>
 </body>
