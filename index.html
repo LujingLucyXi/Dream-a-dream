@@ -1151,9 +1151,11 @@
   .landing-moon{font-size:26px;color:var(--gold2);margin-top:6px;text-shadow:0 0 22px rgba(240,212,138,.5)}
   .landing-name{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:52px;line-height:1;margin:6px 0 10px;color:#f3e9c8;letter-spacing:.01em;text-shadow:0 0 30px rgba(240,212,138,.28)}
   .landing-tag{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:21px;line-height:1.3;color:#dfe3f5;margin:0 0 20px;max-width:420px}
-  .landing-film{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0b0f1f url(assets/cat-sleep-0f293551.webp) center 62%/46% no-repeat;border:1px solid rgba(240,212,138,.28);box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  .landing-film{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0b0f1f url(https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/ac7bdb4e-d252-49ab-9e1c-9682a850813d.jpg) center/cover no-repeat;border:1px solid rgba(240,212,138,.28);box-shadow:0 24px 60px rgba(0,0,0,.55)}
   .landing-film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
   .landing-film video[hidden]{display:none}
+  .landing-sound{position:absolute;right:10px;bottom:10px;z-index:2;background:rgba(7,9,18,.72);color:#f3e9c8;border:1px solid rgba(240,212,138,.5);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:800;backdrop-filter:blur(4px)}
+  .landing-sound[hidden]{display:none}
   .landing-play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;padding-bottom:16px;background:linear-gradient(180deg,rgba(7,9,18,0) 40%,rgba(7,9,18,.75) 100%);border:none;color:#f3e9c8;width:100%}
   .landing-play-ic{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(240,212,138,.92);color:#221a05;font-size:22px;padding-left:4px;box-shadow:0 0 30px rgba(240,212,138,.45);margin-bottom:auto;margin-top:auto}
   .landing-play-t{font-size:13.5px;font-weight:800;letter-spacing:.02em}
@@ -1185,7 +1187,8 @@
     <h1 class="landing-name" id="landingName">Dreameri</h1>
     <p class="landing-tag" id="landTag">Coffee will walk you to the house at the edge of sleep.</p>
     <div class="landing-film">
-      <video id="landVideo" hidden playsinline controls preload="none" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/bba12ab3-4830-4ca3-b80f-17f041acf0fe.mp4"></video>
+      <video id="landVideo" playsinline muted preload="metadata" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/ac7bdb4e-d252-49ab-9e1c-9682a850813d.jpg" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/c07dfffd-b6db-42e7-90ea-814d0654e1ac.mp4"></video>
+      <button type="button" class="landing-sound" id="landSound" hidden>🔊 <span id="landSoundT">Tap for sound</span></button>
       <button type="button" class="landing-play" id="landPlay"><span class="landing-play-ic" aria-hidden="true">▶</span><span class="landing-play-t" id="landPlayT">Watch Coffee’s welcome · 0:47</span></button>
     </div>
     <div class="landing-cta" id="landCta">
@@ -5879,6 +5882,7 @@
   function texts(){
     $('landTag').textContent=T('Coffee will walk you to the house at the edge of sleep.','咖啡会带你走到睡眠边缘的那座房子。');
     $('landPlayT').textContent=T('Watch Coffee’s welcome · 0:47','看咖啡的欢迎短片 · 0:47');
+    $('landSoundT').textContent=T('Tap for sound','点一下开声音');
     $('landCreate').textContent=T('Create a free account','免费创建账户');
     $('landEnter').textContent=T('Step inside','先进去看看');
     $('landSignIn').textContent=T('Already have an account? Sign in','已经有账户？登录');
@@ -5904,10 +5908,24 @@
     setTimeout(function(){ el.hidden=true; el.classList.remove('leaving'); },460);
   }
 
-  $('landPlay').addEventListener('click',function(){
-    var v=$('landVideo'); v.hidden=false; this.hidden=true;
-    var p=v.play(); if(p&&p.catch) p.catch(function(){});
-  });
+  /* The film starts on its own, silently (browsers only allow muted autoplay);
+     its subtitles carry Coffee's words. One tap brings the sound in from the
+     start. Reduced-motion and data-saver visitors get the poster and a play
+     button instead. */
+  var vid=$('landVideo'), playBtn=$('landPlay'), soundBtn=$('landSound');
+  function withSound(){
+    vid.muted=false; vid.controls=true; vid.currentTime=0; soundBtn.hidden=true; playBtn.hidden=true;
+    var p=vid.play(); if(p&&p.catch) p.catch(function(){});
+  }
+  playBtn.addEventListener('click',withSound);
+  soundBtn.addEventListener('click',withSound);
+  vid.addEventListener('ended',function(){ if(vid.muted){ playBtn.hidden=false; soundBtn.hidden=true; } });
+  var calm=false; try{ calm=matchMedia('(prefers-reduced-motion: reduce)').matches||!!(navigator.connection&&navigator.connection.saveData); }catch(e){}
+  function tryAuto(){
+    if(calm) return;
+    var p=vid.play();
+    if(p&&p.then) p.then(function(){ playBtn.hidden=true; soundBtn.hidden=false; }).catch(function(){});
+  }
   $('landCreate').addEventListener('click',function(){ showForm('create'); });
   $('landSignIn').addEventListener('click',function(){ showForm('signin'); });
   $('landBack').addEventListener('click',hideForm);
@@ -5939,6 +5957,7 @@
   texts();
   el.hidden=false;
   document.documentElement.style.overflow='hidden';
+  tryAuto();
 })();
 </script>
 </body>
