@@ -1,5 +1,5 @@
-// Dream a Dream account actions: Supabase Edge Function "dream-account"
-// Deployed in the Dream a Dream project (ref jlvlmuyegirglbyrnfbl).
+// Dreameri account actions: Supabase Edge Function "dream-account"
+// Deployed in the Dreameri project (ref jlvlmuyegirglbyrnfbl).
 // POST { action: "delete" } with the signed-in user's access token in
 // Authorization: Bearer <token>. Deletes that user; their dream_profiles and
 // dream_user_state rows go with them (on delete cascade). Apple requires
@@ -65,7 +65,7 @@ Deno.serve(async (req: Request) => {
   const user = await me.json().catch(() => ({}));
   if (!user?.id) return reply(req, 401, { error: "sign in again" });
 
-  // Delete exactly that user. Their Dream a Dream rows cascade away.
+  // Delete exactly that user. Their Dreameri rows cascade away.
   const del = await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(user.id)}`, {
     method: "DELETE",
     headers: { apikey: svc, Authorization: `Bearer ${svc}` },

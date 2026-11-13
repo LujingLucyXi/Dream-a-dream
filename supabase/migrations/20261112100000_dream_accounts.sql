@@ -1,4 +1,4 @@
--- Dream a Dream: accounts — profile + saved collections, one row each per user.
+-- Dreameri: accounts — profile + saved collections, one row each per user.
 -- Run once in the project's SQL Editor (New query -> paste -> Run). Safe to re-run.
 -- Everything is prefixed dream_ so it sits apart from any other tables here.
 --
