@@ -1502,6 +1502,13 @@
   .price-card.byok-tier .plan-now{color:#7fd6a2}
   .price-card.byok-tier.on{border-style:solid;box-shadow:0 0 0 2px rgba(127,214,162,.5)}
   @media (max-width:760px){ .pricing.tiers{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:4px 2px 14px;margin:0 -4px;-webkit-overflow-scrolling:touch} .pricing.tiers .price-card{flex:0 0 82%;scroll-snap-align:center} }
+  .dc-entry .de-acts{display:flex;gap:8px;margin-top:10px}
+  .dc-entry .de-btn{font:inherit;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:transparent;color:#dfe3f5;cursor:pointer}
+  .dc-entry .de-btn.save{background:var(--gold2);border-color:var(--gold2);color:#1b1730}
+  .dc-entry .de-btn.del{color:#ec8f84;border-color:rgba(236,143,132,.4)}
+  .dc-entry .de-btn.del.armed{background:#b22222;color:#fff;border-color:#b22222}
+  .dc-entry .de-lab{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin:0 0 8px}
+  .dc-entry .de-in{display:block;width:100%;box-sizing:border-box;margin-top:4px;font:inherit;font-size:14px;letter-spacing:0;text-transform:none;color:#eef0fa;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:8px 10px;min-height:0;resize:vertical;color-scheme:dark}
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -3269,7 +3276,7 @@
   }
   window.renderDreamJourney=renderJourney;
   /* ——— Dream Calendar · 梦历 ——— every read dream lands on its day. */
-  var calMonth=null, calSel=null;
+  var calMonth=null, calSel=null, calEdit=-1, calDelArm=-1;
   function dayKey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
   function renderCalendar(){
     var el=$('dreamCal'); if(!el) return;
@@ -3293,7 +3300,17 @@
       var SN={zhougong:L('Zhou Gong','周公'),freud:L('Freud','弗洛伊德'),jung:L('Jung','荣格')};
       html+='<div class="dc-list">'+list.map(function(j){
         var t=new Date(j.date).toLocaleTimeString(window.DREAM_LANG==='zh'?'zh-CN':'en-US',{hour:'numeric',minute:'2-digit'});
-        return '<div class="dc-entry"><span class="de-meta">'+esc(t)+' · '+(SN[j.lens]||'')+'</span><b>'+esc(j.title||'')+'</b>'+(j.note?'<div class="de-note">“'+esc(j.note)+'”</div>':'')+(j.school?'<p>'+esc(j.school)+'</p>':'')+'<p>'+esc(j.snippet||'')+'</p></div>';
+        var ix=journal.indexOf(j), zh=window.DREAM_LANG==='zh';
+        if(calEdit===ix){
+          var dv=new Date(j.date), ds=dv.getFullYear()+'-'+('0'+(dv.getMonth()+1)).slice(-2)+'-'+('0'+dv.getDate()).slice(-2);
+          return '<div class="dc-entry editing" data-ix="'+ix+'"><label class="de-lab">'+L('Title','标题')+'<input type="text" class="de-in" data-f="title" maxlength="80" value="'+esc(j.title||'')+'"></label>'
+            +'<label class="de-lab">'+L('Date','日期')+'<input type="date" class="de-in" data-f="date" value="'+ds+'"></label>'
+            +'<label class="de-lab">'+L('Your sentence','写给自己的话')+'<textarea class="de-in" data-f="note" maxlength="240" rows="2">'+esc(j.note||'')+'</textarea></label>'
+            +'<div class="de-acts"><button type="button" class="de-btn save" data-act="save">'+L('Save','保存')+'</button><button type="button" class="de-btn" data-act="cancel">'+L('Cancel','取消')+'</button></div></div>';
+        }
+        var armed=calDelArm===ix;
+        return '<div class="dc-entry" data-ix="'+ix+'"><span class="de-meta">'+esc(t)+' · '+(SN[j.lens]||'')+'</span><b>'+esc(j.title||'')+'</b>'+(j.note?'<div class="de-note">“'+esc(j.note)+'”</div>':'')+(j.school?'<p>'+esc(j.school)+'</p>':'')+'<p>'+esc(j.snippet||'')+'</p>'
+          +'<div class="de-acts"><button type="button" class="de-btn" data-act="edit">✎ '+L('Edit','编辑')+'</button><button type="button" class="de-btn del'+(armed?' armed':'')+'" data-act="del">'+(armed?L('Tap again to delete','再点一次删除'):L('Delete','删除'))+'</button></div></div>';
       }).join('')+'</div>';
     } else if(!Object.keys(byDay).length){
       html+='<p class="dc-empty">'+L('Each dream you read will appear here, on the day you dreamed it.','你解过的每个梦，都会落在它的那一天。')+'</p>';
@@ -3305,6 +3322,25 @@
   document.addEventListener('click',function(e){
     var n=e.target.closest&&e.target.closest('[data-cal]');
     if(n){ calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+parseInt(n.getAttribute('data-cal'),10),1); calSel=null; renderCalendar(); return; }
+    var act=e.target.closest&&e.target.closest('.dc-entry [data-act]');
+    if(act){
+      var card=act.closest('.dc-entry'), ix=+card.getAttribute('data-ix'), j=journal[ix], a=act.getAttribute('data-act'); if(!j) return;
+      if(a==='edit'){ calEdit=ix; calDelArm=-1; renderCalendar(); var f=document.querySelector('.dc-entry.editing .de-in'); if(f) f.focus(); return; }
+      if(a==='cancel'){ calEdit=-1; renderCalendar(); return; }
+      if(a==='save'){
+        card.querySelectorAll('.de-in').forEach(function(inp){
+          var f=inp.getAttribute('data-f'), v=inp.value.trim();
+          if(f==='title'&&v) j.title=v;
+          if(f==='note') j.note=v;
+          if(f==='date'&&/^\d{4}-\d{2}-\d{2}$/.test(v)){ var old=new Date(j.date), p=v.split('-'); var nd=new Date(+p[0],+p[1]-1,+p[2],isNaN(old)?12:old.getHours(),isNaN(old)?0:old.getMinutes()); j.date=nd.toISOString(); calSel=dayKey(nd); calMonth=new Date(nd.getFullYear(),nd.getMonth(),1); }
+        });
+        calEdit=-1; try{ renderJourney(); }catch(err){} toast(L('Dream updated ✦','梦已更新 ✦')); return;
+      }
+      if(a==='del'){
+        if(calDelArm!==ix){ calDelArm=ix; renderCalendar(); setTimeout(function(){ if(calDelArm===ix){ calDelArm=-1; renderCalendar(); } },4000); return; }
+        journal.splice(ix,1); calDelArm=-1; calEdit=-1; try{ renderJourney(); }catch(err){} try{ refreshWeaveList(); }catch(err){} toast(L('Dream deleted','梦已删除')); return;
+      }
+    }
     var dd=e.target.closest&&e.target.closest('.dc-day.has');
     if(dd){ var k=dd.getAttribute('data-day'); calSel=(calSel===k?null:k); renderCalendar(); }
   });
