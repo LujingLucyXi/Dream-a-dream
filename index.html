@@ -1412,6 +1412,36 @@
   .ac-form textarea{flex:1;resize:none;font:inherit;font-size:14px;color:#eef0fa;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:9px 11px}
   .ac-send{font:inherit;font-size:13px;font-weight:600;padding:10px 14px;border-radius:12px;border:0;background:var(--gold2);color:#1b1730;cursor:pointer;white-space:nowrap}
   .ac-send:disabled{opacity:.5}
+  .self-note{margin:16px 0 6px}
+  .sn-hint{margin:0 0 8px;font-size:12.5px;line-height:1.45;color:#aab2d4}
+  .self-note textarea{width:100%;box-sizing:border-box;resize:none;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.35;color:#f3eedd;background:rgba(0,0,0,.22);border:1px solid rgba(214,178,94,.3);border-radius:12px;padding:10px 12px}
+  .sn-row{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:8px}
+  .sn-saved{font-size:12px;color:#9fd8b0}
+  .sn-btn{font:inherit;font-size:13px;font-weight:600;padding:9px 16px;border-radius:12px;border:0;background:var(--gold2);color:#1b1730;cursor:pointer}
+  .dream-cal{margin:18px 0 22px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+  .dc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .dc-head h4{margin:0;font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600}
+  .dc-head h4 small{display:block;font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.6;font-weight:400}
+  .dc-nav{font:inherit;font-size:18px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:transparent;color:inherit;cursor:pointer}
+  .dc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .dc-dow{font-size:10.5px;opacity:.5;padding:2px 0}
+  .dc-day{position:relative;aspect-ratio:1;border-radius:10px;font-size:13px;display:grid;place-items:center;border:1px solid transparent;background:none;color:#c8cde6;font-family:inherit;padding:0}
+  .dc-day.has{cursor:pointer;color:#fff;background:rgba(214,178,94,.12);border-color:rgba(214,178,94,.35)}
+  .dc-day.has:after{content:"☾";position:absolute;bottom:1px;font-size:9px;color:var(--gold2)}
+  .dc-day.today{box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+  .dc-day.sel{background:rgba(214,178,94,.32)}
+  .dc-list{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+  .dc-entry{padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.08)}
+  .dc-entry .de-meta{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+  .dc-entry b{display:block;font-family:"Cormorant Garamond",serif;font-size:19px;margin:2px 0 4px}
+  .dc-entry .de-note{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;color:#f0dfae;margin:4px 0}
+  .dc-entry p{margin:3px 0 0;font-size:12.5px;line-height:1.45;color:#b9c0dc}
+  .dc-empty{font-size:13px;opacity:.65;margin:10px 0 0}
+  .sub-limit{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:rgba(214,178,94,.14);border:1px solid rgba(214,178,94,.45);color:#f6e2ac;font-size:14px;line-height:1.5}
+  .price-tag{margin:6px 0 10px;font-family:"Cormorant Garamond",serif}
+  .price-tag b{font-size:34px}.price-tag span{font-size:16px;opacity:.8}.price-tag small{display:block;font-family:"DM Sans",sans-serif;font-size:12px;opacity:.75;margin-top:2px}
+  .price-btn.alt{background:transparent;border:1px solid rgba(214,178,94,.6);color:#f0d48a;margin-top:8px}
+  .price-card.plus.is-mine{box-shadow:0 0 0 2px rgba(214,178,94,.6)}
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -1499,8 +1529,8 @@
       <div class="plan-col">
         <div class="plan-col-head"><h5>Free</h5><span>Your current plan</span></div>
         <ul>
-          <li>Dream readings, every night</li>
-          <li>Sleep stories up to 10 minutes</li>
+          <li>One dream reading a day</li>
+          <li>Two sleep stories a week, up to 5 minutes</li>
           <li>Two voices — Nova &amp; Onyx</li>
           <li>Core themes &amp; moods</li>
           <li>Dream Memory — last 3 days only</li>
@@ -1514,6 +1544,7 @@
       <div class="plan-col full">
         <div class="plan-col-head"><h5>Full version</h5><span>Every lock opens</span></div>
         <ul>
+          <li>Unlimited dream readings &amp; sleep stories</li>
           <li>Sleep stories up to 45 minutes</li>
           <li>All six voices</li>
           <li>Every theme — Adventure, Romance, Mystery, Mythic, Historical &amp; more</li>
@@ -1662,11 +1693,11 @@
             <div class="signs-grid" id="signsGrid"></div>
           </div>
           <div class="reading-story" id="readingStory"><div class="section-label"><span>The reading</span></div><p id="readingNarrative"></p><p class="closing" id="readingClosing"></p></div>
-          <div class="ask-coffee" id="askCoffee" hidden>
-            <div class="section-label"><span id="askT">Ask yourself</span></div>
-            <div class="ac-qs" id="acQs"></div>
-            <div class="ac-thread" id="acThread" aria-live="polite"></div>
-            <form class="ac-form" id="acForm"><textarea id="acInput" rows="2" maxlength="600" placeholder="Answer, or ask Coffee more about this dream…"></textarea><button type="submit" class="ac-send" id="acSend">Ask Coffee</button></form>
+          <div class="self-note" id="selfNote">
+            <div class="section-label"><span id="snT">A sentence for yourself</span></div>
+            <p class="sn-hint" id="snHint">Write one line to your future self about this dream. It is kept with the dream in your Dream Calendar.</p>
+            <textarea id="snInput" rows="2" maxlength="240" placeholder="Today I want to remember…"></textarea>
+            <div class="sn-row"><span class="sn-saved" id="snSaved" hidden>✓ Kept in your Dream Calendar</span><button type="button" class="sn-btn" id="snBtn">Keep it</button></div>
           </div>
           <div class="deep-hook" id="deepHook">
             <div class="section-label"><span>The deeper part</span><span id="deepStateLabel" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></div>
@@ -1698,6 +1729,7 @@
     <div class="kicker">Dream Journey</div>
     <h2 class="journey-title">What your dreams <em>keep returning to</em></h2>
     <p class="journey-lede">Every dream you read here is gathered below — the signs, places, people and scenes that come back, dream after dream. The more dreams you bring, the clearer the pattern, and the better it knows you. This is your Dream Memory: on the free version it keeps only the last 3 days; the full version keeps every dream.</p>
+    <div class="dream-cal" id="dreamCal"></div>
     <div id="journeyBody"><p class="journey-empty">No dreams read yet. Read your first dream above, and its signs, places, people and scenes will start gathering here.</p></div>
   </section>
   </main>
@@ -1737,7 +1769,7 @@
           <div class="set-group"><div class="set-name">Theme <span>· genre</span></div><div class="pick-row" role="group" aria-label="Story theme"><button type="button" class="pick-btn" data-stheme="fairytale" aria-pressed="false">Fairy Tale</button><button type="button" class="pick-btn" data-stheme="wonder" aria-pressed="true">Wonder</button><button type="button" class="pick-btn" data-stheme="sliceoflife" aria-pressed="false">Slice of Life</button><button type="button" class="pick-btn locked" data-stheme="adventure" data-locked="true" aria-pressed="false">Adventure<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-stheme="romance" data-locked="true" aria-pressed="false">Romance<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-stheme="mystery" data-locked="true" aria-pressed="false">Mystery<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-stheme="mythic" data-locked="true" aria-pressed="false">Mythic<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-stheme="historical" data-locked="true" aria-pressed="false">Historical<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button></div></div>
           <div class="set-group"><div class="set-name">Mood <span>· how the story feels</span></div><div class="pick-row" role="group" aria-label="Story mood"><button type="button" class="pick-btn" data-smood="inspiring" aria-pressed="true">Inspiring</button><button type="button" class="pick-btn" data-smood="comforting" aria-pressed="false">Comforting</button><button type="button" class="pick-btn" data-smood="playful" aria-pressed="false">Playful</button><button type="button" class="pick-btn locked" data-smood="dreamy" data-locked="true" aria-pressed="false">Dreamy<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-smood="tender" data-locked="true" aria-pressed="false">Tender<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-smood="nostalgic" data-locked="true" aria-pressed="false">Nostalgic<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-smood="brave" data-locked="true" aria-pressed="false">Quietly Brave<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button></div></div>
           <div class="set-group"><div class="set-name">Setting <span>· the scene the story lives in</span></div><div class="pick-row" role="group" aria-label="Story setting"><button type="button" class="pick-btn" data-ssetting="surprise" aria-pressed="true">Let the story choose</button><button type="button" class="pick-btn" data-ssetting="water" aria-pressed="false">By the water</button><button type="button" class="pick-btn" data-ssetting="coast" aria-pressed="false">Sea coast &amp; harbour</button><button type="button" class="pick-btn" data-ssetting="wild" aria-pressed="false">Forest &amp; hills</button><button type="button" class="pick-btn" data-ssetting="snow" aria-pressed="false">Snowy mountains</button><button type="button" class="pick-btn" data-ssetting="desert" aria-pressed="false">Desert at dusk</button><button type="button" class="pick-btn" data-ssetting="meadow" aria-pressed="false">Meadows &amp; farmland</button><button type="button" class="pick-btn" data-ssetting="garden" aria-pressed="false">Garden courtyard</button><button type="button" class="pick-btn" data-ssetting="home" aria-pressed="false">A warm home</button><button type="button" class="pick-btn" data-ssetting="town" aria-pressed="false">A small town</button><button type="button" class="pick-btn" data-ssetting="city" aria-pressed="false">City lights at night</button><button type="button" class="pick-btn" data-ssetting="temple" aria-pressed="false">Temple &amp; shrine gardens</button><button type="button" class="pick-btn" data-ssetting="island" aria-pressed="false">A small island</button><button type="button" class="pick-btn" data-ssetting="train" aria-pressed="false">A night train</button><button type="button" class="pick-btn" data-ssetting="sky" aria-pressed="false">Under the open sky</button></div><div class="set-custom"><label class="char-lab" for="settingCustom">Or describe your own setting <span>· in your own words — the story will live there</span></label><input class="char-input" id="settingCustom" type="text" maxlength="200" placeholder="e.g. a snow cabin above a frozen lake, lanterns along the path home" /></div></div>
-          <div class="set-group"><div class="set-name">Length <span>· how long the story runs — free up to 10 min</span></div><div class="pick-row" role="group" aria-label="Story length"><button type="button" class="pick-btn" data-slength="5" aria-pressed="true">5 min</button><button type="button" class="pick-btn" data-slength="10" aria-pressed="false">10 min</button><button type="button" class="pick-btn locked" data-slength="20" data-locked="true" aria-pressed="false">20 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="30" data-locked="true" aria-pressed="false">30 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="45" data-locked="true" aria-pressed="false">45 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button></div></div>
+          <div class="set-group"><div class="set-name">Length <span>· how long the story runs — free up to 5 min</span></div><div class="pick-row" role="group" aria-label="Story length"><button type="button" class="pick-btn" data-slength="5" aria-pressed="true">5 min</button><button type="button" class="pick-btn locked" data-slength="10" data-locked="true" aria-pressed="false">10 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="20" data-locked="true" aria-pressed="false">20 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="30" data-locked="true" aria-pressed="false">30 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="45" data-locked="true" aria-pressed="false">45 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button></div></div>
           <div class="set-group"><div class="set-name">Characters <span>· who's in the story — pick any, they can be together</span></div><div class="pick-row" role="group" aria-label="Story characters — choose one or more"><button type="button" class="pick-btn" data-schar="self" aria-pressed="true">Me — I'm in the story</button><button type="button" class="pick-btn" data-schar="named" aria-pressed="false">People I name</button><button type="button" class="pick-btn" data-schar="invented" aria-pressed="false">Let the story invent some</button></div><p style="margin:7px 0 0;font-size:12px;line-height:1.55;color:#9aa6d1">Not either/or — tap more than one. For example: you <em>and</em> people you name, together in the same story.</p><div class="char-fields" id="charFields" hidden><div id="charNameRow"><label class="char-lab" for="charName">Their names <span>· one name, or several — “Mara &amp; Tomas”</span></label><input id="charName" type="text" maxlength="60" placeholder="e.g. Mara, Tomas" /></div><label class="char-lab" for="charDetails">The characters in more detail <span>· optional — who they are, and to each other — and to you, if you're in it too</span></label><textarea id="charDetails" rows="3" maxlength="600" placeholder="e.g. Mara, my older sister, who always knows the way home. Tomas, the kind stranger she keeps meeting by the water, who may not stay a stranger…"></textarea></div></div>
           <div class="weave-box"><div class="weave-head"><b>Weave in my past dreams</b><button type="button" class="weave-toggle" id="weaveToggle" aria-pressed="true">On — woven in</button></div><p class="weave-list" id="weaveList"></p></div>
         </div>
@@ -1779,6 +1811,7 @@
     <div class="kicker">Dreameri · Plans</div>
     <h2 class="sub-title">Free, and the <em>full version</em></h2>
     <p class="sub-lede">Everything with a lock belongs to the full version. Here is what each one holds.</p>
+    <p class="sub-limit" id="subLimit" hidden></p>
     <div class="one-unlock">
       <div>
         <b>Just this one reading? $1</b>
@@ -1791,12 +1824,13 @@
         <h3>Free</h3>
         <p class="plan-now">Your current plan</p>
         <ul>
-          <li>Dream readings, every night</li>
-          <li>Sleep stories up to 10 minutes</li>
+          <li>One dream reading a day</li>
+          <li>Two sleep stories a week, up to 5 minutes</li>
           <li>Two voices — Nova &amp; Onyx</li>
           <li>Core themes &amp; moods</li>
           <li>Dream Memory — last 3 days only</li>
-          <li class="off">Stories of 20, 30 &amp; 45 minutes</li>
+          <li class="off">Unlimited readings &amp; stories</li>
+          <li class="off">Stories of 10, 20, 30 &amp; 45 minutes</li>
           <li class="off">All six voices</li>
           <li class="off">Locked themes &amp; moods</li>
           <li class="off">Each reading’s deeper part — $1 per reading</li>
@@ -1808,6 +1842,7 @@
         <h3>Full version</h3>
         <p class="plan-now">Every lock opens</p>
         <ul>
+          <li>Unlimited dream readings &amp; sleep stories</li>
           <li>Sleep stories up to 45 minutes</li>
           <li>All six voices</li>
           <li>Every theme — Adventure, Romance, Mystery, Mythic, Historical &amp; more</li>
@@ -1816,8 +1851,10 @@
           <li>Every reading’s deeper part, included — no per-reading fee</li>
           <li>Dream Memory — every dream, kept &amp; gathered</li>
         </ul>
-        <button class="price-btn" id="subBtn" type="button">Subscribe</button>
-        <p class="price-sub">Subscriptions aren’t open yet. When they open, every locked option unlocks at once — nothing new to set up.</p>
+        <div class="price-tag" id="subPriceTag"><b>$3.99</b> <span>/ month</span><small>or $29 / year — save 39%</small></div>
+        <button class="price-btn" id="subBtn" type="button">Subscribe — $3.99 / month</button>
+        <button class="price-btn alt" id="subYearly" type="button">Yearly — $29</button>
+        <p class="price-sub" id="subNote">Cancel anytime. Secure payment by Stripe.</p>
       </div>
     </div>
   </div>
@@ -1843,12 +1880,31 @@
   var page=document.getElementById('subscribePage'); if(!page) return;
   var toastTimer=null;
   function toast(m){ var t=document.getElementById('toast'); if(!t) return; t.textContent=m; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove('show')},2800); }
-  window.openSubscribePage=function(){ page.classList.add('open'); page.scrollTop=0; document.body.style.overflow='hidden'; };
-  function close(){ page.classList.remove('open'); document.body.style.overflow=''; }
+  window.openSubscribePage=function(){ try{ if(window.dreamPaintPlan) window.dreamPaintPlan(); }catch(e){} page.classList.add('open'); page.scrollTop=0; document.body.style.overflow='hidden'; };
+  function close(){ page.classList.remove('open'); document.body.style.overflow=''; var l=document.getElementById('subLimit'); if(l) l.hidden=true; var ou=document.querySelector('#subscribePage .one-unlock'); if(ou) ou.hidden=false; }
   var c=document.getElementById('subClose'); if(c) c.addEventListener('click',close);
   var kf=document.getElementById('subKeepFree'); if(kf) kf.addEventListener('click',close);
-  var sb=document.getElementById('subBtn'); if(sb) sb.addEventListener('click',function(){ toast(window.DREAM_LANG==='zh'?'订阅还没开放——完整版还在准备中。':'Subscriptions aren’t open yet — the full version is still being prepared.'); });
-  var uo=document.getElementById('subUnlockOne'); if(uo) uo.addEventListener('click',function(){ if(window.unlockPreviewReading){ window.unlockPreviewReading(); close(); } else { toast(window.DREAM_LANG==='zh'?'单次解锁还没开放——不会收取任何费用。':'One-reading unlocks aren’t open yet — no charge has been made.'); } });
+  function buy(plan){ if(window.dreamStartCheckout) window.dreamStartCheckout(plan); }
+  var sb=document.getElementById('subBtn'); if(sb) sb.addEventListener('click',function(){ if(window.dreamPlan&&window.dreamPlan()==='full'){ if(window.dreamOpenPortal) window.dreamOpenPortal(); return; } buy('monthly'); });
+  var sy=document.getElementById('subYearly'); if(sy) sy.addEventListener('click',function(){ buy('yearly'); });
+  window.dreamShowLimit=function(info){
+    var el=document.getElementById('subLimit'); var zh=window.DREAM_LANG==='zh'; var w=info&&info.what;
+    var m=w==='story'?(zh?'这周的两个免费睡前故事已经用完了。下周再来——或者打开完整版，想听多少就听多少。':'You’ve used this week’s two free sleep stories. More arrive next week — or open the full version for as many as you like.')
+      :w==='story_length'?(zh?'免费版的故事最长 5 分钟。更长的故事属于完整版。':'Free stories run up to 5 minutes. Longer stories belong to the full version.')
+      :(zh?'今天的免费解梦已经用过了。明天再来——或者打开完整版，每个梦都能解。':'You’ve used today’s free dream reading. Come back tomorrow — or open the full version and read every dream.');
+    if(el){ el.textContent=m; el.hidden=false; }
+    var ou=document.querySelector('#subscribePage .one-unlock'); if(ou) ou.hidden=true;
+    window.openSubscribePage();
+  };
+  window.dreamPaintPlan=function(){
+    var full=window.dreamPlan&&window.dreamPlan()==='full', zh=window.DREAM_LANG==='zh';
+    var b=document.getElementById('subBtn'), y=document.getElementById('subYearly'), n=document.getElementById('subNote'), t=document.getElementById('subPriceTag');
+    var card=b&&b.closest('.price-card'); if(card) card.classList.toggle('is-mine',!!full);
+    if(b) b.textContent=full?(zh?'管理订阅':'Manage subscription'):(zh?'订阅——每月 $3.99':'Subscribe — $3.99 / month');
+    if(y) y.hidden=!!full; if(t) t.hidden=!!full;
+    if(n) n.textContent=full?(zh?'你正在使用完整版 ✦ 所有的锁都已打开。':'You’re on the full version ✦ every lock is open.'):(zh?'随时可以取消。由 Stripe 安全支付。':'Cancel anytime. Secure payment by Stripe.');
+  };
+  var uo=document.getElementById('subUnlockOne'); if(uo) uo.addEventListener('click',function(){ if(window.unlockPreviewReading){ close(); window.unlockPreviewReading(); } });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&page.classList.contains('open')) close(); });
 })();
 </script>
@@ -2097,7 +2153,6 @@
       var surf=(lens==='freud')?'<span class="lens-surface">'+L('What you saw','你看见的')+'</span>':'';
       var si=box.children.length+1; d.innerHTML='<span class="sym-num">'+si+'</span><div class="sym-icon">'+(ICONS[s.icon]||ICONS.moon)+'</div><div>'+tag+'<b>'+esc(s.name)+'</b>'+surf+'<p class="mm">'+esc(s.meaning)+'</p>'+wish+(String(s.meaning||'').length>90?'<span class="mm-more">'+L('Read more ▾','展开 ▾')+'</span>':'')+'</div>'; d.addEventListener('click',function(){ d.classList.toggle('open'); }); box.appendChild(d)});
     try{ renderConcept(r,lens); }catch(e){}
-    try{ renderAskCoffee(r,lens); }catch(e){}
     var sc=$('lensSchool'); if(!sc){ sc=document.createElement('div'); sc.id='lensSchool'; sc.className='lens-school'; var cb=document.querySelector('#shareCard .card-body'); if(cb) cb.insertBefore(sc,cb.firstChild); }
     var LN={zhougong:[L('周公解梦 · Zhou Gong','周公解梦'),L('What it foretells','此梦所兆')],freud:[L('Freud · the hidden wish','弗洛伊德 · 隐藏的愿望'),L('The wish beneath','梦底下的愿望')],jung:[L('Jung · the whole self','荣格 · 完整的自己'),L('Who you are becoming','你正在成为的人')]};
     sc.innerHTML='<span class="ls-mark" aria-hidden="true"></span><div><span class="ls-name">'+LN[lens][0]+'</span>'+(r.school?'<span class="ls-label">'+LN[lens][1]+'</span><p>'+esc(r.school)+'</p>':'')+'</div>';
@@ -2118,7 +2173,8 @@
      part in full, so the unlocked reading can be seen and judged.
      No charge, no checkout, nothing stored. Once opened, every
      reading this visit shows its deeper part open. */
-  var previewUnlocked=false, lastReading=null;
+  var previewUnlocked=false, lastReading=null, paidFor=null;
+  function readingKey(r){ return r?String(r.titleHTML||'')+'|'+String(r.line||''):''; }
   var LOCK_SVG='<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>';
   function isRelationshipDream(text){
     return /\bex\b|ex-boyfriend|ex-girlfriend|boyfriend|girlfriend|husband|wife|partner|lover|break ?up|broke up|wedding|marry|married|dating|crush|kiss/i.test(text||'')||/前任|前男友|前女友|男朋友|女朋友|老公|老婆|伴侣|分手|结婚|婚礼|在一起|接吻|约会/.test(text||'');
@@ -2203,7 +2259,7 @@
       +'<div class="sign-tile bright"><div class="sign-tag"><span>✦ '+L('Bright sign','光明之象')+'</span></div><b>'+esc(bright?bright.name:'')+'</b><p>'+esc(truncStr(bright?bright.meaning:'',200))+'</p></div>'
       +'<div class="sign-tile warn"><div class="sign-tag"><span>◑ '+L('Warning sign','警示之象')+'</span></div><b>'+esc(warn?warn.name:'')+'</b><p>'+esc(truncStr(warn?warn.meaning:'',200))+'</p></div>';
     var rel=waiting?true:isRelationshipDream(lastDreamText);
-    var unlocked=previewUnlocked;
+    var unlocked=previewUnlocked||isFullPlan()||(!!paidFor&&paidFor===readingKey(lastReading));
     var dt=$('deepTitle');
     if(dt) dt.textContent=waiting?L('The deeper part of a reading looks like this','一次解读的深处，长这样'):(rel?L('What this dream is saying about love','这个梦，在说你们之间的事'):L('What this dream is saying underneath','这个梦，在底下说什么'));
     var LOCKED_ICON='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>';
@@ -2248,12 +2304,21 @@
      in full, in place — and keep every later reading this visit open
      too, so the unlocked reading can be read the way a buyer would. */
   function unlockPreviewReading(){
-    previewUnlocked=true;
-    if(lastReading){ try{ renderHook(lastReading); }catch(e){} }
-    toast(L('Unlocked — this reading is open ✦ No charge was made.','已解锁——这一次解读已打开 ✦ 没有收取任何费用。'));
-    setTimeout(function(){ var hook=$('deepHook'); if(hook) hook.scrollIntoView({behavior:'smooth',block:'nearest'}); },80);
+    if(isFullPlan()){ if(lastReading){ try{ renderHook(lastReading); }catch(e){} } return; }
+    if(!lastReading){ toast(L('Read a dream first — then its deeper part can be unlocked.','先解一个梦——它的深处才能解锁。')); return; }
+    if(window.dreamStartUnlock) window.dreamStartUnlock(readingKey(lastReading));
   }
+  window.dreamMarkPaid=function(key){ paidFor=key; if(lastReading){ try{ renderHook(lastReading); }catch(e){} } toast(L('Unlocked — this reading is open ✦','已解锁——这一次解读已打开 ✦')); setTimeout(function(){ var hook=$('deepHook'); if(hook) hook.scrollIntoView({behavior:'smooth',block:'nearest'}); },80); };
   window.unlockPreviewReading=unlockPreviewReading;
+  document.addEventListener('dreamplan',function(){
+    var full=isFullPlan();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-locked], [data-was-locked]'),function(b){
+      if(full&&b.getAttribute('data-locked')==='true'){ b.setAttribute('data-was-locked','1'); b.setAttribute('data-locked','false'); b.classList.remove('locked'); var t=b.querySelector('.lock-tag'); if(t) t.style.display='none'; }
+      else if(!full&&b.getAttribute('data-was-locked')==='1'){ b.setAttribute('data-locked','true'); b.classList.add('locked'); var t2=b.querySelector('.lock-tag'); if(t2) t2.style.display=''; }
+    });
+    if(lastReading){ try{ renderHook(lastReading); }catch(e){} }
+    try{ if(window.dreamPaintPlan) window.dreamPaintPlan(); }catch(e){}
+  });
   (function(){
     var uob=$('unlockOneBtn'); if(uob) uob.addEventListener('click',function(){ unlockPreviewReading(); });
     var upb=$('unlockPlansBtn'); if(upb) upb.addEventListener('click',function(){ if(window.openSubscribePage) window.openSubscribePage(); });
@@ -2444,7 +2509,7 @@
       dd='\n\nThe dreamer has an ACTIVE DAYDREAM — a wish written as a future scene:\nWISH: """'+activeDaydream.wish+'"""\nSCENE: """'+activeDaydream.scene+'"""\nSEED LINE: "'+activeDaydream.seed+'"\nRead the night dream beside this daydream, using ONLY what is in the two texts. Add two extra JSON fields: "daydreamLink":"2-3 sentences in the same voice of the old dream books — name a person, place or feeling that is ACTUALLY in the night dream, say plainly how the night dream sits beside the wish (it pictured it, echoed part of it, or showed something else entirely), and end by pointing toward the wished-for life. Never invent an image that is not in the night dream." and "daydreamAction":"ONE forward-looking gift, prefixed with either Refined daydream: or Today, one small step: — a sharper version of the wish in present tense, or one small kind action for today, under 20 words." Make the "closing" field a tonight seed built from that forward gift, in the closing format below — never a phrase from the painful past.';
     }
     var LZ=window.__dreamLens||'zhougong';
-    return 'You are Dreameri, a wise, warm dream reader. Read the dream below the way a gifted interpreter would in a real conversation: concrete, insightful, specific to THIS dream and this person’s likely life right now. The dreamer should finish reading and think "yes — that is exactly what is going on with me."\n\n'+LENS_RULES[LZ]+'\n\nHOW TO READ:\n- Follow the dream IN ORDER, as 3 to 5 MOMENTS (scenes or turns). Group images that happen together into one moment (e.g. "Missing the flight, Hawaiian shirt on" is one moment). A short dream may have 3; never more than 5.\n- For each moment: say what its images commonly mean in plain, everyday terms (according to the school above), why the dream may have chosen them, and what that suggests about the dreamer’s waking life right now. Be concrete — name likely real situations (plans changing, social overload, a project, a relationship), offered gently as possibility, not fact.\n- Notice contrasts and turns (a plan going wrong that turns out better; joy at its peak followed by something odd) — the turn is often the heart of the dream. Give the ending special weight.\n- Use only the people, places, objects and feelings the dreamer actually described. Never invent images that are not in the dream.\n- Speak to the dreamer as "you". Plain, warm sentences. No preamble, no talk about readings, interpretation or yourself.\n- Never diagnose, never predict as certainty, never promise a wish will come true. Pregnancy dreams: folklore only, never medical.\n\nReturn ONLY valid JSON:\n{"title":"short title from the dream’s own images, max 5 words",\n"school":"see SCHOOL above — the whole dream in 1-2 sentences, the first thing the dreamer reads",\n"symbols":[{"name":"moment title naming its main images, max 8 words","meaning":"2-3 sentences, at most 55 words: what the images mean, why they appeared, what it suggests about waking life","icon":"one of water,cat,door,house,bag,fly,moon,sea,mirror,train,dragon,fish,fruit,snake,flower,gem,key,letter,bridge,candle,seed,compass,scale,heart,photo,teeth,chase — only if it matches an image in this moment, else moon", "...":"plus the per-moment field the SCHOOL requires"}],\n"concept":{"name":"the school’s key idea at work, 1-4 words","meaning":"one plain sentence showing that idea in THIS dream"},\n"questions":["two short, warm self-reflection questions tied to this dream and the dreamer’s real life, at most 22 words each"],\n"narrative":"2-3 sentences tying the moments together: what the dream as a whole is telling the dreamer, ending forward-looking",\n"mood":"two-word mood grounded in the waking feeling, second word may be wrapped in *",\n"moodTags":"short tags separated by ·",\n"meter":0-100,\n"line":"one forward-looking line to remember, under 16 words — never built from a painful phrase, never holding onto an ex or a loss",\n"closing":"Tonight, as you fall asleep, hold this: \\"<the line>\\" — then one short warm sentence",\n"insight":"one sentence for the chosen life-moment theme, or empty string",\n"why":"one sentence naming the moments this was built from",\n"brightSign":{"name":"the most hopeful image, from the dream","meaning":"one sentence"},\n"warningSign":{"name":"the image that asks for care, from the dream","meaning":"one gentle sentence"},\n"place":{"id":"the ONE place the dream mainly happens, only from: water, sea, home, childhood, mountains, forest, city, school, work, road, train, sky, wedding, market, table, hospital, hotel, temple, library, stage, park, boat, abroad, moon — or \\"none\\" if the dream names none","words":"the dream’s phrase naming it, or empty"},\n"daydreamLink":"only when a daydream is given below, else empty","daydreamAction":"only when a daydream is given below, else empty"}\n\nDream: """'+text+'"""\nWoke up feeling: '+feel+'\nTheme: '+THEMES[theme].label+' — life moment: '+(lifeMomentAnswer||THEMES[theme].tag)+dd+followupBlock()+aiLang('reading');
+    return 'You are Dreameri, a wise, warm dream reader. Read the dream below the way a gifted interpreter would in a real conversation: concrete, insightful, specific to THIS dream and this person’s likely life right now. The dreamer should finish reading and think "yes — that is exactly what is going on with me."\n\n'+LENS_RULES[LZ]+'\n\nHOW TO READ:\n- Follow the dream IN ORDER, as 3 to 5 MOMENTS (scenes or turns). Group images that happen together into one moment (e.g. "Missing the flight, Hawaiian shirt on" is one moment). A short dream may have 3; never more than 5.\n- For each moment: say what its images commonly mean in plain, everyday terms (according to the school above), why the dream may have chosen them, and what that suggests about the dreamer’s waking life right now. Be concrete — name likely real situations (plans changing, social overload, a project, a relationship), offered gently as possibility, not fact.\n- Notice contrasts and turns (a plan going wrong that turns out better; joy at its peak followed by something odd) — the turn is often the heart of the dream. Give the ending special weight.\n- Use only the people, places, objects and feelings the dreamer actually described. Never invent images that are not in the dream.\n- Speak to the dreamer as "you". Plain, warm sentences. No preamble, no talk about readings, interpretation or yourself.\n- Never diagnose, never predict as certainty, never promise a wish will come true. Pregnancy dreams: folklore only, never medical.\n\nReturn ONLY valid JSON:\n{"title":"short title from the dream’s own images, max 5 words",\n"school":"see SCHOOL above — the whole dream in 1-2 sentences, the first thing the dreamer reads",\n"symbols":[{"name":"moment title naming its main images, max 8 words","meaning":"2-3 sentences, at most 55 words: what the images mean, why they appeared, what it suggests about waking life","icon":"one of water,cat,door,house,bag,fly,moon,sea,mirror,train,dragon,fish,fruit,snake,flower,gem,key,letter,bridge,candle,seed,compass,scale,heart,photo,teeth,chase — only if it matches an image in this moment, else moon", "...":"plus the per-moment field the SCHOOL requires"}],\n"concept":{"name":"the school’s key idea at work, 1-4 words","meaning":"one plain sentence showing that idea in THIS dream"},\n"narrative":"2-3 sentences tying the moments together: what the dream as a whole is telling the dreamer, ending forward-looking",\n"mood":"two-word mood grounded in the waking feeling, second word may be wrapped in *",\n"moodTags":"short tags separated by ·",\n"meter":0-100,\n"line":"one forward-looking line to remember, under 16 words — never built from a painful phrase, never holding onto an ex or a loss",\n"closing":"Tonight, as you fall asleep, hold this: \\"<the line>\\" — then one short warm sentence",\n"insight":"one sentence for the chosen life-moment theme, or empty string",\n"why":"one sentence naming the moments this was built from",\n"brightSign":{"name":"the most hopeful image, from the dream","meaning":"one sentence"},\n"warningSign":{"name":"the image that asks for care, from the dream","meaning":"one gentle sentence"},\n"place":{"id":"the ONE place the dream mainly happens, only from: water, sea, home, childhood, mountains, forest, city, school, work, road, train, sky, wedding, market, table, hospital, hotel, temple, library, stage, park, boat, abroad, moon — or \\"none\\" if the dream names none","words":"the dream’s phrase naming it, or empty"},\n"daydreamLink":"only when a daydream is given below, else empty","daydreamAction":"only when a daydream is given below, else empty"}\n\nDream: """'+text+'"""\nWoke up feeling: '+feel+'\nTheme: '+THEMES[theme].label+' — life moment: '+(lifeMomentAnswer||THEMES[theme].tag)+dd+followupBlock()+aiLang('reading');
   }
   function buildDaydreamPrompt(wish){
     return 'You are Dreameri making a DAYDREAM — manifestation as a dream scene, not a goal plan. Voice: warm, vivid, hopeful, sensory, present tense, second person (you). Never corporate, never hustle language, never a list of steps, never promise the wish will come true.\n\nReturn ONLY valid JSON:\n{"title":"short evocative scene title, max 5 words","scene":"A short EXPANDED STORY in miniature, NOT a summary of the wish and NOT a description of it: 6-10 SHORT paragraphs separated by \\n\\n, present tense, second person. Open mid-moment — a sound, a door opening, a first line of dialogue — never with an announcement of what day or event this is. Unfold it like a storyteller: a few concrete details from the wish, lived in order (an arrival, a small exchange of real dialogue in quotation marks, a small hitch or laugh, the moment itself), plus invented everyday details around them that the wish never mentioned — the scene must GROW beyond the wish, warmly and a little inspiring, never merely restate it. RHYTHM AND PAUSES — WRITE IT THE WAY A STORYTELLER TELLS IT: sentences VARY — some long and flowing, some three or four words; short paragraphs stand alone as beats; a line of dialogue often gets its own paragraph; let there be rests before the turns and after the tender lines. Uniform medium sentences, one after another at the same length, are the AI voice — never write that way. DESCRIBED EVENTS — STRICT: every concrete event the wish names must HAPPEN in the scene as lived action, never replaced by a generic ordinary moment near it: if the wish says she is getting married to her boyfriend, the wedding happens on the page — she walks in, the vows are said aloud, the ring goes on the hand — with the people from the wish living it. An event the dreamer described that is missing, or only implied, is a failure. NEVER ANNOUNCE THE FACT — STRICT BAN: no sentence may emphasise, clarify or point at the event itself or at the wish: banned shapes include \u201Cthis is the day itself\u201D, \u201Cyour wedding day \u2014 not a thought, it is happening\u201D, \u201Cthe one you described\u201D, \u201Cit became true\u201D, and in Chinese 就是这一天本身 / 不是念头里的，是正在发生的 / 它成了真的 / 礼成，你们结婚了 as narration. The event is simply happening; the text never explains that it is happening. CHINESE, WHEN THE LANGUAGE IS CHINESE — WRITE NATIVE CHINESE, NEVER TRANSLATED CHINESE: no calques of English phrasing (never 站在新郎等人的地方 for \u201Cwaiting where grooms wait\u201D, never 忘了整理表情, never 滑上手指 for a ring) — write the scene the way a Chinese storyteller would write it first-hand, in living spoken-and-written Chinese: 他站在红毯那头等你 / 他看着你，眼睛都红了 / 他把戒指慢慢套上你的手指.","seed":"ONE short seed line for tonight (入睡种子), under 14 words, present tense, image-led, to hold while falling asleep. FORWARD-LOOKING ONLY: it pictures the wished-for life the dreamer wants to feel close to — never a painful memory, never a person from the past they are letting go of. e.g. The window is open, and my life is already breathing in that room."}\n\nCORE, CONTEXT AND CRAFT — STRICT, THIS GOVERNS THE SCENE: Before writing, identify SILENTLY (never print it): (1) the CORE — the one central moment, event or feeling the wish describes — and the MAIN CHARACTERS, exactly the people the wish names; (2) the SETTING AND THE TIME — where it happens, what hour and season it breathes. Then build in this order: (a) a PRE-STORY of 1-2 short paragraphs that sets the tone and leads INTO the core — the approach, the just-before, the world of the core warming up — invented only from the core’s own world; (b) the CORE itself, unfolded detail by detail; (c) everything after still ORBITING the core — same world, same people, same place; any drift that cannot trace back to the core is cut. STAY IN THE VERTICAL of the described scenario: a snow-mountain ski trip stays a snow-mountain ski trip. EXPAND, NEVER REPEAT: no sentence copies the wish’s wording word-for-word (names and single key nouns excepted); every described detail becomes a lived moment with NEW texture — what it sounds like, feels like, who says what, what happens in the next breath. If the description is thin, imagine modestly, only to fill gaps in THIS story — the core world’s own weather, tools and ordinary next moments — never irrelevant invention. CREATIVE CRAFT: lay the scene on a causal spine — once… / every day… / but this time… / because of that… / because of that… / until finally the core moment lands… / and ever since then… — each beat CAUSES the next, never ’and then, and then’. One character, one want, one GENTLE obstacle (a hesitation, a small fear, a wrong turn — never a villain), one change by the end. Every sentence must reveal character or advance the action, or be cut; start as close to the core as the pre-story allows. SHOW, DON’T TELL: scenes in real time with action, dialogue and senses; summary only for transitions; never name a feeling an action or a spoken line can show. SCENE TEST: each paragraph carries a small goal, a gentle obstacle, a choice and a consequence, or it is compressed into a sentence. SETTING DOES WORK: 1-2 sensory details per paragraph, chosen to ground place, time and mood — never wallpaper.\n\nWish, written as a future scene: """'+wish+'"""'+aiLang('scene');
@@ -2467,7 +2532,7 @@
     if(byokActive()) return byokChatCompletion(buildDaydreamPrompt(wish),30000).then(function(data){return parseDaydream(data,wish)}).catch(function(){return null});
     if(!AI_ENDPOINT) return Promise.resolve(null);
     var ctrl=(typeof AbortController!=='undefined')?new AbortController():null; var timer=ctrl?setTimeout(function(){ctrl.abort()},15000):null;
-    return fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({type:'daydream',kind:'daydream',wish:wish,dream:wish,prompt:buildDaydreamPrompt(wish)})}).then(function(res){if(timer)clearTimeout(timer); if(!res.ok) throw new Error('ai '+res.status); return res.json()}).then(function(data){return parseDaydream(data,wish)}).catch(function(){if(timer)clearTimeout(timer); return null});
+    return aiFetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({type:'daydream',kind:'daydream',wish:wish,dream:wish,prompt:buildDaydreamPrompt(wish)})}).then(function(res){if(timer)clearTimeout(timer); if(!res.ok) throw new Error('ai '+res.status); return res.json()}).then(function(data){return parseDaydream(data,wish)}).catch(function(){if(timer)clearTimeout(timer); return null});
   }
   function generateDaydream(wish){
     var w=wish.trim(); var low=' '+w.toLowerCase()+' ';
@@ -2587,11 +2652,25 @@
       return {lens:window.__dreamLens||'zhougong',school:raw.school?zhT(String(raw.school)).slice(0,360):'',concept:(raw.concept&&raw.concept.name)?{name:zhT(String(raw.concept.name)).slice(0,40),meaning:zhT(String(raw.concept.meaning||'')).slice(0,300)}:null,questions:Array.isArray(raw.questions)?raw.questions.filter(Boolean).slice(0,3).map(function(q){return zhT(String(q)).slice(0,200)}):[],place:(raw.place&&typeof raw.place==='object')?raw.place:null,titleHTML:titleHTML,symbols:syms,moodHTML:moodHtml,moodTags:raw.moodTags?zhT(String(raw.moodTags)):fallback.moodTags,meter:Math.max(8,Math.min(94,parseInt(raw.meter,10)||fallback.meter)),line:lineTxt,narrative:narrativeTxt,closing:closingTxt,source:L('Written by cloud AI','云端 AI 所写'),why:(raw.why&&!bannedReadingCheck(raw.why)?esc(zhT(String(raw.why))):fallback.why),insight:raw.insight&&!bannedReadingCheck(raw.insight)?'<p>'+esc(zhT(String(raw.insight)))+'</p>':fallback.insight,insightTitle:THEMES[theme].insightTitle,daydreamLink:ddLink,brightSign:(raw.brightSign&&raw.brightSign.name&&!bannedReadingCheck(raw.brightSign.meaning||''))?{name:zhT(String(raw.brightSign.name)),meaning:zhT(String(raw.brightSign.meaning||''))}:null,warningSign:(raw.warningSign&&raw.warningSign.name&&!bannedReadingCheck(raw.warningSign.meaning||''))?{name:zhT(String(raw.warningSign.name)),meaning:zhT(String(raw.warningSign.meaning||''))}:null};
     }catch(e){return null}
   }
+  /* Every call to the reading function carries the signed-in user's token,
+     so the free allowance and the full plan follow the person, not the device. */
+  function aiFetch(url,opts){
+    var g=window.dreamAuthToken?window.dreamAuthToken():Promise.resolve(null);
+    return Promise.resolve(g).catch(function(){return null}).then(function(t){ if(t){ opts.headers=Object.assign({},opts.headers||{},{Authorization:'Bearer '+t}); } return fetch(url,opts); });
+  }
+  function isFullPlan(){ return !!(window.dreamPlan&&window.dreamPlan()==='full'); }
+  function checkQuota(){
+    if(byokActive()||!AI_ENDPOINT||isFullPlan()) return Promise.resolve(null);
+    var ctrl=(typeof AbortController!=='undefined')?new AbortController():null; var tm=ctrl?setTimeout(function(){ctrl.abort()},5000):null;
+    return aiFetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({type:'quota',prompt:'quota'})})
+      .then(function(r){ if(tm) clearTimeout(tm); return r.ok?r.json():null; }).catch(function(){ return null; });
+  }
+  window.dreamCheckQuota=checkQuota;
   function fetchCloudReading(text,feel){
     if(byokActive()) return byokChatCompletion(buildAIPrompt(text,feel),40000).then(function(data){return parseAIReading(data,text,feel)}).catch(function(){return null});
     if(!AI_ENDPOINT) return Promise.resolve(null);
     var ctrl=(typeof AbortController!=='undefined')?new AbortController():null; var timer=ctrl?setTimeout(function(){ctrl.abort()},40000):null;
-    return fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({dream:text,theme:theme,themeLabel:THEMES[theme].label,mood:feel,lifeMoment:lifeMomentAnswer||THEMES[theme].tag,prompt:buildAIPrompt(text,feel)})}).then(function(res){if(timer)clearTimeout(timer); if(!res.ok) throw new Error('ai '+res.status); return res.json()}).then(function(data){return parseAIReading(data,text,feel)}).catch(function(){if(timer)clearTimeout(timer); return null});
+    return aiFetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({dream:text,theme:theme,themeLabel:THEMES[theme].label,mood:feel,lifeMoment:lifeMomentAnswer||THEMES[theme].tag,prompt:buildAIPrompt(text,feel)})}).then(function(res){if(timer)clearTimeout(timer); if(res.status===402) return res.json().then(function(j){return {__limit:j||{what:'reading'}}}); if(!res.ok) throw new Error('ai '+res.status); return res.json()}).then(function(data){ if(data&&data.__limit) return data; return parseAIReading(data,text,feel)}).catch(function(){if(timer)clearTimeout(timer); return null});
   }
   /* The waiting overlay · 等待层: ONE fixed, viewport-centred moon /
      stars / cat scene for every generation — reading, sleep story,
@@ -3086,6 +3165,63 @@
     body.innerHTML=html;
   }
   window.renderDreamJourney=renderJourney;
+  /* ——— Dream Calendar · 梦历 ——— every read dream lands on its day. */
+  var calMonth=null, calSel=null;
+  function dayKey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+  function renderCalendar(){
+    var el=$('dreamCal'); if(!el) return;
+    var now=new Date(); if(!calMonth) calMonth=new Date(now.getFullYear(),now.getMonth(),1);
+    var byDay={};
+    journal.forEach(function(j){ if(!j||!j.date) return; var d=new Date(j.date); if(isNaN(d)) return; var k=dayKey(d); (byDay[k]=byDay[k]||[]).push(j); });
+    var y=calMonth.getFullYear(), m=calMonth.getMonth();
+    var mName=window.DREAM_LANG==='zh'?(y+'年'+(m+1)+'月'):calMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    var dows=window.DREAM_LANG==='zh'?['日','一','二','三','四','五','六']:['S','M','T','W','T','F','S'];
+    var html='<div class="dc-head"><button type="button" class="dc-nav" data-cal="-1" aria-label="Previous month">‹</button><h4><small>'+L('Dream Calendar','梦历')+'</small>'+esc(mName)+'</h4><button type="button" class="dc-nav" data-cal="1" aria-label="Next month">›</button></div><div class="dc-grid">';
+    dows.forEach(function(d){ html+='<div class="dc-dow">'+d+'</div>'; });
+    var first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+    for(var i=0;i<first;i++) html+='<div></div>';
+    for(var d=1;d<=days;d++){
+      var k=y+'-'+(m+1)+'-'+d, has=byDay[k];
+      html+='<button type="button" class="dc-day'+(has?' has':'')+(k===dayKey(now)?' today':'')+(k===calSel?' sel':'')+'" '+(has?'data-day="'+k+'" aria-label="'+has.length+' dream(s)"':'disabled')+'>'+d+'</button>';
+    }
+    html+='</div>';
+    var list=calSel&&byDay[calSel];
+    if(list){
+      var SN={zhougong:L('Zhou Gong','周公'),freud:L('Freud','弗洛伊德'),jung:L('Jung','荣格')};
+      html+='<div class="dc-list">'+list.map(function(j){
+        var t=new Date(j.date).toLocaleTimeString(window.DREAM_LANG==='zh'?'zh-CN':'en-US',{hour:'numeric',minute:'2-digit'});
+        return '<div class="dc-entry"><span class="de-meta">'+esc(t)+' · '+(SN[j.lens]||'')+'</span><b>'+esc(j.title||'')+'</b>'+(j.note?'<div class="de-note">“'+esc(j.note)+'”</div>':'')+(j.school?'<p>'+esc(j.school)+'</p>':'')+'<p>'+esc(j.snippet||'')+'</p></div>';
+      }).join('')+'</div>';
+    } else if(!Object.keys(byDay).length){
+      html+='<p class="dc-empty">'+L('Each dream you read will appear here, on the day you dreamed it.','你解过的每个梦，都会落在它的那一天。')+'</p>';
+    }
+    el.innerHTML=html;
+  }
+  document.addEventListener('click',function(e){
+    var n=e.target.closest&&e.target.closest('[data-cal]');
+    if(n){ calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+parseInt(n.getAttribute('data-cal'),10),1); calSel=null; renderCalendar(); return; }
+    var dd=e.target.closest&&e.target.closest('.dc-day.has');
+    if(dd){ var k=dd.getAttribute('data-day'); calSel=(calSel===k?null:k); renderCalendar(); }
+  });
+  var _rj=renderJourney; renderJourney=function(){ _rj(); try{ renderCalendar(); }catch(e){} };
+  window.renderDreamJourney=renderJourney;
+  /* A sentence for yourself: kept on the newest journal entry. */
+  function resetSelfNote(){
+    var i=$('snInput'); if(!i) return; i.value=''; $('snSaved').hidden=true;
+    $('snT').textContent=L('A sentence for yourself','写给自己的一句话');
+    $('snHint').textContent=L('Write one line to your future self about this dream. It is kept with the dream in your Dream Calendar.','为这个梦，写一句给未来的自己。它会和这个梦一起，存进你的梦历。');
+    i.placeholder=L('Today I want to remember…','今天，我想记住……');
+    $('snBtn').textContent=L('Keep it','存下来');
+  }
+  document.addEventListener('click',function(e){
+    if(!e.target||e.target.id!=='snBtn') return;
+    var v=$('snInput').value.trim(); if(!v||!journal.length) return;
+    journal[0].note=v; $('snSaved').textContent=L('✓ Kept in your Dream Calendar','✓ 已存进你的梦历'); $('snSaved').hidden=false;
+    var d=new Date(journal[0].date||Date.now()); calMonth=new Date(d.getFullYear(),d.getMonth(),1); calSel=dayKey(d);
+    try{ renderCalendar(); }catch(err){}
+    toast(L('Kept with this dream ✦','已和这个梦存在一起 ✦'));
+  });
+  document.addEventListener('dreamread',function(){ try{ resetSelfNote(); }catch(e){} });
   /* Accounts read and restore the journal through this (see the Accounts script). */
   window.__dreamJournalIO={get:function(){ return journal.slice(); },set:function(a){ journal.length=0; Array.prototype.push.apply(journal,Array.isArray(a)?a:[]); try{ renderJourney(); }catch(e){} if(typeof refreshWeaveList==='function'){ try{ refreshWeaveList(); }catch(e){} } }};
   /* ——— The ONE completion path · 唯一的完成路径 ———
@@ -3124,7 +3260,7 @@
     try{ renderReading(r); }catch(e){}
     // 3 · Journal + Journey, from the captured dream text.
     try{
-      journal.unshift({title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
+      journal.unshift({date:new Date().toISOString(),lens:r.lens||'zhougong',school:r.school||'',note:'',title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
     }catch(e){}
     try{ renderJourney(); }catch(e){}
     try{ refreshWeaveList(); }catch(e){}
@@ -3136,6 +3272,11 @@
   window.completeDreamReading=completeReading;
   $('readBtn').addEventListener('click',function(){
     var text=input.value.trim(); var detail=countDreamDetail(text); if(detail<DREAM_MIN_DETAIL){var left=DREAM_MIN_DETAIL-detail; toast(L('Please write at least 20 words — '+left+' more to go. Add where you were, who was there, what happened, and how it felt, so the reading has enough to work with.','请至少写 20 个字——还差 '+left+' 个字。补上你在哪里、和谁在一起、发生了什么、感觉如何，解读才有足够的内容可读。')); updCount(); input.focus(); return}
+    if(!window.__dreamQuotaOk&&!isFullPlan()&&!byokActive()&&AI_ENDPOINT){
+      var rb0=$('readBtn'); if(rb0) rb0.disabled=true;
+      checkQuota().then(function(q){ if(rb0) rb0.disabled=false; if(q&&q.readingsLeft===0){ try{ if(window.dreamHearthReset) window.dreamHearthReset(); }catch(e){} window.dreamShowLimit({what:'reading'}); return; } window.__dreamQuotaOk=true; $('readBtn').click(); });
+      return;
+    }
     if(!window.__dreamAsked&&window.dreamHearthAsk){ window.dreamHearthAsk(text,feeling); return; }
     var feelAtTap=feeling;
     lastDreamText=text; lastFeeling=feelAtTap;
@@ -3145,6 +3286,7 @@
     function finish(ai){
       if(finished) return; finished=true;
       try{ hideLoading(); }catch(e){}
+      if(ai&&ai.__limit){ try{ if(window.dreamHearthReset) window.dreamHearthReset(); }catch(e){} try{ window.dreamShowLimit(ai.__limit); }catch(e){} return; }
       var r=null;
       try{ r=ai||generate(text,feelAtTap); }catch(e){ r=null; }
       if(!r){
@@ -3160,7 +3302,7 @@
     var cloudPromise;
     try{ cloudPromise=fetchCloudReading(text,feelAtTap); }
     catch(e){ cloudPromise=Promise.resolve(null); }
-    window.__dreamLastAnswers=window.__dreamAnswers||window.__dreamLastAnswers; window.__dreamAsked=false; window.__dreamAnswers=null;
+    window.__dreamLastAnswers=window.__dreamAnswers||window.__dreamLastAnswers; window.__dreamAsked=false; window.__dreamAnswers=null; window.__dreamQuotaOk=false;
     Promise.resolve(cloudPromise).then(function(ai){
       var elapsed=Date.now()-started; var minWait=AI_ENDPOINT?0:1100;
       return wait(Math.max(0,minWait-elapsed)).then(function(){return ai});
@@ -3428,11 +3570,13 @@
       return {title:zhT(String(raw.title||L('Your Sleep Story','你的睡前故事'))),story:zhT(story)};
     }catch(e){return null}
   }
+  var curStoryId='';
   function fetchCloudSleepStory(dd,strict,st,seg){
+    if(seg&&seg.index===0&&!strict) curStoryId=String(Date.now())+Math.random().toString(36).slice(2,10);
     if(byokActive()) return byokChatCompletion(buildSleepStoryPrompt(dd,strict,st,seg),60000).then(function(data){return parseSleepStory(data,st,dd.wish)}).catch(function(){return null});
     if(!AI_ENDPOINT) return Promise.resolve(null);
     var ctrl=(typeof AbortController!=='undefined')?new AbortController():null; var timer=ctrl?setTimeout(function(){ctrl.abort()},45000):null;
-    return fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({type:'sleep-story',kind:'sleepstory',wish:dd.wish,dream:dd.wish,storyTheme:st?st.theme:'',storyMood:st?st.mood:'',storySetting:st?st.setting:'',prompt:buildSleepStoryPrompt(dd,strict,st,seg)})}).then(function(res){if(timer)clearTimeout(timer); if(!res.ok) throw new Error('ai '+res.status); return res.json()}).then(function(data){return parseSleepStory(data,st,dd.wish)}).catch(function(){if(timer)clearTimeout(timer); return null});
+    return aiFetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({type:'sleep-story',kind:'sleepstory',storyId:curStoryId,storyLength:st?st.lengthMin:5,wish:dd.wish,dream:dd.wish,storyTheme:st?st.theme:'',storyMood:st?st.mood:'',storySetting:st?st.setting:'',prompt:buildSleepStoryPrompt(dd,strict,st,seg)})}).then(function(res){if(timer)clearTimeout(timer); if(res.status===402){ res.json().then(function(jj){ try{ window.dreamShowLimit(jj||{what:'story'}); }catch(e){} }).catch(function(){}); throw new Error('free_limit'); } if(!res.ok) throw new Error('ai '+res.status); return res.json()}).then(function(data){return parseSleepStory(data,st,dd.wish)}).catch(function(){if(timer)clearTimeout(timer); return null});
   }
   // Dream-history weaving: collect people, places, symbols and lines from the dreams
   // already read in this visit (the journal), so tonight's story can answer them.
@@ -4783,6 +4927,11 @@
   if(createBtn) createBtn.addEventListener('click',function(){
     var wish=wishInput.value.trim();
     if(wish.length<12){toast(L('Write a little more of the scene — where you are, what it feels like.','再多写一点这个场景——你在哪里，感觉如何。')); wishInput.focus(); return}
+    if(!createBtn.__quotaOk&&!isFullPlan()&&!byokActive()&&AI_ENDPOINT){
+      createBtn.disabled=true;
+      checkQuota().then(function(q){ createBtn.disabled=false; if(q&&q.storiesLeft===0){ window.dreamShowLimit({what:'story'}); return; } createBtn.__quotaOk=true; createBtn.click(); createBtn.__quotaOk=false; });
+      return;
+    }
     createBtn.disabled=true; $('dayBtnLabel').textContent=L('Making your scene & story…','正在生成场景与故事…');
     parkSleepPlayer(); showDayOutput();
     var dob=$('dayOutputBody'); if(dob) dob.innerHTML='<div class="wait">'+waitSceneHTML()+'<b>'+L('Making your scene…','正在生成你的场景…')+'</b><div class="wait-sub">'+L('Listening to your wish','聆听你的心愿')+'</div><div class="wait-dots" aria-hidden="true"><span></span><span></span><span></span></div></div>';
@@ -5238,6 +5387,13 @@
     'Everything with a lock belongs to the full version. Here is what each one holds.':'带锁的，都属于完整版。两个版本各有什么，都在这里。',
     'Your current plan':'你现在用的版本',
     'Dream readings, every night':'每晚解梦',
+    'One dream reading a day':'每天解一个梦',
+    'Two sleep stories a week, up to 5 minutes':'每周两个睡前故事，最长 5 分钟',
+    'Unlimited readings & stories':'不限次数的解梦与故事',
+    'Stories of 10, 20, 30 & 45 minutes':'10、20、30 和 45 分钟的故事',
+    'Unlimited dream readings & sleep stories':'不限次数的解梦与睡前故事',
+    'Yearly — $29':'按年——$29',
+    'Cancel anytime. Secure payment by Stripe.':'随时可以取消。由 Stripe 安全支付。',
     'Sleep stories up to 10 minutes':'睡前故事最长 10 分钟',
     'Two voices — Nova & Onyx':'两个声音——Nova 和 Onyx',
     'Core themes & moods':'核心主题与氛围',
@@ -5313,6 +5469,7 @@
     'Or describe your own setting':'或者，描述你自己的场景 ',
     '· in your own words — the story will live there':'· 用你自己的话来说——故事会住在那里',
     '· how long the story runs — free up to 10 min':'· 故事讲多久——免费版最长十分钟',
+    '· how long the story runs — free up to 5 min':'· 故事讲多久——免费版最长五分钟',
     'Let the story choose':'让故事来选',
     'By the water':'水边',
     'Forest & hills':'森林与山丘',
@@ -6126,6 +6283,68 @@
   var user=null, profile=null, view='idle', note='', busy=false, deleteArmed=false;
   var synced=false, lastSaved=null, langTouched=false, prompted=false;
 
+  /* ——— Plans & payments (Stripe, via the dream-billing function) ——— */
+  var BILLING_URL=SUPABASE_URL+'/functions/v1/dream-billing';
+  window.dreamAuthToken=function(){ return sb.auth.getSession().then(function(r){ return r&&r.data&&r.data.session?r.data.session.access_token:null; }).catch(function(){ return null; }); };
+  window.dreamPlan=function(){ return profile&&profile.plan==='full'?'full':'free'; };
+  function announcePlan(){ try{ document.dispatchEvent(new CustomEvent('dreamplan',{detail:window.dreamPlan()})); }catch(e){} }
+  function billing(body){
+    return window.dreamAuthToken().then(function(t){
+      if(!t) throw new Error('signin');
+      return fetch(BILLING_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},body:JSON.stringify(body)})
+        .then(function(r){ return r.json().catch(function(){return {}}).then(function(j){ if(!r.ok) throw new Error(j.error||('billing '+r.status)); return j; }); });
+    });
+  }
+  function needSignIn(){
+    toastNote(T('Sign in first — your plan stays with your account, on every device.','先登录——你的方案跟着账户走，在每台设备上都有效。'));
+    var sp=document.getElementById('subscribePage'); if(sp&&sp.classList.contains('open')){ var c=document.getElementById('subClose'); if(c) c.click(); }
+    setTimeout(openAccount,250);
+  }
+  function returnUrl(){ return location.origin+location.pathname; }
+  window.dreamStartCheckout=function(plan){
+    if(!user){ needSignIn(); return; }
+    toastNote(T('Opening secure checkout…','正在打开安全支付页面…'));
+    billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } })
+      .catch(function(e){ toastNote(/already/.test(e.message)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — please try again.','支付页面暂时没能打开——请再试一次。')); });
+  };
+  window.dreamOpenPortal=function(){
+    if(!user){ needSignIn(); return; }
+    billing({action:'portal',returnUrl:returnUrl()}).then(function(j){ if(j.url) location.href=j.url; })
+      .catch(function(){ toastNote(T('Subscription settings could not open just now — please try again.','订阅设置暂时没能打开——请再试一次。')); });
+  };
+  /* $1 unlock: checkout opens in a new tab, so the reading stays right here;
+     this tab watches for the payment and opens the reading once it lands. */
+  window.dreamStartUnlock=function(key){
+    if(!user){ needSignIn(); return; }
+    var w=null; try{ w=window.open('','_blank'); }catch(e){}
+    if(w){ try{ w.document.write('<p style="font-family:sans-serif;padding:24px">Opening secure checkout…</p>'); }catch(e){} }
+    billing({action:'checkout',plan:'unlock',returnUrl:returnUrl()}).then(function(j){
+      if(!j.url) throw new Error('no url');
+      if(w&&!w.closed) w.location.href=j.url; else { w=window.open(j.url,'_blank'); if(!w){ location.href=j.url; return; } }
+      toastNote(T('Finish paying in the new tab — this reading opens here as soon as it’s done.','在新标签页里完成支付——一付好，这次解读就在这里打开。'));
+      var tries=0, iv=setInterval(function(){
+        if(++tries>200){ clearInterval(iv); return; }
+        billing({action:'verify',sessionId:j.sessionId}).then(function(v){ if(v&&v.paid){ clearInterval(iv); if(window.dreamMarkPaid) window.dreamMarkPaid(key); } }).catch(function(){});
+      },4000);
+    }).catch(function(){ if(w&&!w.closed) w.close(); toastNote(T('Checkout could not open just now — please try again.','支付页面暂时没能打开——请再试一次。')); });
+  };
+  /* Back from Stripe: the webhook may take a moment, so check the plan a few times. */
+  (function(){
+    var q=new URLSearchParams(location.search), sub=q.get('sub'), un=q.get('unlock');
+    if(!sub&&!un) return;
+    try{ history.replaceState(null,'',location.pathname+location.hash); }catch(e){}
+    if(sub==='success'){
+      var n=0; (function poll(){
+        if(user&&profile&&profile.plan==='full'){ toastNote(T('Welcome to the full version ✦ every lock is open.','欢迎来到完整版 ✦ 所有的锁都打开了。')); return; }
+        if(++n>15){ toastNote(T('Payment received — your plan will switch on in a moment. Refresh if it hasn’t.','付款已收到——方案马上就会开通。没有的话刷新一下。')); return; }
+        if(user) loadProfile().then(function(){ render(); announcePlan(); }).catch(function(){});
+        setTimeout(poll,2000);
+      })();
+    } else if(un==='paid'){
+      setTimeout(function(){ toastNote(T('Payment received ✦ Go back to the tab with your reading — it’s unlocked there.','付款已收到 ✦ 回到有你解读的那个标签页——它已经在那里解锁了。')); },800);
+    }
+  })();
+
   /* ——— Saved state ——— */
   function snapshot(){
     var c=cIO().get();
@@ -6221,7 +6440,7 @@
     if(u&&handled===u.id){ user=u; return; }            /* token refresh: nothing to redo */
     if(u){
       handled=u.id; user=u; view='in'; note=''; render();
-      Promise.all([loadProfile(),loadAndMerge()]).then(function(){
+      Promise.all([loadProfile().then(function(){ announcePlan(); }),loadAndMerge()]).then(function(){
         if(event==='SIGNED_IN'&&/access_token|type=magiclink/.test(location.hash+location.search)) toastNote(T('Signed in — your shelf, passport and dreams are kept now ✦','已登录——你的纪念品架子、护照和梦都会被保存 ✦'));
         render();
       }).catch(function(){ note=T('Signed in, but your saved dreams could not be loaded just now. They are safe — try again in a moment.','已登录，但暂时没能载入你保存的梦。它们是安全的——稍后再试。'); render(); });
@@ -6229,7 +6448,7 @@
     } else {
       var was=user; user=null; profile=null; handled=null; synced=false; lastSaved=null; view='idle'; deleteArmed=false;
       if(was){ applyState({}); }                           /* leave nothing personal on a shared device */
-      render();
+      render(); announcePlan();
     }
   });
 
@@ -6259,6 +6478,7 @@
       var name=profile&&profile.display_name||'';
       h='<h4 class="byok-title">'+(name?esc(name):T('Signed in','已登录'))+'</h4>'
        +'<p class="byok-intro acct-email">'+esc(user.email||'')+' · <span class="acct-plan">'+planLabel()+'</span></p>'
+       +'<div class="byok-actions"><button type="button" class="byok-save" id="acctPlanBtn">'+(profile&&profile.plan==='full'?T('Manage subscription','管理订阅'):T('Open the full version','打开完整版'))+'</button></div>'
        +(note?'<p class="byok-status" role="status">'+esc(note)+'</p>':'')
        +'<label class="byok-label" for="acctName">'+T('Your name in the app','你在应用里的名字')+'</label>'
        +'<div class="byok-field"><input type="text" id="acctName" maxlength="60" value="'+esc(name)+'" placeholder="'+T('Optional','可不填')+'" autocomplete="nickname" /><button type="button" class="byok-show" id="acctNameSave">'+T('Save','保存')+'</button></div>'
@@ -6272,6 +6492,7 @@
     pill();
   }
   function wire(){
+    var pb=$('acctPlanBtn'); if(pb) pb.addEventListener('click',function(){ if(profile&&profile.plan==='full') window.dreamOpenPortal(); else if(window.openSubscribePage) window.openSubscribePage(); });
     var send=$('acctSend'), email=$('acctEmail');
     if(send) send.addEventListener('click',function(){
       var v=(email&&email.value||'').trim();
@@ -6889,6 +7110,7 @@
   if(mic){ mic.addEventListener('click',function(e){ e.stopImmediatePropagation(); e.preventDefault(); open('speak'); },true); }
   document.addEventListener('dreamlang',function(){ var b=$('hearthOpenBtn'); if(b) b.lastChild.textContent=' '+T('Speak your dream by the fire','对着炉火讲你的梦'); });
   window.dreamHearthAsk=function(text,f){ feel=f||feel; ask(text,feel); };
+  window.dreamHearthReset=function(){ try{ stage('heard'); status(''); }catch(e){} };
   /* Inline: the hearth IS the Dream Decipher page. Its fire burns while
      it is on screen and rests when it is not. */
   var inline=el.classList.contains('inline');
@@ -6944,7 +7166,7 @@
   }
   function parts(){
     var list=[], q=function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
-    list=list.concat(q('#shareCard .card-art'), q('#shareCard .card-body > .section-label'), q('#symbols > *'), q('#lensConcept'), q('#signsHook'), q('#readingStory'), q('#askCoffee'), q('#deepHook'), q('#shareCard .remember'), q('#shareCard .card-foot'), q('#revealSection .card-actions'));
+    list=list.concat(q('#shareCard .card-art'), q('#shareCard .card-body > .section-label'), q('#symbols > *'), q('#lensConcept'), q('#signsHook'), q('#readingStory'), q('#selfNote'), q('#deepHook'), q('#shareCard .remember'), q('#shareCard .card-foot'), q('#revealSection .card-actions'));
     return list.filter(function(n){ return n&&n.offsetParent!==null; });
   }
   function finish(){
