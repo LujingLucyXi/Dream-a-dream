@@ -22,7 +22,10 @@ const HOURLY_CALLS = 60; // readings + daydream scenes + story parts, per visito
 // and the page then fell back to its built-in story (same story every time,
 // not about the wish). The page itself waits 45 s, so stay just under that.
 const TIMEOUT_MS_STORY = 42000;
-const TIMEOUT_MS_DEFAULT = 14000;
+// A dream reading now carries each school's extra fields (omen / wish /
+// archetype) and takes gpt-4o-mini ~12-20 s; at 14 s it was cut off and the
+// page fell back to the built-in book. The page waits 40 s.
+const TIMEOUT_MS_DEFAULT = 38000;
 
 // ---- Guard (same block in all three Dream a Dream functions; keep in sync) ----
 // 1. Only the app's own site may call this function from a browser.
