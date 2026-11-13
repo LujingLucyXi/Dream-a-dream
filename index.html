@@ -1456,7 +1456,7 @@
   .prof-stat span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-top:5px}
   .prof-block{margin:0 0 18px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
   .prof-label{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px}
-  .road-scene{position:relative;max-width:440px;margin:0 auto;border-radius:16px;overflow:hidden;background:#0d1226 url('__ROADBG__') center bottom/cover no-repeat;box-shadow:inset 0 0 60px rgba(5,8,20,.85)}
+  .road-scene{position:relative;max-width:440px;margin:0 auto;border-radius:16px;overflow:hidden;background:#0d1226 url('https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/10698361-01eb-462a-aa9f-27df84b4286e.webp') center bottom/cover no-repeat;box-shadow:inset 0 0 60px rgba(5,8,20,.85)}
   .road-scene:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,11,24,.25),rgba(8,11,24,.05) 30%,rgba(8,11,24,.35));pointer-events:none}
   .road-scene svg{position:relative;display:block;width:100%;height:auto}
   .dream-road .rd-name{font-family:"Cormorant Garamond",Georgia,serif;font-size:17px;font-style:italic;font-weight:600;fill:#fbeccb}
@@ -1480,20 +1480,28 @@
   .byok-panel:not([hidden]){position:fixed;inset:0;z-index:72;max-width:none;margin:0;border:0;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0c1020;padding:28px max(18px,calc((100% - 600px)/2)) 64px}
   .byok-panel:not([hidden]) .settings-head{position:sticky;top:-28px;z-index:2;background:#0c1020;padding:14px 0 10px;margin-top:-14px}
   /* Manifestation · the princess-and-the-pea room */
-  .pea-scene{position:relative;border-radius:22px;overflow:hidden;min-height:620px;aspect-ratio:9/15;max-height:860px;margin:-6px -6px 12px;background:#0f1428;box-shadow:0 18px 50px rgba(0,0,0,.45)}
-  .pea-bg{position:absolute;inset:0;background:#141a33 center 30%/cover no-repeat;transform-origin:76% 75%;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+  .pea-scene{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:1100/1971;max-width:460px;margin-left:auto!important;margin-right:auto!important;margin:-6px -6px 12px;background:#0f1428;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .pea-bg{position:absolute;inset:0;background-color:#141a33;background-position:center top;background-size:cover;background-repeat:no-repeat;transform-origin:76% 75%;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
   .pea-scene.wishing .pea-bg{transform:scale(1.05)}
   .pea-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  .pea-ui{position:absolute;left:0;right:0;bottom:0;padding:70px 14px 14px;background:linear-gradient(180deg,rgba(10,13,28,0),rgba(10,13,28,.72) 38%,rgba(10,13,28,.92))}
-  .pea-head{text-align:center;margin-bottom:10px}
+  .pea-ui{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 10px;background:linear-gradient(180deg,rgba(10,13,28,0),rgba(10,13,28,.6) 40%,rgba(10,13,28,.82))}
+  .pea-head{position:absolute;left:0;right:0;top:0;text-align:center;padding:16px 16px 40px;background:linear-gradient(180deg,rgba(8,10,22,.82),rgba(8,10,22,.45) 60%,rgba(8,10,22,0));pointer-events:none}
   .pea-kicker{font-size:10.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2)}
   .pea-head h3{margin:4px 0 2px;font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;line-height:1.1;color:#fbeccb;text-shadow:0 2px 12px rgba(0,0,0,.6)}
   .pea-head p{margin:0;font-size:13px;color:#cdd3ee;text-shadow:0 1px 6px rgba(0,0,0,.7)}
   .pea-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .pea-ui .voice-field{background:rgba(14,18,38,.72);border:1px solid rgba(240,212,138,.35);border-radius:18px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-  .pea-ui .voice-field textarea{min-height:92px;background:transparent;color:#f3f0e6;font-family:"Cormorant Garamond",serif;font-size:18px;line-height:1.35}
+  .pea-scene .pea-ui .voice-field #wishInput{min-height:58px;height:58px;resize:none;border:0;background:transparent;color:#f3f0e6;font-family:"Cormorant Garamond",serif;font-size:18px;line-height:1.35}
   .pea-scene.wishing .pea-ui .voice-field{border-color:rgba(184,160,255,.7);box-shadow:0 0 0 3px rgba(150,120,255,.18),0 0 30px rgba(150,120,255,.25)}
-  @media (max-width:520px){ .pea-scene{min-height:560px;margin:-10px -10px 12px} .pea-head h3{font-size:23px} }
+  @media (max-width:520px){ .pea-scene{margin:-10px -10px 12px} .pea-head h3{font-size:22px} }
+  .pricing.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
+  .pricing.tiers .price-card{display:flex;flex-direction:column}
+  .pricing.tiers .price-card ul{flex:1;align-content:start;align-items:start}
+  .pricing.tiers .price-tag b{font-size:30px}
+  .price-card.byok-tier{border:1px dashed rgba(127,214,162,.55);background:linear-gradient(180deg,rgba(127,214,162,.08),rgba(127,214,162,.02))}
+  .price-card.byok-tier .plan-now{color:#7fd6a2}
+  .price-card.byok-tier.on{border-style:solid;box-shadow:0 0 0 2px rgba(127,214,162,.5)}
+  @media (max-width:760px){ .pricing.tiers{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:4px 2px 14px;margin:0 -4px;-webkit-overflow-scrolling:touch} .pricing.tiers .price-card{flex:0 0 82%;scroll-snap-align:center} }
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -1594,10 +1602,10 @@
         </ul>
       </div>
       <div class="plan-col full">
-        <div class="plan-col-head"><h5>Full version</h5><span>Every lock opens</span></div>
+        <div class="plan-col-head"><h5>Pro</h5><span>Every lock opens</span></div>
         <ul>
-          <li>Unlimited dream readings &amp; sleep stories</li>
-          <li>Sleep stories up to 45 minutes</li>
+          <li>10 dream readings a day</li>
+          <li>2 sleep stories a day, up to 45 minutes</li>
           <li>All six voices</li>
           <li>Every theme — Adventure, Romance, Mystery, Mythic, Historical &amp; more</li>
           <li>Every mood — Dreamy, Tender, Nostalgic, Quietly Brave &amp; more</li>
@@ -1761,7 +1769,7 @@
               <div><b id="unlockBarTitle">Unlock this reading — $1</b><span id="unlockBarDesc">One-time, for this dream only. No subscription needed.</span></div>
               <div>
                 <button type="button" class="unlock-btn" id="unlockOneBtn">$1 · Unlock this reading</button>
-                <button type="button" class="unlock-alt" id="unlockPlansBtn">or see the full version</button>
+                <button type="button" class="unlock-alt" id="unlockPlansBtn">or see Pro</button>
               </div>
             </div>
           </div>
@@ -1794,8 +1802,8 @@
         <div class="pea-scene" id="peaScene">
           <div class="pea-bg" id="peaBg" role="img" aria-label="Coffee the cat asleep on top of ten mattresses, a tiny pea beneath the last one, and a glowing crystal ball on the table"></div>
           <canvas class="pea-canvas" id="peaCanvas" aria-hidden="true"></canvas>
+          <div class="pea-head"><span class="pea-kicker" id="peaKicker">Manifestation</span><h3 id="peaTitle">Whisper a wish into the crystal ball</h3><p id="peaSub">Coffee is asleep on ten mattresses, waiting to dream it with you.</p></div>
           <div class="pea-ui">
-            <div class="pea-head"><span class="pea-kicker" id="peaKicker">Manifestation</span><h3 id="peaTitle">Whisper a wish into the crystal ball</h3><p id="peaSub">Coffee is asleep on ten mattresses, waiting to dream it with you.</p></div>
             <label for="wishInput" class="pea-label">Your wish, as a future scene</label>
             <div class="voice-field">
               <textarea id="wishInput" maxlength="600" placeholder="Picture it as if you are already there — where you are, the light, who is nearby."></textarea>
@@ -1852,8 +1860,8 @@
   <div class="sub-inner">
     <button class="sub-close" id="subClose" type="button" aria-label="Close">×</button>
     <div class="kicker">Dreameri · Plans</div>
-    <h2 class="sub-title">Free, and the <em>full version</em></h2>
-    <p class="sub-lede">Everything with a lock belongs to the full version. Here is what each one holds.</p>
+    <h2 class="sub-title">Free, <em>Pro</em> &amp; Unlimited</h2>
+    <p class="sub-lede">Everything with a lock opens with Pro — or with your own key, free and unlimited.</p>
     <p class="sub-limit" id="subLimit" hidden></p>
     <div class="one-unlock">
       <div>
@@ -1862,51 +1870,51 @@
       </div>
       <button class="price-btn" id="subUnlockOne" type="button">Unlock this reading — $1</button>
     </div>
-    <div class="pricing">
+    <div class="pricing tiers">
       <div class="price-card">
         <h3>Free</h3>
-        <p class="plan-now">Your current plan</p>
+        <p class="plan-now" id="freeNow">Your current plan</p>
+        <div class="price-tag"><b>$0</b></div>
         <ul>
-          <li>One dream reading a day</li>
-          <li>Two sleep stories a week, up to 5 minutes</li>
+          <li>1 dream reading a day</li>
+          <li>2 sleep stories a week, up to 5 minutes</li>
           <li>Two voices — Nova &amp; Onyx</li>
           <li>Core themes &amp; moods</li>
-          <li>Dream Memory — last 3 days only</li>
-          <li class="off">Unlimited readings &amp; stories</li>
-          <li class="off">Stories of 10, 20, 30 &amp; 45 minutes</li>
-          <li class="off">All six voices</li>
-          <li class="off">Locked themes &amp; moods</li>
-          <li class="off">Each reading’s deeper part — $1 per reading</li>
-          <li class="off">Full Dream Memory — every dream kept</li>
+          <li>Dream Memory — last 3 days</li>
+          <li class="off">Longer stories, all voices, every theme</li>
+          <li class="off">Each reading’s deeper part — $1 each</li>
         </ul>
-        <button class="price-btn" id="subKeepFree" type="button">Keep the free version</button>
+        <button class="price-btn" id="subKeepFree" type="button">Keep Free</button>
       </div>
       <div class="price-card plus">
-        <h3>Full version</h3>
-        <p class="plan-now">Every lock opens</p>
-        <ul>
-          <li>Unlimited dream readings &amp; sleep stories</li>
-          <li>Sleep stories up to 45 minutes</li>
-          <li>All six voices</li>
-          <li>Every theme — Adventure, Romance, Mystery, Mythic, Historical &amp; more</li>
-          <li>Every mood — Dreamy, Tender, Nostalgic, Quietly Brave &amp; more</li>
-          <li>Every story length</li>
-          <li>Every reading’s deeper part, included — no per-reading fee</li>
-          <li>Dream Memory — every dream, kept &amp; gathered</li>
-        </ul>
+        <h3>Pro</h3>
+        <p class="plan-now" id="proNow">Most loved</p>
         <div class="price-tag" id="subPriceTag"><b>$3.99</b> <span>/ month</span><small>or $29 / year — save 39%</small></div>
+        <ul>
+          <li>10 dream readings a day</li>
+          <li>2 sleep stories a day, up to 45 minutes</li>
+          <li>All six voices</li>
+          <li>Every theme &amp; mood</li>
+          <li>Every reading’s deeper part, included</li>
+          <li>Dream Memory — every dream kept</li>
+        </ul>
         <button class="price-btn" id="subBtn" type="button">Subscribe — $3.99 / month</button>
         <button class="price-btn alt" id="subYearly" type="button">Yearly — $29 / year</button>
-        <p class="price-sub" id="subNote">Renews automatically each month or year. Cancel anytime in Settings → Manage subscription — you keep the full version until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.</p>
+        <p class="price-sub" id="subNote">Renews automatically. Cancel anytime in Settings → Manage subscription — Pro stays until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.</p>
       </div>
-    </div>
-    <div class="byok-plan" id="byokPlan">
-      <div>
-        <div class="kicker">Or · free</div>
-        <b id="byokPlanTitle">Bring your own OpenAI key — every lock opens, free</b>
-        <p id="byokPlanText">Have an OpenAI account? Paste your API key in Settings and Dreameri runs on it: unlimited readings and stories, every voice, theme and length — no subscription. OpenAI bills you directly for what you use (usually a few cents a night). Your key stays on this device only; it is never sent to Dreameri.</p>
+      <div class="price-card byok-tier" id="byokPlan">
+        <h3>Unlimited</h3>
+        <p class="plan-now" id="byokPlanTitle">Bring your own key</p>
+        <div class="price-tag"><b>Free</b> <span>with your OpenAI key</span></div>
+        <ul>
+          <li>No limits — read and listen as much as you like</li>
+          <li>Everything in Pro: every voice, theme &amp; length</li>
+          <li>Runs on your own OpenAI account — OpenAI bills you directly, usually a few cents a night</li>
+          <li>Your key stays on this device, never sent to Dreameri</li>
+        </ul>
+        <p class="price-sub" id="byokPlanText"></p>
+        <button class="price-btn alt" id="byokPlanBtn" type="button">Use my own key</button>
       </div>
-      <button class="price-btn alt" id="byokPlanBtn" type="button">Use my own key</button>
     </div>
   </div>
 </div>
@@ -1955,7 +1963,7 @@
   var page=document.getElementById('subscribePage'); if(!page) return;
   var toastTimer=null;
   function toast(m){ var t=document.getElementById('toast'); if(!t) return; t.textContent=m; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove('show')},2800); }
-  window.openSubscribePage=function(){ try{ if(window.dreamPaintPlan) window.dreamPaintPlan(); }catch(e){} page.classList.add('open'); page.scrollTop=0; document.body.style.overflow='hidden'; };
+  window.openSubscribePage=function(){ try{ if(window.dreamPaintPlan) window.dreamPaintPlan(); }catch(e){} page.classList.add('open'); setTimeout(function(){ var tr=page.querySelector('.pricing.tiers'), pc=tr&&tr.querySelector('.price-card.plus'); if(tr&&pc&&tr.scrollWidth>tr.clientWidth+4) tr.scrollLeft=pc.offsetLeft-(tr.clientWidth-pc.offsetWidth)/2; },30); page.scrollTop=0; document.body.style.overflow='hidden'; };
   function close(){ page.classList.remove('open'); document.body.style.overflow=''; var l=document.getElementById('subLimit'); if(l) l.hidden=true; var ou=document.querySelector('#subscribePage .one-unlock'); if(ou) ou.hidden=false; }
   var c=document.getElementById('subClose'); if(c) c.addEventListener('click',close);
   var kf=document.getElementById('subKeepFree'); if(kf) kf.addEventListener('click',close);
@@ -1964,9 +1972,11 @@
   var sy=document.getElementById('subYearly'); if(sy) sy.addEventListener('click',function(){ buy('yearly'); });
   window.dreamShowLimit=function(info){
     var el=document.getElementById('subLimit'); var zh=window.DREAM_LANG==='zh'; var w=info&&info.what;
-    var m=w==='story'?(zh?'这周的两个免费睡前故事已经用完了。下周再来——或者打开完整版，想听多少就听多少。':'You’ve used this week’s two free sleep stories. More arrive next week — or open the full version for as many as you like.')
-      :w==='story_length'?(zh?'免费版的故事最长 5 分钟。更长的故事属于完整版。':'Free stories run up to 5 minutes. Longer stories belong to the full version.')
-      :(zh?'今天的免费解梦已经用过了。明天再来——或者打开完整版，每个梦都能解。':'You’ve used today’s free dream reading. Come back tomorrow — or open the full version and read every dream.');
+    var pro=info&&info.plan==='full';
+    var m=pro?(w==='story'?(zh?'今天的两个 Pro 睡前故事已经听过了。明天再来——或者用你自己的密钥，不限次数。':'You’ve had today’s two Pro sleep stories. More tomorrow — or bring your own key for unlimited.'):w==='story_length'?(zh?'Pro 的故事最长 45 分钟。':'Pro stories run up to 45 minutes.'):(zh?'今天的 10 次 Pro 解梦已经用完了。明天再来——或者用你自己的密钥，不限次数。':'You’ve used today’s 10 Pro readings. More tomorrow — or bring your own key for unlimited.'))
+      :w==='story'?(zh?'这周的两个免费睡前故事已经用完了。下周再来——或者打开 Pro，每天两个最长 45 分钟的故事。':'You’ve used this week’s two free sleep stories. More arrive next week — or open Pro for two 45-minute stories a day.')
+      :w==='story_length'?(zh?'免费版的故事最长 5 分钟。更长的故事属于 Pro。':'Free stories run up to 5 minutes. Longer stories come with Pro.')
+      :(zh?'今天的免费解梦已经用过了。明天再来——或者打开 Pro，每天 10 次解梦。':'You’ve used today’s free dream reading. Come back tomorrow — or open Pro for 10 readings a day.');
     if(el){ el.textContent=m; el.hidden=false; }
     var ou=document.querySelector('#subscribePage .one-unlock'); if(ou) ou.hidden=true;
     window.openSubscribePage();
@@ -1978,18 +1988,21 @@
     setTimeout(function(){ var k=document.getElementById('byokKey'); if(k){ k.scrollIntoView({behavior:'smooth',block:'center'}); k.focus({preventScroll:true}); } },120);
   });
   window.dreamPaintPlan=function(){
-    var byok=!!(window.dreamHasByok&&window.dreamHasByok()), zh0=window.DREAM_LANG==='zh';
+    var byok=!!(window.dreamHasByok&&window.dreamHasByok()), zh0=window.DREAM_LANG==='zh', full=window.dreamPlan&&window.dreamPlan()==='full';
     var bc=document.getElementById('byokPlan'); if(bc) bc.classList.toggle('on',byok);
     var bt=document.getElementById('byokPlanTitle'), bx=document.getElementById('byokPlanText'), bb=document.getElementById('byokPlanBtn');
-    if(bt) bt.textContent=byok?(zh0?'你的 OpenAI 密钥已连接 ✓ 所有的锁都已打开':'Your OpenAI key is connected ✓ every lock is open'):(zh0?'用你自己的 OpenAI 密钥——所有的锁都打开，免费':'Bring your own OpenAI key — every lock opens, free');
-    if(bx) bx.textContent=zh0?'有 OpenAI 账户？在“设置”里粘贴你的 API 密钥，Dreameri 就在它上面运行：解梦和故事不限次数，所有声音、主题和长度都打开——不用订阅。OpenAI 按你的用量直接向你收费（通常每晚几美分）。密钥只保存在这台设备上，从不发给 Dreameri。':'Have an OpenAI account? Paste your API key in Settings and Dreameri runs on it: unlimited readings and stories, every voice, theme and length — no subscription. OpenAI bills you directly for what you use (usually a few cents a night). Your key stays on this device only; it is never sent to Dreameri.';
+    if(bt) bt.textContent=byok?(zh0?'已连接 ✓':'Connected ✓'):(zh0?'用你自己的密钥':'Bring your own key');
+    if(bx) bx.textContent=byok?(zh0?'你的 OpenAI 密钥已在这台设备上生效，所有的锁都打开了，没有次数限制。':'Your OpenAI key is active on this device — every lock is open, with no limits.'):'';
+    var fn=document.getElementById('freeNow'), pn=document.getElementById('proNow');
+    if(fn) fn.textContent=(!full&&!byok)?(zh0?'你现在的方案':'Your current plan'):(zh0?'免费':'Free forever');
+    if(pn) pn.textContent=full?(zh0?'你现在的方案 ✓':'Your plan ✓'):(zh0?'最受喜爱':'Most loved');
     if(bb) bb.textContent=byok?(zh0?'管理我的密钥':'Manage my key'):(zh0?'用我自己的密钥':'Use my own key');
-    var full=window.dreamPlan&&window.dreamPlan()==='full', zh=window.DREAM_LANG==='zh';
+    var zh=window.DREAM_LANG==='zh';
     var b=document.getElementById('subBtn'), y=document.getElementById('subYearly'), n=document.getElementById('subNote'), t=document.getElementById('subPriceTag');
     var card=b&&b.closest('.price-card'); if(card) card.classList.toggle('is-mine',!!full);
     if(b) b.textContent=full?(zh?'管理订阅':'Manage subscription'):(zh?'订阅——每月 $3.99':'Subscribe — $3.99 / month');
     if(y) y.hidden=!!full; if(t) t.hidden=!!full;
-    if(n) n.textContent=full?(zh?'你正在使用完整版 ✦ 所有的锁都已打开。':'You’re on the full version ✦ every lock is open.'):(zh?'按月或按年自动续费，随时可在“设置 → 管理订阅”里取消；已付的这个周期结束前，完整版都还在。取消后不再扣费，已付的周期不退款。由 Stripe 安全支付。':'Renews automatically each month or year. Cancel anytime in Settings → Manage subscription — you keep the full version until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.');
+    if(n) n.textContent=full?(zh?'你正在使用 Pro ✦ 每天 10 次解梦、2 个最长 45 分钟的故事。':'You’re on Pro ✦ 10 readings and two 45-minute stories a day.'):(zh?'自动续费，随时可在“设置 → 管理订阅”里取消；已付的这个周期结束前，Pro 都还在。取消后不再扣费，已付的周期不退款。由 Stripe 安全支付。':'Renews automatically. Cancel anytime in Settings → Manage subscription — Pro stays until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.');
   };
   var uo=document.getElementById('subUnlockOne'); if(uo) uo.addEventListener('click',function(){ if(window.unlockPreviewReading){ close(); window.unlockPreviewReading(); } });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&page.classList.contains('open')) close(); });
@@ -2750,7 +2763,7 @@
   function isFullPlan(){ return !!(window.dreamPlan&&window.dreamPlan()==='full'); }
   function hasAllAccess(){ return isFullPlan()||byokActive(); }
   function checkQuota(){
-    if(byokActive()||!AI_ENDPOINT||isFullPlan()) return Promise.resolve(null);
+    if(byokActive()||!AI_ENDPOINT) return Promise.resolve(null);
     var ctrl=(typeof AbortController!=='undefined')?new AbortController():null; var tm=ctrl?setTimeout(function(){ctrl.abort()},5000):null;
     return aiFetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctrl?ctrl.signal:undefined,body:JSON.stringify({type:'quota',prompt:'quota'})})
       .then(function(r){ if(tm) clearTimeout(tm); return r.ok?r.json():null; }).catch(function(){ return null; });
@@ -3485,9 +3498,9 @@
   window.completeDreamReading=completeReading;
   $('readBtn').addEventListener('click',function(){
     var text=input.value.trim(); var detail=countDreamDetail(text); if(detail<DREAM_MIN_DETAIL){var left=DREAM_MIN_DETAIL-detail; toast(L('Please write at least 20 words — '+left+' more to go. Add where you were, who was there, what happened, and how it felt, so the reading has enough to work with.','请至少写 20 个字——还差 '+left+' 个字。补上你在哪里、和谁在一起、发生了什么、感觉如何，解读才有足够的内容可读。')); updCount(); input.focus(); return}
-    if(!window.__dreamQuotaOk&&!isFullPlan()&&!byokActive()&&AI_ENDPOINT){
+    if(!window.__dreamQuotaOk&&!byokActive()&&AI_ENDPOINT){
       var rb0=$('readBtn'); if(rb0) rb0.disabled=true;
-      checkQuota().then(function(q){ if(rb0) rb0.disabled=false; if(q&&q.readingsLeft===0){ try{ if(window.dreamHearthReset) window.dreamHearthReset(); }catch(e){} window.dreamShowLimit({what:'reading'}); return; } window.__dreamQuotaOk=true; $('readBtn').click(); });
+      checkQuota().then(function(q){ if(rb0) rb0.disabled=false; if(q&&q.readingsLeft===0){ try{ if(window.dreamHearthReset) window.dreamHearthReset(); }catch(e){} window.dreamShowLimit({what:'reading',plan:q.plan}); return; } window.__dreamQuotaOk=true; $('readBtn').click(); });
       return;
     }
     if(!window.__dreamAsked&&window.dreamHearthAsk){ window.dreamHearthAsk(text,feeling); return; }
@@ -5140,9 +5153,9 @@
   if(createBtn) createBtn.addEventListener('click',function(){
     var wish=wishInput.value.trim();
     if(wish.length<12){toast(L('Write a little more of the scene — where you are, what it feels like.','再多写一点这个场景——你在哪里，感觉如何。')); wishInput.focus(); return}
-    if(!createBtn.__quotaOk&&!isFullPlan()&&!byokActive()&&AI_ENDPOINT){
+    if(!createBtn.__quotaOk&&!byokActive()&&AI_ENDPOINT){
       createBtn.disabled=true;
-      checkQuota().then(function(q){ createBtn.disabled=false; if(q&&q.storiesLeft===0){ window.dreamShowLimit({what:'story'}); return; } createBtn.__quotaOk=true; createBtn.click(); createBtn.__quotaOk=false; });
+      checkQuota().then(function(q){ createBtn.disabled=false; if(q&&q.storiesLeft===0){ window.dreamShowLimit({what:'story',plan:q.plan}); return; } createBtn.__quotaOk=true; createBtn.click(); createBtn.__quotaOk=false; });
       return;
     }
     createBtn.disabled=true; $('dayBtnLabel').textContent=L('Making your scene & story…','正在生成场景与故事…');
@@ -5608,6 +5621,24 @@
     'Yearly — $29':'按年——$29',
     'Yearly — $29 / year':'按年——每年 $29',
     'Or · free':'或者 · 免费',
+    '1 dream reading a day':'每天 1 次解梦',
+    '2 sleep stories a week, up to 5 minutes':'每周 2 个睡前故事，最长 5 分钟',
+    'Dream Memory — last 3 days':'梦境记忆——最近 3 天',
+    'Longer stories, all voices, every theme':'更长的故事、所有声音、所有主题',
+    'Each reading’s deeper part — $1 each':'每次解读的深处——每篇 $1',
+    'Keep Free':'继续用免费版',
+    '10 dream readings a day':'每天 10 次解梦',
+    '2 sleep stories a day, up to 45 minutes':'每天 2 个睡前故事，最长 45 分钟',
+    'Every theme & mood':'所有主题与氛围',
+    'Every reading’s deeper part, included':'每次解读的深处，全部包含',
+    'Dream Memory — every dream kept':'梦境记忆——每个梦都留着',
+    'Unlimited':'不限次数',
+    'No limits — read and listen as much as you like':'没有限制——想解多少、想听多少都行',
+    'Everything in Pro: every voice, theme & length':'Pro 的一切：所有声音、主题和长度',
+    'Runs on your own OpenAI account — OpenAI bills you directly, usually a few cents a night':'在你自己的 OpenAI 账户上运行——OpenAI 直接向你收费，通常每晚几美分',
+    'Your key stays on this device, never sent to Dreameri':'密钥只留在这台设备上，从不发给 Dreameri',
+    'Use my own key':'用我自己的密钥',
+    'or see Pro':'或看看 Pro',
     'Cancel anytime. Secure payment by Stripe.':'随时可以取消。由 Stripe 安全支付。',
     'Sleep stories up to 10 minutes':'睡前故事最长 10 分钟',
     'Two voices — Nova & Onyx':'两个声音——Nova 和 Onyx',
@@ -6526,7 +6557,7 @@
     if(!user){ needSignIn(); return; }
     busyBtns(true);
     billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } else busyBtns(false); })
-      .catch(function(e){ busyBtns(false); var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
+      .catch(function(e){ busyBtns(false); var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on Pro ✦','你已经是 Pro 了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
   };
   window.dreamOpenPortal=function(){
     if(!user){ needSignIn(); return; }
@@ -6556,7 +6587,7 @@
     try{ history.replaceState(null,'',location.pathname+location.hash); }catch(e){}
     if(sub==='success'){
       var n=0; (function poll(){
-        if(user&&profile&&profile.plan==='full'){ toastNote(T('Welcome to the full version ✦ every lock is open.','欢迎来到完整版 ✦ 所有的锁都打开了。')); return; }
+        if(user&&profile&&profile.plan==='full'){ toastNote(T('Welcome to Pro ✦ every lock is open.','欢迎来到 Pro ✦ 所有的锁都打开了。')); return; }
         if(++n>15){ toastNote(T('Payment received — your plan will switch on in a moment. Refresh if it hasn’t.','付款已收到——方案马上就会开通。没有的话刷新一下。')); return; }
         if(user) loadProfile().then(function(){ render(); announcePlan(); }).catch(function(){});
         setTimeout(poll,2000);
@@ -6674,7 +6705,7 @@
   });
 
   /* ——— Account section in Settings ——— */
-  function planLabel(){ return profile&&profile.plan==='full'?T('Full version','完整版'):T('Free version','免费版'); }
+  function planLabel(){ return profile&&profile.plan==='full'?T('Pro','Pro'):T('Free version','免费版'); }
   function render(){
     section.hidden=false; if(sep) sep.hidden=false;
     var lab=$('acctLabel'); if(lab) lab.textContent=T('Your account','你的账户');
@@ -6699,7 +6730,7 @@
       var name=profile&&profile.display_name||'';
       h='<h4 class="byok-title">'+(name?esc(name):T('Signed in','已登录'))+'</h4>'
        +'<p class="byok-intro acct-email">'+esc(user.email||'')+' · <span class="acct-plan">'+planLabel()+'</span></p>'
-       +'<div class="byok-actions"><button type="button" class="byok-save" id="acctPlanBtn">'+(profile&&profile.plan==='full'?T('Manage subscription','管理订阅'):T('Open the full version','打开完整版'))+'</button></div>'
+       +'<div class="byok-actions"><button type="button" class="byok-save" id="acctPlanBtn">'+(profile&&profile.plan==='full'?T('Manage subscription','管理订阅'):T('See Pro','看看 Pro'))+'</button></div>'
        +(note?'<p class="byok-status" role="status">'+esc(note)+'</p>':'')
        +'<label class="byok-label" for="acctName">'+T('Your name in the app','你在应用里的名字')+'</label>'
        +'<div class="byok-field"><input type="text" id="acctName" maxlength="60" value="'+esc(name)+'" placeholder="'+T('Optional','可不填')+'" autocomplete="nickname" /><button type="button" class="byok-show" id="acctNameSave">'+T('Save','保存')+'</button></div>'
@@ -7463,13 +7494,13 @@
     cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); cx.setTransform(DPR,0,0,DPR,0,0);
     // background-size:cover, position center 30%
     var s=Math.max(W/PEA.w,H/PEA.h), iw=PEA.w*s, ih=PEA.h*s;
-    img={x:(W-iw)/2, y:(H-ih)*0.3, w:iw, h:ih};
+    img={x:(W-iw)/2, y:0, w:iw, h:ih};
   }
   function P(o){ return {x:img.x+o.x*img.w, y:img.y+o.y*img.h}; }
   function spark(burst){
     var b=P(PEA.ball), c=P(PEA.cat), r=PEA.ball.r*img.w;
     var a=Math.random()*Math.PI*2;
-    parts.push({x:b.x+Math.cos(a)*r*.5, y:b.y+Math.sin(a)*r*.5, sx:b.x, sy:b.y, tx:c.x+(Math.random()-.5)*60, ty:c.y+(Math.random()-.5)*30, t:0, d:(burst?1.4:2.4)+Math.random()*1.4, hue:Math.random()<.5?265:170, s:1+Math.random()*2.2, wob:Math.random()*6});
+    parts.push({x:b.x+Math.cos(a)*r*.5, y:b.y+Math.sin(a)*r*.5, sx:b.x, sy:b.y, tx:c.x+(Math.random()-.5)*60, ty:c.y+(Math.random()-.5)*30, t:0, d:(burst?1.4:2.4)+Math.random()*1.4, hue:Math.random()<.5?265:170, s:.8+Math.random()*1.6, wob:Math.random()*6});
   }
   function frame(now){
     raf=0; if(!running) return;
@@ -7500,7 +7531,7 @@
     var wn=P(PEA.win), wr=PEA.win.r*img.w;
     for(var s=0;s<6;s++){ var sa=s*2.1, sx2=wn.x+Math.cos(sa)*wr*.6, sy2=wn.y+Math.sin(sa*1.3)*wr*.5, tw=.5+.5*Math.sin(t*2.3+s*1.7); cx.fillStyle='rgba(255,246,210,'+(0.15+tw*0.55)+')'; cx.beginPath(); cx.arc(sx2,sy2,1+tw*1.1,0,Math.PI*2); cx.fill(); }
     // wish sparkles rising to the cat
-    if(!reduce&&Math.random()<e*0.45) spark(false);
+    if(!reduce&&Math.random()<e*0.28) spark(false);
     for(var i=parts.length-1;i>=0;i--){
       var q=parts[i]; q.t+=1/60/q.d; if(q.t>=1){ parts.splice(i,1); if(Math.random()<.35) zs.push({x:q.tx,y:q.ty,t:0}); continue; }
       var u=q.t, ease=u*u*(3-2*u);
