@@ -1440,6 +1440,8 @@
   .sub-limit{margin:10px 0 0;padding:12px 14px;border-radius:14px;background:rgba(214,178,94,.14);border:1px solid rgba(214,178,94,.45);color:#f6e2ac;font-size:14px;line-height:1.5}
   .price-tag{margin:6px 0 10px;font-family:"Cormorant Garamond",serif}
   .price-tag b{font-size:34px}.price-tag span{font-size:16px;opacity:.8}.price-tag small{display:block;font-family:"DM Sans",sans-serif;font-size:12px;opacity:.75;margin-top:2px}
+  .price-btn.is-busy{opacity:.75;cursor:progress;animation:busyPulse 1.2s ease-in-out infinite}
+  @keyframes busyPulse{50%{opacity:.5}}
   .price-btn.alt{background:transparent;border:1px solid rgba(214,178,94,.6);color:#f0d48a;margin-top:8px}
   .price-card.plus.is-mine{box-shadow:0 0 0 2px rgba(214,178,94,.6)}
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
@@ -1853,8 +1855,8 @@
         </ul>
         <div class="price-tag" id="subPriceTag"><b>$3.99</b> <span>/ month</span><small>or $29 / year — save 39%</small></div>
         <button class="price-btn" id="subBtn" type="button">Subscribe — $3.99 / month</button>
-        <button class="price-btn alt" id="subYearly" type="button">Yearly — $29</button>
-        <p class="price-sub" id="subNote">Cancel anytime. Secure payment by Stripe.</p>
+        <button class="price-btn alt" id="subYearly" type="button">Yearly — $29 / year</button>
+        <p class="price-sub" id="subNote">Renews automatically each month or year. Cancel anytime in Settings → Manage subscription — you keep the full version until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.</p>
       </div>
     </div>
   </div>
@@ -1902,7 +1904,7 @@
     var card=b&&b.closest('.price-card'); if(card) card.classList.toggle('is-mine',!!full);
     if(b) b.textContent=full?(zh?'管理订阅':'Manage subscription'):(zh?'订阅——每月 $3.99':'Subscribe — $3.99 / month');
     if(y) y.hidden=!!full; if(t) t.hidden=!!full;
-    if(n) n.textContent=full?(zh?'你正在使用完整版 ✦ 所有的锁都已打开。':'You’re on the full version ✦ every lock is open.'):(zh?'随时可以取消。由 Stripe 安全支付。':'Cancel anytime. Secure payment by Stripe.');
+    if(n) n.textContent=full?(zh?'你正在使用完整版 ✦ 所有的锁都已打开。':'You’re on the full version ✦ every lock is open.'):(zh?'按月或按年自动续费，随时可在“设置 → 管理订阅”里取消；已付的这个周期结束前，完整版都还在。取消后不再扣费，已付的周期不退款。由 Stripe 安全支付。':'Renews automatically each month or year. Cancel anytime in Settings → Manage subscription — you keep the full version until the end of the period you paid for. No charges after you cancel; past periods aren’t refunded. Secure payment by Stripe.');
   };
   var uo=document.getElementById('subUnlockOne'); if(uo) uo.addEventListener('click',function(){ if(window.unlockPreviewReading){ close(); window.unlockPreviewReading(); } });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&page.classList.contains('open')) close(); });
@@ -5393,6 +5395,7 @@
     'Stories of 10, 20, 30 & 45 minutes':'10、20、30 和 45 分钟的故事',
     'Unlimited dream readings & sleep stories':'不限次数的解梦与睡前故事',
     'Yearly — $29':'按年——$29',
+    'Yearly — $29 / year':'按年——每年 $29',
     'Cancel anytime. Secure payment by Stripe.':'随时可以取消。由 Stripe 安全支付。',
     'Sleep stories up to 10 minutes':'睡前故事最长 10 分钟',
     'Two voices — Nova & Onyx':'两个声音——Nova 和 Onyx',
@@ -6301,11 +6304,17 @@
     setTimeout(openAccount,250);
   }
   function returnUrl(){ return location.origin+location.pathname; }
+  function busyBtns(on){
+    ['subBtn','subYearly'].forEach(function(id){ var b=document.getElementById(id); if(!b) return;
+      if(on){ b.setAttribute('data-label',b.textContent); b.disabled=true; b.classList.add('is-busy'); b.textContent=T('Opening secure checkout…','正在打开安全支付…'); }
+      else { b.disabled=false; b.classList.remove('is-busy'); if(b.getAttribute('data-label')) b.textContent=b.getAttribute('data-label'); } });
+  }
+  window.addEventListener('pageshow',function(){ busyBtns(false); });
   window.dreamStartCheckout=function(plan){
     if(!user){ needSignIn(); return; }
-    toastNote(T('Opening secure checkout…','正在打开安全支付页面…'));
-    billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } })
-      .catch(function(e){ var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
+    busyBtns(true);
+    billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } else busyBtns(false); })
+      .catch(function(e){ busyBtns(false); var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
   };
   window.dreamOpenPortal=function(){
     if(!user){ needSignIn(); return; }

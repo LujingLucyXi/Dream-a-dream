@@ -135,6 +135,9 @@ Deno.serve(async (req: Request) => {
           "metadata[user_id]": user.id,
           "subscription_data[metadata][user_id]": user.id,
           allow_promotion_codes: "true",
+          "custom_text[submit][message]": plan === "monthly"
+            ? "Billed $3.99 every month until you cancel. Cancel anytime in Dreameri (Settings → Manage subscription) — you keep the full version until the end of the month you paid for. No charges after you cancel; past months are not refunded."
+            : "Billed $29 once a year until you cancel. Cancel anytime in Dreameri (Settings → Manage subscription) — you keep the full version until the end of the year you paid for. No charges after you cancel; past periods are not refunded.",
           success_url: back + "?sub=success",
           cancel_url: back + "?sub=cancel",
         });
@@ -151,6 +154,7 @@ Deno.serve(async (req: Request) => {
           "line_items[0][price_data][product_data][name]": UNLOCK.name,
           "metadata[user_id]": user.id,
           "metadata[kind]": "unlock",
+          "custom_text[submit][message]": "A one-time $1 payment. It opens the deeper part of this one reading only — no subscription, nothing recurring.",
           success_url: back + "?unlock=paid&sid={CHECKOUT_SESSION_ID}",
           cancel_url: back + "?unlock=cancel",
         });
