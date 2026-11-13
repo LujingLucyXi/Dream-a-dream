@@ -1321,6 +1321,11 @@
   .dm-pop-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:6px}
   .dm-pop-links button{background:none;border:none;color:#c9cee3;text-decoration:underline;text-underline-offset:3px;font-size:13.5px;padding:6px 2px}
   .dm-pop-links button[disabled]{opacity:.6;text-decoration:none}
+
+  /* ——— The scene reaches the very top: header, tabs and collections float over it ——— */
+  .site-head,.mode-switch,.collect-strip{position:relative;z-index:5}
+  .hearth.inline .hearth-zoom{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%)}
+  .hearth.inline .hearth-bg::after{background:linear-gradient(180deg,rgba(5,7,15,.78) 0%,rgba(5,7,15,.35) 18%,rgba(5,7,15,0) 34%,rgba(5,7,15,0) 58%,rgba(5,7,15,.82) 100%)}
 </style>
 </head>
 <body>
@@ -1444,7 +1449,7 @@
   <div class="layout" id="reader">
     <section class="input-panel" aria-label="Tell your dream">
 <div class="hearth inline" id="hearth" role="region" aria-labelledby="hearthTitle">
-  <div class="hearth-zoom" id="hearthZoom" aria-hidden="true"><div class="hearth-bg" id="hearthBg"><video id="hearthLoop" muted loop playsinline preload="auto" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/d7aef08b-dcce-4be8-996a-2a28d8b90e50.jpg" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/1b292961-93e2-403f-a5e5-a8f23fc49a4c.mp4"></video></div></div>
+  <div class="hearth-zoom" id="hearthZoom" aria-hidden="true"><div class="hearth-bg" id="hearthBg"></div></div>
   <canvas class="hearth-canvas" id="hearthCanvas" aria-hidden="true"></canvas>
   <div class="hearth-ui">
     <div class="hearth-top">
@@ -6262,9 +6267,18 @@
    through the same questions on their way to the reading. */
 (function(){
   var el=document.getElementById('hearth'); if(!el) return;
-  var HEARTH_IMG='https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/d7aef08b-dcce-4be8-996a-2a28d8b90e50.jpg';
-  var IMG_W=834, IMG_H=1112;           /* the painting's own size */
-  var FIRE={x:0.52, y:0.56, w:0.2};        /* fire base, as fractions of the painting */
+  /* Two paintings of the same cabin: tall for phones, wide for larger
+     screens. Each knows where its fire, lantern and star window are. */
+  var SCENES={
+    tall:{img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/b4330ca0-ecd5-429b-85ed-fcfbd546c34c.jpg',w:1100,h:1971,fire:{x:0.5,y:0.772,w:0.2},lantern:{x:0.163,y:0.405,r:0.09},win:{x:0.5,y:0.14,r:0.13}},
+    wide:{img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/5e56c766-4b28-4903-b6d2-7781b2d9ed31.jpg',w:1920,h:1072,fire:{x:0.5,y:0.805,w:0.1},lantern:{x:0.381,y:0.403,r:0.03},win:{x:0.5,y:0.128,r:0.05}}
+  };
+  var SC=SCENES.tall, HEARTH_IMG=SC.img, IMG_W=SC.w, IMG_H=SC.h, FIRE=SC.fire;
+  function pickScene(){
+    var wide=SCENES.wide&&el.clientWidth>el.clientHeight*1.05;
+    var next=wide?SCENES.wide:SCENES.tall;
+    if(next!==SC||!$('hearthBg').style.backgroundImage){ SC=next; HEARTH_IMG=SC.img; IMG_W=SC.w; IMG_H=SC.h; FIRE=SC.fire; $('hearthBg').style.backgroundImage='url('+SC.img+')'; }
+  }
   var BG_Y=0.58;                                  /* matches background-position-y */
   var AI_URL=(window.DREAM_READER_AI_ENDPOINT||'https://jlvlmuyegirglbyrnfbl.supabase.co/functions/v1/dream-reading');
   var TRANSCRIBE_URL='https://jlvlmuyegirglbyrnfbl.supabase.co/functions/v1/dream-transcribe';
@@ -6326,14 +6340,16 @@
   /* ——— Painting + fire geometry ——— */
   var cv=$('hearthCanvas'), cx=cv.getContext('2d'), W=0, H=0, DPR=1;
   var fx=0, fy=0, fw=0;
+  var lx=0,ly=0,lr=0,wx=0,wy=0,wr=0,imgS=1,imgOx=0,imgOy=0;
   function layout(){
     DPR=Math.min(2,window.devicePixelRatio||1);
-    W=el.clientWidth; H=el.clientHeight;
+    W=el.clientWidth; H=el.clientHeight; pickScene();
     cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
     cx.setTransform(DPR,0,0,DPR,0,0);
     var s=Math.max(W/IMG_W,H/IMG_H), dw=IMG_W*s, dh=IMG_H*s;
     var ox=(W-dw)/2, oy=(H-dh)*BG_Y;
     bx=ox+FIRE.x*dw; by=oy+FIRE.y*dh; bw=FIRE.w*dw; zox=bx; zoy=by-bw*.55;
+    lx=ox+SC.lantern.x*dw; ly=oy+SC.lantern.y*dh; lr=SC.lantern.r*dw; wx=ox+SC.win.x*dw; wy=oy+SC.win.y*dh; wr=SC.win.r*dw; imgOx=ox; imgOy=oy; imgS=s;
     applyZoom();
   }
   /* While the dreamer speaks, the scene leans in toward the fire. The
@@ -6362,6 +6378,32 @@
       parts.push({x:fx+(Math.random()-.5)*spread*2, y:fy-Math.random()*fw*.05, vx:(Math.random()-.5)*.35, vy:-(0.7+Math.random()*1.3), life:1, decay:.012+Math.random()*.014, s:fw*(.18+Math.random()*.2), seed:Math.random()*6.28});
     }
   }
+  /* Quiet life in the painting: the lantern breathes, dust drifts
+     through the lamplight, a few stars blink in the round window. Drawn
+     in the same zoom as the painting so it stays on its objects. */
+  var dust=[];
+  function zp(x,y){ return {x:zox+(x-zox)*zoom, y:zoy+(y-zoy)*zoom}; }
+  function drawAmbient(t){
+    var L=zp(lx,ly), R=lr*zoom, f=.55+.25*Math.sin(t*7.3)+.12*Math.sin(t*13.1)+.08*Math.sin(t*2.1);
+    var g=cx.createRadialGradient(L.x,L.y,0,L.x,L.y,R*3.2);
+    g.addColorStop(0,'rgba(255,205,120,'+(.22*f)+')'); g.addColorStop(1,'rgba(255,190,100,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(L.x,L.y,R*3.2,0,6.283); cx.fill();
+    var Wp=zp(wx,wy), WR=wr*zoom;
+    for(var i=0;i<7;i++){
+      var a=i*2.39+1, rr=WR*(.25+.6*((i*37)%10)/10), x=Wp.x+Math.cos(a)*rr, y=Wp.y+Math.sin(a)*rr*.9;
+      var tw=Math.max(0,Math.sin(t*(1.3+i*.37)+i*1.7)); var s=WR*.12*(.5+tw);
+      cx.globalAlpha=.75*tw*tw; cx.drawImage(SPG,x-s/2,y-s/2,s,s);
+    }
+    cx.globalAlpha=1;
+    if(!reduce&&dust.length<40) dust.push({x:Math.random()*W,y:H*(.25+Math.random()*.6),vx:.08+Math.random()*.18,vy:-.03-Math.random()*.06,ph:Math.random()*6.28,s:1.2+Math.random()*2.4,life:1});
+    for(var j=dust.length-1;j>=0;j--){
+      var d=dust[j]; d.x+=d.vx+Math.sin(t*.6+d.ph)*.12; d.y+=d.vy; d.life-=.0015;
+      if(d.life<=0||d.x>W+10){ dust.splice(j,1); continue; }
+      var near=Math.max(0,1-Math.hypot(d.x-L.x,d.y-L.y)/(R*6));
+      cx.globalAlpha=(.12+.45*near)*Math.min(1,d.life*3); cx.drawImage(SPG,d.x-d.s,d.y-d.s,d.s*2,d.s*2);
+    }
+    cx.globalAlpha=1;
+  }
   /* The mythical layer: an aurora breathing above the flames, a slow
      ring of starlight circling the hearth, and motes of teal, gold and
      violet rising into the chimney. */
@@ -6389,11 +6431,12 @@
     raf=requestAnimationFrame(frame);
     var t=(now-t0)/1000;
     level+=(target-level)*.12; flareV*=.94;
-    zoomTo=(rec&&!reduce)?1.55:1; if(Math.abs(zoomTo-zoom)>.0005){ zoom+=(zoomTo-zoom)*.035; applyZoom(); }
-    var magic=Math.max(0,Math.min(1,(zoom-1)/.5));
+    zoomTo=(rec&&!reduce)?1.35:1; if(Math.abs(zoomTo-zoom)>.0005){ zoom+=(zoomTo-zoom)*.035; applyZoom(); }
+    var magic=Math.max(0,Math.min(1,(zoom-1)/.35));
     var heat=Math.min(1.6,level*(1-magic*.35)+flareV+magic*.15);
     cx.clearRect(0,0,W,H);
     cx.globalCompositeOperation='lighter';
+    drawAmbient(t);
     if(magic>.02) drawMagic(t,magic,heat);
     /* light thrown into the room */
     var room=cx.createRadialGradient(fx,fy-fw*.3,0,fx,fy-fw*.3,Math.max(W,H)*.75);
@@ -6648,6 +6691,26 @@
   var inline=el.classList.contains('inline');
   function resetIntake(){ mode='speak'; typed=false; $('hearthText').value=''; $('hearthText').placeholder=''; stage('speak'); status(''); texts(); }
   window.resetDreamIntake=resetIntake;
+  /* Pull the scene up to the top of the page, under the header, so the
+     whole first screen is the cabin; its own words start below the
+     floating header. */
+  function placeScene(){
+    if(!inline) return;
+    if(el.offsetParent===null){ el.style.marginTop=''; return; }
+    el.style.marginTop='0px';
+    var top=el.getBoundingClientRect().top+window.scrollY;
+    el.style.marginTop=(-top)+'px';
+    var strip=document.querySelector('.collect-strip')||document.querySelector('.mode-switch');
+    var hb=strip?strip.getBoundingClientRect().bottom+window.scrollY:top;
+    var ui=el.querySelector('.hearth-ui'); if(ui) ui.style.paddingTop=Math.round(hb+14)+'px';
+    if(running){ layout(); micPoint(); }
+  }
+  window.addEventListener('resize',placeScene);
+  document.addEventListener('dreamview',function(){ setTimeout(placeScene,0); });
+  document.addEventListener('dreamlang',function(){ setTimeout(placeScene,0); });
+  window.addEventListener('load',placeScene);
+  setTimeout(placeScene,0); setTimeout(placeScene,600);
+  ['modeNightBtn','modeDayBtn'].forEach(function(id){ var b=$(id); if(b) b.addEventListener('click',function(){ setTimeout(placeScene,30); }); });
   if(inline){
     if(HEARTH_IMG.indexOf('__')!==0) $('hearthBg').style.backgroundImage='url('+HEARTH_IMG+')';
     stage('speak'); texts();
