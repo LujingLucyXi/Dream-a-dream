@@ -1359,6 +1359,23 @@
   /* reading: appears in place, no movement */
   .unfold-hide{opacity:0!important;transform:none!important}
   .unfold-in{transition:opacity .6s ease}
+
+  /* ——— Passport pages that feel like a real passport: security-print paper ——— */
+  .pp-pages{position:relative;overflow:hidden;background-color:#efe5cb;background-image:
+     radial-gradient(circle at 15% 10%,rgba(255,255,255,.55),transparent 35%),
+     radial-gradient(circle at 85% 90%,rgba(160,130,70,.18),transparent 40%),
+     repeating-radial-gradient(circle at 50% 120%,rgba(51,84,158,.07) 0 1px,transparent 1px 9px),
+     repeating-linear-gradient(115deg,rgba(160,61,85,.045) 0 1px,transparent 1px 7px),
+     repeating-linear-gradient(65deg,rgba(46,125,107,.045) 0 1px,transparent 1px 7px);
+     background-size:auto;box-shadow:0 18px 40px rgba(2,4,12,.45),inset 0 0 40px rgba(138,109,47,.22),inset 14px 0 18px -12px rgba(90,70,30,.35)}
+  .pp-pages::after{content:"DREAMLAND · 梦境 · DREAMLAND · 梦境";position:absolute;right:-30px;bottom:18px;transform:rotate(-90deg);transform-origin:right bottom;font-size:9px;letter-spacing:.4em;color:rgba(51,84,158,.18);font-weight:900;pointer-events:none;white-space:nowrap}
+  .pp-pages::before{content:"";position:absolute;left:50%;top:50%;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(51,84,158,.05) 0 3deg,transparent 3deg 9deg);pointer-events:none}
+  .pp-pages>*{position:relative}
+  .pstamp.just-pressed{animation:dmPress .8s cubic-bezier(.3,1.6,.5,1) .35s both}
+  .pm6.pstamp.just-pressed{animation-name:dmPress6}
+  .dm-pop-places{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .dm-pop-place{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.04);color:#f3e9c8;border:1px solid rgba(240,212,138,.35);border-radius:14px;padding:11px 10px;font-weight:800;font-size:13.5px}
+  .dm-pop-place .ic{color:var(--gold2);font-size:15px}
 </style>
 </head>
 <body>
@@ -5752,13 +5769,14 @@
         +(isNew?'':'<p class="dm-pop-from">'+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次来到这里'):('Visit '+st.count+' to this place'))+'</p>');
     }
     html+='<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+L('Keep them','收下')+'</button></div>'
-      +'<div class="dm-pop-links"><button type="button" data-pop-shelf>'+L('See the shelf','看看架子')+'</button>'
-      +(p&&st?'<button type="button" data-pop-pass>'+L('Open the passport','打开护照')+'</button>':'')
+      +'<div class="dm-pop-places"><button type="button" class="dm-pop-place" data-pop-shelf><span class="ic">✦</span>'+L('Place on my shelf','放上我的架子')+'</button>'
+      +(p&&st?'<button type="button" class="dm-pop-place" data-pop-pass><span class="ic">☾</span>'+L('Stamp my passport','盖进我的护照')+'</button>':'')+'</div>'
+      +'<div class="dm-pop-links">'
       +'<button type="button" data-task="'+g.id+'"'+(entry&&entry.taskDone?' disabled':'')+'>'+(entry&&entry.taskDone?('✓ '+L('Task done','任务完成')):L('Mark the task done','标记任务完成'))+'</button></div>';
     popup(html,function(o,close){
       o.querySelector('[data-pop-next]').addEventListener('click',close);
       o.querySelector('[data-pop-shelf]').addEventListener('click',function(){ close(); selectedGift=g.id; openShelf(); });
-      var pp=o.querySelector('[data-pop-pass]'); if(pp) pp.addEventListener('click',function(){ close(); openPassport(); });
+      var pp=o.querySelector('[data-pop-pass]'); if(pp) pp.addEventListener('click',function(){ close(); openPassport(p.id); });
       var t=o.querySelector('[data-task]'); if(t) t.addEventListener('click',function(){ setTimeout(function(){ t.disabled=true; t.textContent='✓ '+L('Task done','任务完成'); },0); });
     });
   };
@@ -5883,7 +5901,17 @@
   function openPage(page){ page.classList.add('open'); page.scrollTop=0; document.body.style.overflow='hidden'; }
   function closePage(page){ page.classList.remove('open'); document.body.style.overflow=''; }
   function openShelf(){ newShelf=false; if(selectedGift!=null){ var c=catOfGift(selectedGift); if(c){ shelfIdx=CAT_ORDER.indexOf(c); arriveGift=selectedGift; } } renderStrip(); openPage($('shelfPage')); renderShelf(); }
-  function openPassport(){ newPass=false; renderStrip(); renderPassport(); openPage($('passportPage')); }
+  function openPassport(focusId){
+    newPass=false; renderStrip(); renderPassport(); openPage($('passportPage'));
+    if(typeof focusId==='string'){
+      var idx=0; PP.forEach(function(x,i){ if(x.id===focusId) idx=i; });
+      setTimeout(function(){
+        var all=document.querySelectorAll('#passportBody .visa-flow .pstamp'), order=PP.filter(function(x){ return stamps[x.id]; }), k=order.findIndex(function(x){ return x.id===focusId; });
+        var el=all[k]; if(!el) return;
+        el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.remove('just-pressed'); void el.offsetWidth; el.classList.add('just-pressed');
+      },120);
+    }
+  }
   window.openShelfPage=openShelf; window.openPassportPage=openPassport;
 
   /* Task toggles, wherever they appear (reveal card + shelf). */
