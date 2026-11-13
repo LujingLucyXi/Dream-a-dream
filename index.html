@@ -1456,7 +1456,17 @@
   .prof-stat span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-top:5px}
   .prof-block{margin:0 0 18px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
   .prof-label{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px}
-  .dream-road svg{display:block;width:100%;max-width:440px;margin:0 auto;height:auto}
+  .road-scene{position:relative;max-width:440px;margin:0 auto;border-radius:16px;overflow:hidden;background:#0d1226 url('__ROADBG__') center bottom/cover no-repeat;box-shadow:inset 0 0 60px rgba(5,8,20,.85)}
+  .road-scene:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,11,24,.25),rgba(8,11,24,.05) 30%,rgba(8,11,24,.35));pointer-events:none}
+  .road-scene svg{position:relative;display:block;width:100%;height:auto}
+  .dream-road .rd-name{font-family:"Cormorant Garamond",Georgia,serif;font-size:17px;font-style:italic;font-weight:600;fill:#fbeccb}
+  .dream-road .rd-meta{font-size:10.5px;letter-spacing:.04em;fill:#c9d0ee}
+  .dream-road .rd-tonight{font-family:"Cormorant Garamond",Georgia,serif;font-size:16px;font-style:italic;fill:#b8ffe0}
+  .dream-road .rd-glow{animation:rdPulse 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes rdPulse{50%{opacity:.55;transform:scale(.85)}}
+  .dream-road .rd-line{animation:rdFlow 14s linear infinite}
+  @keyframes rdFlow{to{stroke-dashoffset:-200}}
+  @media (prefers-reduced-motion:reduce){ .dream-road .rd-glow,.dream-road .rd-line{animation:none} }
   .dream-road .rd-st{cursor:pointer}
   .dream-road .rd-st:hover circle.rd-dot{r:11}
   .road-empty{font-size:13.5px;opacity:.75;margin:0}
@@ -1469,6 +1479,21 @@
   @media (max-width:520px){ .prof-stats{grid-template-columns:repeat(2,1fr)} }
   .byok-panel:not([hidden]){position:fixed;inset:0;z-index:72;max-width:none;margin:0;border:0;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0c1020;padding:28px max(18px,calc((100% - 600px)/2)) 64px}
   .byok-panel:not([hidden]) .settings-head{position:sticky;top:-28px;z-index:2;background:#0c1020;padding:14px 0 10px;margin-top:-14px}
+  /* Manifestation · the princess-and-the-pea room */
+  .pea-scene{position:relative;border-radius:22px;overflow:hidden;min-height:620px;aspect-ratio:9/15;max-height:860px;margin:-6px -6px 12px;background:#0f1428;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .pea-bg{position:absolute;inset:0;background:#141a33 center 30%/cover no-repeat;transform-origin:76% 75%;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+  .pea-scene.wishing .pea-bg{transform:scale(1.05)}
+  .pea-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .pea-ui{position:absolute;left:0;right:0;bottom:0;padding:70px 14px 14px;background:linear-gradient(180deg,rgba(10,13,28,0),rgba(10,13,28,.72) 38%,rgba(10,13,28,.92))}
+  .pea-head{text-align:center;margin-bottom:10px}
+  .pea-kicker{font-size:10.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2)}
+  .pea-head h3{margin:4px 0 2px;font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;line-height:1.1;color:#fbeccb;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .pea-head p{margin:0;font-size:13px;color:#cdd3ee;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+  .pea-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .pea-ui .voice-field{background:rgba(14,18,38,.72);border:1px solid rgba(240,212,138,.35);border-radius:18px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .pea-ui .voice-field textarea{min-height:92px;background:transparent;color:#f3f0e6;font-family:"Cormorant Garamond",serif;font-size:18px;line-height:1.35}
+  .pea-scene.wishing .pea-ui .voice-field{border-color:rgba(184,160,255,.7);box-shadow:0 0 0 3px rgba(150,120,255,.18),0 0 30px rgba(150,120,255,.25)}
+  @media (max-width:520px){ .pea-scene{min-height:560px;margin:-10px -10px 12px} .pea-head h3{font-size:23px} }
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -1766,15 +1791,12 @@
     </div>
     <div class="day-grid">
       <div class="day-form">
-        <label for="wishInput">Your wish, as a future scene</label>
-        <div class="couch-scene couch-scene-sm">
-          <button type="button" class="cat-perch" data-pose="sleep" title="Tap the cat — it changes pose" aria-label="The cat is sleeping. Tap to change its pose">
-          <span class="cat-pose"><span class="seq"><img class="seq-img" src="assets/cat-sleep-0f293551.webp" alt="" /><img class="breath-img ol-img" src="assets/cat-sleep-0f293551.webp" alt="" aria-hidden="true" /><img class="ear-img ol-img" src="assets/cat-sleep-0f293551.webp" alt="" aria-hidden="true" /><img class="tail-img ol-img" src="assets/cat-sleep-0f293551.webp" alt="" aria-hidden="true" /><img class="knead-paw-img ol-img" src="assets/cat-sleep-0f293551.webp" alt="" aria-hidden="true" /><img class="feet-img ol-img" src="assets/cat-sleep-0f293551.webp" alt="" aria-hidden="true" /></span></span>
-          <span class="cat-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></span>
-        </button>
-          <div class="couch">
-            <div class="couch-arm couch-arm-l" aria-hidden="true"></div>
-            <div class="couch-arm couch-arm-r" aria-hidden="true"></div>
+        <div class="pea-scene" id="peaScene">
+          <div class="pea-bg" id="peaBg" role="img" aria-label="Coffee the cat asleep on top of ten mattresses, a tiny pea beneath the last one, and a glowing crystal ball on the table"></div>
+          <canvas class="pea-canvas" id="peaCanvas" aria-hidden="true"></canvas>
+          <div class="pea-ui">
+            <div class="pea-head"><span class="pea-kicker" id="peaKicker">Manifestation</span><h3 id="peaTitle">Whisper a wish into the crystal ball</h3><p id="peaSub">Coffee is asleep on ten mattresses, waiting to dream it with you.</p></div>
+            <label for="wishInput" class="pea-label">Your wish, as a future scene</label>
             <div class="voice-field">
               <textarea id="wishInput" maxlength="600" placeholder="Picture it as if you are already there — where you are, the light, who is nearby."></textarea>
               <button type="button" class="mic-btn" id="wishMicBtn" aria-label="Record your wish by voice" aria-pressed="false" title="Voice input — tap the microphone"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="micGoldB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9e7ab"/><stop offset=".55" stop-color="#e9c96e"/><stop offset="1" stop-color="#b3852c"/></linearGradient></defs><path class="mic-arc" d="M2.9 9.6a5.2 5.2 0 0 0 0 4.8" stroke="#f0d48a" stroke-width="1.4" stroke-linecap="round" opacity=".5"/><path class="mic-arc" d="M21.1 9.6a5.2 5.2 0 0 1 0 4.8" stroke="#f0d48a" stroke-width="1.4" stroke-linecap="round" opacity=".5"/><g class="mic-core"><circle cx="12" cy="10.4" r="6.7" stroke="url(#micGoldB)" stroke-width="1.05" opacity=".85"/><path d="M12 .9l.58 1.3 1.3.58-1.3.58L12 4.66l-.58-1.3-1.3-.58 1.3-.58z" fill="url(#micGoldB)"/><rect x="9.7" y="4.9" width="4.6" height="8.2" rx="2.3" fill="url(#micGoldB)"/><path d="M9.95 7.4h4.1M9.85 9.5h4.3M9.95 11.6h4.1" stroke="#8a6414" stroke-width=".85" opacity=".55"/><path d="M10.65 5.9c-.32.85-.47 1.8-.47 2.85" stroke="#fff6d8" stroke-width="1" stroke-linecap="round" opacity=".8"/><path d="M7.45 10.3a4.55 4.55 0 0 0 9.1 0" stroke="url(#micGoldB)" stroke-width="1.25" stroke-linecap="round"/><path d="M12 15.4v2.7" stroke="url(#micGoldB)" stroke-width="1.35" stroke-linecap="round"/><rect x="8.8" y="18.6" width="6.4" height="1.35" rx=".67" fill="url(#micGoldB)"/><path d="M10.1 21.1h3.8" stroke="url(#micGoldB)" stroke-width="1.1" stroke-linecap="round" opacity=".7"/></g></svg></button>
@@ -2576,7 +2598,7 @@
       dd='\n\nThe dreamer has an ACTIVE DAYDREAM — a wish written as a future scene:\nWISH: """'+activeDaydream.wish+'"""\nSCENE: """'+activeDaydream.scene+'"""\nSEED LINE: "'+activeDaydream.seed+'"\nRead the night dream beside this daydream, using ONLY what is in the two texts. Add two extra JSON fields: "daydreamLink":"2-3 sentences in the same voice of the old dream books — name a person, place or feeling that is ACTUALLY in the night dream, say plainly how the night dream sits beside the wish (it pictured it, echoed part of it, or showed something else entirely), and end by pointing toward the wished-for life. Never invent an image that is not in the night dream." and "daydreamAction":"ONE forward-looking gift, prefixed with either Refined daydream: or Today, one small step: — a sharper version of the wish in present tense, or one small kind action for today, under 20 words." Make the "closing" field a tonight seed built from that forward gift, in the closing format below — never a phrase from the painful past.';
     }
     var LZ=window.__dreamLens||'zhougong';
-    return 'You are Dreameri, a wise, warm dream reader. Read the dream below the way a gifted interpreter would in a real conversation: concrete, insightful, specific to THIS dream and this person’s likely life right now. The dreamer should finish reading and think "yes — that is exactly what is going on with me."\n\n'+LENS_RULES[LZ]+'\n\nHOW TO READ:\n- Follow the dream IN ORDER, as 3 to 5 MOMENTS (scenes or turns). Group images that happen together into one moment (e.g. "Missing the flight, Hawaiian shirt on" is one moment). A short dream may have 3; never more than 5.\n- For each moment: say what its images commonly mean in plain, everyday terms (according to the school above), why the dream may have chosen them, and what that suggests about the dreamer’s waking life right now. Be concrete — name likely real situations (plans changing, social overload, a project, a relationship), offered gently as possibility, not fact.\n- Notice contrasts and turns (a plan going wrong that turns out better; joy at its peak followed by something odd) — the turn is often the heart of the dream. Give the ending special weight.\n- Use only the people, places, objects and feelings the dreamer actually described. Never invent images that are not in the dream.\n- Speak to the dreamer as "you". Plain, warm sentences. No preamble, no talk about readings, interpretation or yourself.\n- Never diagnose, never predict as certainty, never promise a wish will come true. Pregnancy dreams: folklore only, never medical.\n\nReturn ONLY valid JSON:\n{"title":"short title from the dream’s own images, max 5 words",\n"school":"see SCHOOL above — the whole dream in 1-2 sentences, the first thing the dreamer reads",\n"symbols":[{"name":"moment title naming its main images, max 8 words","meaning":"2-3 sentences, at most 55 words: what the images mean, why they appeared, what it suggests about waking life","icon":"one of water,cat,door,house,bag,fly,moon,sea,mirror,train,dragon,fish,fruit,snake,flower,gem,key,letter,bridge,candle,seed,compass,scale,heart,photo,teeth,chase — only if it matches an image in this moment, else moon", "...":"plus the per-moment field the SCHOOL requires"}],\n"concept":{"name":"the school’s key idea at work, 1-4 words","meaning":"one plain sentence showing that idea in THIS dream"},\n"narrative":"2-3 sentences tying the moments together: what the dream as a whole is telling the dreamer, ending forward-looking",\n"mood":"two-word mood grounded in the waking feeling, second word may be wrapped in *",\n"moodTags":"short tags separated by ·",\n"meter":0-100,\n"line":"one forward-looking line to remember, under 16 words — never built from a painful phrase, never holding onto an ex or a loss",\n"closing":"Tonight, as you fall asleep, hold this: \\"<the line>\\" — then one short warm sentence",\n"insight":"one sentence for the chosen life-moment theme, or empty string",\n"why":"one sentence naming the moments this was built from",\n"brightSign":{"name":"the most hopeful image, from the dream","meaning":"one sentence"},\n"warningSign":{"name":"the image that asks for care, from the dream","meaning":"one gentle sentence"},\n"place":{"id":"the ONE place the dream mainly happens, only from: water, sea, home, childhood, mountains, forest, city, school, work, road, train, sky, wedding, market, table, hospital, hotel, temple, library, stage, park, boat, abroad, moon — or \\"none\\" if the dream names none","words":"the dream’s phrase naming it, or empty"},\n"daydreamLink":"only when a daydream is given below, else empty","daydreamAction":"only when a daydream is given below, else empty"}\n\nDream: """'+text+'"""\nWoke up feeling: '+feel+'\nTheme: '+THEMES[theme].label+' — life moment: '+(lifeMomentAnswer||THEMES[theme].tag)+dd+followupBlock()+aiLang('reading');
+    return 'You are Dreameri, a wise, warm dream reader. Read the dream below the way a gifted interpreter would in a real conversation: concrete, insightful, specific to THIS dream and this person’s likely life right now. The dreamer should finish reading and think "yes — that is exactly what is going on with me."\n\n'+LENS_RULES[LZ]+'\n\nHOW TO READ:\n- Follow the dream IN ORDER, as 3 to 5 MOMENTS (scenes or turns). Group images that happen together into one moment (e.g. "Missing the flight, Hawaiian shirt on" is one moment). A short dream may have 3; never more than 5.\n- For each moment: say what its images commonly mean in plain, everyday terms (according to the school above), why the dream may have chosen them, and what that suggests about the dreamer’s waking life right now. Be concrete — name likely real situations (plans changing, social overload, a project, a relationship), offered gently as possibility, not fact.\n- Notice contrasts and turns (a plan going wrong that turns out better; joy at its peak followed by something odd) — the turn is often the heart of the dream. Give the ending special weight.\n- Use only the people, places, objects and feelings the dreamer actually described. Never invent images that are not in the dream.\n- Speak to the dreamer as "you". Plain, warm sentences. No preamble, no talk about readings, interpretation or yourself.\n- Never diagnose, never predict as certainty, never promise a wish will come true. Pregnancy dreams: folklore only, never medical.\n\nReturn ONLY valid JSON:\n{"title":"short title from the dream’s own images, max 5 words",\n"school":"see SCHOOL above — the whole dream in 1-2 sentences, the first thing the dreamer reads",\n"symbols":[{"name":"moment title naming its main images, max 8 words","meaning":"2-3 sentences, at most 55 words: what the images mean, why they appeared, what it suggests about waking life","icon":"one of water,cat,door,house,bag,fly,moon,sea,mirror,train,dragon,fish,fruit,snake,flower,gem,key,letter,bridge,candle,seed,compass,scale,heart,photo,teeth,chase — only if it matches an image in this moment, else moon", "...":"plus the per-moment field the SCHOOL requires"}],\n"concept":{"name":"the school’s key idea at work, 1-4 words","meaning":"one plain sentence showing that idea in THIS dream"},\n"narrative":"2-3 sentences tying the moments together: what the dream as a whole is telling the dreamer, ending forward-looking",\n"mood":"two-word mood grounded in the waking feeling, second word may be wrapped in *",\n"moodTags":"short tags separated by ·",\n"meter":0-100,\n"line":"one forward-looking line to remember, under 16 words — never built from a painful phrase, never holding onto an ex or a loss",\n"closing":"Tonight, as you fall asleep, hold this: \\"<the line>\\" — then one short warm sentence",\n"insight":"one sentence for the chosen life-moment theme, or empty string",\n"why":"one sentence naming the moments this was built from",\n"station":{"name":"a poetic name for this night as a station on the dreamer\u2019s road, 2-5 words, named for the inner CHALLENGE faced or the ACHIEVEMENT reached in this dream \u2014 never a summary of the plot (e.g. \"The Crossing of Letting Go\", \"Where Courage Learned to Wait\", \"The Harbour of Forgiving\")","sign":"the dream\u2019s single core sign, 1-3 words, from the dream"},\n"brightSign":{"name":"the most hopeful image, from the dream","meaning":"one sentence"},\n"warningSign":{"name":"the image that asks for care, from the dream","meaning":"one gentle sentence"},\n"place":{"id":"the ONE place the dream mainly happens, only from: water, sea, home, childhood, mountains, forest, city, school, work, road, train, sky, wedding, market, table, hospital, hotel, temple, library, stage, park, boat, abroad, moon — or \\"none\\" if the dream names none","words":"the dream’s phrase naming it, or empty"},\n"daydreamLink":"only when a daydream is given below, else empty","daydreamAction":"only when a daydream is given below, else empty"}\n\nDream: """'+text+'"""\nWoke up feeling: '+feel+'\nTheme: '+THEMES[theme].label+' — life moment: '+(lifeMomentAnswer||THEMES[theme].tag)+dd+followupBlock()+aiLang('reading');
   }
   function buildDaydreamPrompt(wish){
     return 'You are Dreameri making a DAYDREAM — manifestation as a dream scene, not a goal plan. Voice: warm, vivid, hopeful, sensory, present tense, second person (you). Never corporate, never hustle language, never a list of steps, never promise the wish will come true.\n\nReturn ONLY valid JSON:\n{"title":"short evocative scene title, max 5 words","scene":"A short EXPANDED STORY in miniature, NOT a summary of the wish and NOT a description of it: 6-10 SHORT paragraphs separated by \\n\\n, present tense, second person. Open mid-moment — a sound, a door opening, a first line of dialogue — never with an announcement of what day or event this is. Unfold it like a storyteller: a few concrete details from the wish, lived in order (an arrival, a small exchange of real dialogue in quotation marks, a small hitch or laugh, the moment itself), plus invented everyday details around them that the wish never mentioned — the scene must GROW beyond the wish, warmly and a little inspiring, never merely restate it. RHYTHM AND PAUSES — WRITE IT THE WAY A STORYTELLER TELLS IT: sentences VARY — some long and flowing, some three or four words; short paragraphs stand alone as beats; a line of dialogue often gets its own paragraph; let there be rests before the turns and after the tender lines. Uniform medium sentences, one after another at the same length, are the AI voice — never write that way. DESCRIBED EVENTS — STRICT: every concrete event the wish names must HAPPEN in the scene as lived action, never replaced by a generic ordinary moment near it: if the wish says she is getting married to her boyfriend, the wedding happens on the page — she walks in, the vows are said aloud, the ring goes on the hand — with the people from the wish living it. An event the dreamer described that is missing, or only implied, is a failure. NEVER ANNOUNCE THE FACT — STRICT BAN: no sentence may emphasise, clarify or point at the event itself or at the wish: banned shapes include \u201Cthis is the day itself\u201D, \u201Cyour wedding day \u2014 not a thought, it is happening\u201D, \u201Cthe one you described\u201D, \u201Cit became true\u201D, and in Chinese 就是这一天本身 / 不是念头里的，是正在发生的 / 它成了真的 / 礼成，你们结婚了 as narration. The event is simply happening; the text never explains that it is happening. CHINESE, WHEN THE LANGUAGE IS CHINESE — WRITE NATIVE CHINESE, NEVER TRANSLATED CHINESE: no calques of English phrasing (never 站在新郎等人的地方 for \u201Cwaiting where grooms wait\u201D, never 忘了整理表情, never 滑上手指 for a ring) — write the scene the way a Chinese storyteller would write it first-hand, in living spoken-and-written Chinese: 他站在红毯那头等你 / 他看着你，眼睛都红了 / 他把戒指慢慢套上你的手指.","seed":"ONE short seed line for tonight (入睡种子), under 14 words, present tense, image-led, to hold while falling asleep. FORWARD-LOOKING ONLY: it pictures the wished-for life the dreamer wants to feel close to — never a painful memory, never a person from the past they are letting go of. e.g. The window is open, and my life is already breathing in that room."}\n\nCORE, CONTEXT AND CRAFT — STRICT, THIS GOVERNS THE SCENE: Before writing, identify SILENTLY (never print it): (1) the CORE — the one central moment, event or feeling the wish describes — and the MAIN CHARACTERS, exactly the people the wish names; (2) the SETTING AND THE TIME — where it happens, what hour and season it breathes. Then build in this order: (a) a PRE-STORY of 1-2 short paragraphs that sets the tone and leads INTO the core — the approach, the just-before, the world of the core warming up — invented only from the core’s own world; (b) the CORE itself, unfolded detail by detail; (c) everything after still ORBITING the core — same world, same people, same place; any drift that cannot trace back to the core is cut. STAY IN THE VERTICAL of the described scenario: a snow-mountain ski trip stays a snow-mountain ski trip. EXPAND, NEVER REPEAT: no sentence copies the wish’s wording word-for-word (names and single key nouns excepted); every described detail becomes a lived moment with NEW texture — what it sounds like, feels like, who says what, what happens in the next breath. If the description is thin, imagine modestly, only to fill gaps in THIS story — the core world’s own weather, tools and ordinary next moments — never irrelevant invention. CREATIVE CRAFT: lay the scene on a causal spine — once… / every day… / but this time… / because of that… / because of that… / until finally the core moment lands… / and ever since then… — each beat CAUSES the next, never ’and then, and then’. One character, one want, one GENTLE obstacle (a hesitation, a small fear, a wrong turn — never a villain), one change by the end. Every sentence must reveal character or advance the action, or be cut; start as close to the core as the pre-story allows. SHOW, DON’T TELL: scenes in real time with action, dialogue and senses; summary only for transitions; never name a feeling an action or a spoken line can show. SCENE TEST: each paragraph carries a small goal, a gentle obstacle, a choice and a consequence, or it is compressed into a sentence. SETTING DOES WORK: 1-2 sensory details per paragraph, chosen to ground place, time and mood — never wallpaper.\n\nWish, written as a future scene: """'+wish+'"""'+aiLang('scene');
@@ -2716,7 +2738,7 @@
       // the English format, rebuild it in Chinese around the line.
       if(window.DREAM_LANG==='zh'&&/^Tonight, as you fall asleep/i.test(closingTxt)) closingTxt='今晚，临睡前，把这一句轻轻握住：“'+lineTxt.replace(/[“”"]/g,'')+'”想一想它指向的生活——不慌不忙，温暖，已经在开始了。';
       if(activeDaydream&&raw.daydreamAction&&!bannedReadingCheck(raw.daydreamAction)) closingTxt=window.DREAM_LANG==='zh'?('今晚，临睡前，把这一句轻轻握住：“'+lineTxt+'”'+zhT(ddAct||'')):('Tonight, as you fall asleep, hold this: \u201C'+lineTxt+'\u201D '+String(raw.daydreamAction));
-      return {lens:window.__dreamLens||'zhougong',school:raw.school?zhT(String(raw.school)).slice(0,360):'',concept:(raw.concept&&raw.concept.name)?{name:zhT(String(raw.concept.name)).slice(0,40),meaning:zhT(String(raw.concept.meaning||'')).slice(0,300)}:null,questions:Array.isArray(raw.questions)?raw.questions.filter(Boolean).slice(0,3).map(function(q){return zhT(String(q)).slice(0,200)}):[],place:(raw.place&&typeof raw.place==='object')?raw.place:null,titleHTML:titleHTML,symbols:syms,moodHTML:moodHtml,moodTags:raw.moodTags?zhT(String(raw.moodTags)):fallback.moodTags,meter:Math.max(8,Math.min(94,parseInt(raw.meter,10)||fallback.meter)),line:lineTxt,narrative:narrativeTxt,closing:closingTxt,source:L('Written by cloud AI','云端 AI 所写'),why:(raw.why&&!bannedReadingCheck(raw.why)?esc(zhT(String(raw.why))):fallback.why),insight:raw.insight&&!bannedReadingCheck(raw.insight)?'<p>'+esc(zhT(String(raw.insight)))+'</p>':fallback.insight,insightTitle:THEMES[theme].insightTitle,daydreamLink:ddLink,brightSign:(raw.brightSign&&raw.brightSign.name&&!bannedReadingCheck(raw.brightSign.meaning||''))?{name:zhT(String(raw.brightSign.name)),meaning:zhT(String(raw.brightSign.meaning||''))}:null,warningSign:(raw.warningSign&&raw.warningSign.name&&!bannedReadingCheck(raw.warningSign.meaning||''))?{name:zhT(String(raw.warningSign.name)),meaning:zhT(String(raw.warningSign.meaning||''))}:null};
+      return {lens:window.__dreamLens||'zhougong',school:raw.school?zhT(String(raw.school)).slice(0,360):'',station:(raw.station&&raw.station.name)?{name:zhT(String(raw.station.name)).slice(0,48),sign:zhT(String(raw.station.sign||'')).slice(0,30)}:null,concept:(raw.concept&&raw.concept.name)?{name:zhT(String(raw.concept.name)).slice(0,40),meaning:zhT(String(raw.concept.meaning||'')).slice(0,300)}:null,questions:Array.isArray(raw.questions)?raw.questions.filter(Boolean).slice(0,3).map(function(q){return zhT(String(q)).slice(0,200)}):[],place:(raw.place&&typeof raw.place==='object')?raw.place:null,titleHTML:titleHTML,symbols:syms,moodHTML:moodHtml,moodTags:raw.moodTags?zhT(String(raw.moodTags)):fallback.moodTags,meter:Math.max(8,Math.min(94,parseInt(raw.meter,10)||fallback.meter)),line:lineTxt,narrative:narrativeTxt,closing:closingTxt,source:L('Written by cloud AI','云端 AI 所写'),why:(raw.why&&!bannedReadingCheck(raw.why)?esc(zhT(String(raw.why))):fallback.why),insight:raw.insight&&!bannedReadingCheck(raw.insight)?'<p>'+esc(zhT(String(raw.insight)))+'</p>':fallback.insight,insightTitle:THEMES[theme].insightTitle,daydreamLink:ddLink,brightSign:(raw.brightSign&&raw.brightSign.name&&!bannedReadingCheck(raw.brightSign.meaning||''))?{name:zhT(String(raw.brightSign.name)),meaning:zhT(String(raw.brightSign.meaning||''))}:null,warningSign:(raw.warningSign&&raw.warningSign.name&&!bannedReadingCheck(raw.warningSign.meaning||''))?{name:zhT(String(raw.warningSign.name)),meaning:zhT(String(raw.warningSign.meaning||''))}:null};
     }catch(e){return null}
   }
   /* Every call to the reading function carries the signed-in user's token,
@@ -3277,11 +3299,36 @@
   window.renderDreamJourney=renderJourney;
 
   /* ——— My dreams · profile: stats, the road, what Coffee notices ——— */
+  /* Older dreams have no station name: give them one from their waking
+     feeling and core sign, in the same spirit (challenge or achievement). */
+  function stationName(j){
+    if(j.station) return String(j.station);
+    var zh=window.DREAM_LANG==='zh', f=String(j.feel||''), seed=hashStr(String(j.title||'')+f);
+    var EN={Restless:['The Crossing of Unquiet Water','Where the Night Would Not Settle','The Gate of First Courage'],Tender:['The Harbour of Soft Return','Where Warmth Was Remembered','The Lantern of Gentle Things'],Strange:['The Bridge of Unfamiliar Light','Where the Map Ran Out','The Door Not Yet Named'],Relieved:['The Clearing of Setting Down','Where the Weight Came Off','The Shore of Breathing Out'],Sad:['The Hollow of Kept Warmth','Where Missing Became Love','The Valley of Quiet Rain'],'':['The Crossing of Letting Go','Where Courage Learned to Wait','The Harbour of Small Beginnings','The Bridge Between Two Selves','Where the Heart Turned Toward Light']};
+    var ZH={Restless:['不安之水的渡口','长夜未眠之处','初生勇气之门'],Tender:['温柔归来的港湾','被记起的暖','温柔之物的灯'],Strange:['陌生之光的桥','地图走到尽头的地方','尚未命名的门'],Relieved:['放下之地','卸下重量的地方','松一口气的岸'],Sad:['留住温暖的谷','思念成爱之处','静雨之谷'],'':['放手的渡口','勇气学会等待的地方','小小开始的港湾','两个自己之间的桥','心转向光的地方']};
+    var pool=(zh?ZH:EN)[f]||(zh?ZH:EN)[''];
+    return pool[seed%pool.length];
+  }
+  /* Dreams read before dates were saved: the souvenir from the same dream
+     kept its date, so borrow it (matched by the reading's title). */
+  function backfillDates(){
+    var io=window.__dreamCollectionsIO, shelf=io&&io.get?io.get().shelf:[]; if(!shelf||!shelf.length) return;
+    function norm(s){ return String(s||'').replace(/\s+/g,' ').trim().toLowerCase(); }
+    function parse(s){ s=String(s||''); var m=s.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/); if(m) return new Date(+m[1],+m[2]-1,+m[3],12); var d=new Date(s); if(isNaN(d)) return null; d.setHours(12,0,0,0); return d; }
+    var changed=false;
+    journal.forEach(function(j){
+      if(!j||(j.date&&!isNaN(new Date(j.date)))) return;
+      var it=shelf.filter(function(x){ return x&&norm(x.title)&&norm(x.title)===norm(j.title); })[0];
+      var d=it&&parse(it.date); if(d){ j.date=d.toISOString(); j.dateFrom='souvenir'; changed=true; }
+    });
+    return changed;
+  }
   function datedJournal(){ return journal.filter(function(j){ return j&&j.date&&!isNaN(new Date(j.date)); }); }
   function renderProfile(){
     var cnt=$('profileCount'); if(cnt) cnt.textContent=window.DREAM_LANG==='zh'?(journal.length+' 个梦'):(journal.length+(journal.length===1?' dream':' dreams'));
     var lbl=$('profileBtnLabel'); if(lbl) lbl.textContent=L('My dreams','我的梦');
     var page=$('profilePage'); if(!page) return;
+    try{ backfillDates(); }catch(e){}
     var zh=window.DREAM_LANG==='zh', dj=datedJournal(), now=new Date();
     $('profTitle').innerHTML=zh?'你的<em>梦之档案</em>':'Your dream <em>profile</em>';
     $('profMapLabel').textContent=L('Road into Dreamland','通往梦境的路');
@@ -3294,31 +3341,40 @@
     var places=tallyJourney('places').length;
     function stat(n,l){ return '<div class="prof-stat"><b>'+n+'</b><span>'+l+'</span></div>'; }
     $('profStats').innerHTML=stat(journal.length,L('Dreams read','解过的梦'))+stat(month,L('This month','本月'))+stat(streak,L('Night streak','连续的夜'))+stat(places,L('Places','去过的地方'));
-    // the road: last 7 dated dreams, oldest at the bottom, the next dream waiting at the top
+    // the road: up to 7 stations, oldest at the bottom, tonight's dream waiting at the top
+    backfillDates();
     var road=$('dreamRoad'), list=journal.filter(Boolean).slice(0,7).reverse();
     if(!list.length){ road.innerHTML='<p class="road-empty">'+L('Your road begins with your first dream. Each one you read becomes a station here, in the order you dreamed them.','你的路从第一个梦开始。每解一个梦，它就成为这里的一站，按你做梦的顺序排开。')+'</p>'; }
     else {
-      var W=340, step=86, n=list.length+1, H=(n-1)*step+70, pts=[];
-      for(var i=0;i<n;i++){ pts.push({x:i%2?W*0.68:W*0.32, y:H-30-i*step}); }
-      var path='M'+pts[0].x+','+(pts[0].y+30);
-      path+=' L'+pts[0].x+','+pts[0].y;
+      var W=360, step=96, n=list.length+1, H=(n-1)*step+120, pts=[];
+      for(var i=0;i<n;i++){ var t=i/(Math.max(1,n-1)); pts.push({x:W*(0.5+(i%2?0.17:-0.17)*(0.75+0.25*Math.sin(i*1.7))), y:H-48-i*step}); }
+      var path='M'+(W*0.5)+','+H+' Q'+(W*0.5)+','+(pts[0].y+30)+' '+pts[0].x+','+pts[0].y;
       for(var k=1;k<n;k++){ var a=pts[k-1], b=pts[k], my=(a.y+b.y)/2; path+=' C'+a.x+','+my+' '+b.x+','+my+' '+b.x+','+b.y; }
-      var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(L('Your road of dreams','你的梦之路'))+'">'
-        +'<defs><linearGradient id="rdG" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6d5a2e"/><stop offset="1" stop-color="#f0d48a"/></linearGradient><filter id="rdGlow"><feGaussianBlur stdDeviation="4"/></filter></defs>'
-        +'<path d="'+path+'" fill="none" stroke="rgba(240,212,138,.12)" stroke-width="22" stroke-linecap="round"/>'
-        +'<path d="'+path+'" fill="none" stroke="url(#rdG)" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>';
+      var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(L('Your road into Dreamland','你通往梦境的路'))+'">'
+        +'<defs><linearGradient id="rdG" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#8a6a2a" stop-opacity=".5"/><stop offset=".7" stop-color="#f0d48a"/><stop offset="1" stop-color="#9ff0c8"/></linearGradient>'
+        +'<radialGradient id="rdL"><stop offset="0" stop-color="#ffe7a3" stop-opacity=".95"/><stop offset=".45" stop-color="#f0b84a" stop-opacity=".35"/><stop offset="1" stop-color="#f0b84a" stop-opacity="0"/></radialGradient>'
+        +'<radialGradient id="rdT"><stop offset="0" stop-color="#b8ffe0" stop-opacity=".9"/><stop offset="1" stop-color="#7fd6a2" stop-opacity="0"/></radialGradient>'
+        +'<filter id="rdSh" x="-20%" y="-40%" width="140%" height="180%"><feDropShadow dx="0" dy="1" stdDeviation="2.2" flood-color="#05070f" flood-opacity=".95"/></filter></defs>'
+        +'<path d="'+path+'" fill="none" stroke="rgba(10,14,30,.55)" stroke-width="20" stroke-linecap="round"/>'
+        +'<path d="'+path+'" fill="none" stroke="rgba(240,212,138,.16)" stroke-width="12" stroke-linecap="round"/>'
+        +'<path class="rd-line" d="'+path+'" fill="none" stroke="url(#rdG)" stroke-width="2.4" stroke-dasharray="1 9" stroke-linecap="round"/>';
       list.forEach(function(j,i){
-        var dated=!!(j.date&&!isNaN(new Date(j.date))), pt=pts[i], dt=dated?new Date(j.date):null, left=i%2===0;
-        var title=String(j.title||'').replace(/\s+/g,' ').trim(); if(title.length>24) title=title.slice(0,23)+'…';
-        var date=dated?dt.toLocaleDateString(zh?'zh-CN':'en-US',{month:'short',day:'numeric'}):L('Earlier','更早');
-        var tx=left?pt.x+18:pt.x-18, anchor=left?'start':'end';
-        svg+='<g class="'+(dated?'rd-st':'rd-old')+'"'+(dated?' data-day="'+dayKey(dt)+'" tabindex="0"':'')+'><circle cx="'+pt.x+'" cy="'+pt.y+'" r="13" fill="rgba(240,212,138,.18)" filter="url(#rdGlow)"/><circle class="rd-dot" cx="'+pt.x+'" cy="'+pt.y+'" r="8" fill="#11172b" stroke="#f0d48a" stroke-width="2"/>'
-          +'<text x="'+tx+'" y="'+(pt.y-3)+'" text-anchor="'+anchor+'" font-size="12.5" font-weight="700" fill="#eef0fa">'+esc(title)+'</text>'
-          +'<text x="'+tx+'" y="'+(pt.y+13)+'" text-anchor="'+anchor+'" font-size="10.5" fill="#aab2d4">'+esc(date)+(j.note?' · ✎':'')+'</text></g>';
+        var dated=!!(j.date&&!isNaN(new Date(j.date))), pt=pts[i], dt=dated?new Date(j.date):null, right=pt.x<W*0.5;
+        var name=stationName(j), lines=[];
+        if(/[\u4e00-\u9fff]/.test(name)){ lines=name.length>10?[name.slice(0,10),name.slice(10,20)]:[name]; }
+        else { var cur=''; name.split(/\s+/).forEach(function(w){ if((cur+' '+w).trim().length>19&&cur){ lines.push(cur); cur=w; } else cur=(cur+' '+w).trim(); }); if(cur) lines.push(cur); if(lines.length>2){ lines=[lines[0],lines.slice(1).join(' ')]; if(lines[1].length>20) lines[1]=lines[1].slice(0,19)+'…'; } }
+        var sign=String(j.sign||(j.symbols&&j.symbols[0])||'').replace(/\s+/g,' ').trim(); if(sign.length>22) sign=sign.slice(0,21)+'…';
+        var date=dated?dt.toLocaleDateString(zh?'zh-CN':'en-US',{month:'short',day:'numeric'}):L('Before Nov 13','11月13日之前');
+        var tx=right?pt.x+24:pt.x-24, anchor=right?'start':'end';
+        var lantern='<g transform="translate('+pt.x+','+pt.y+')"><circle r="26" fill="url(#rdL)" class="rd-glow" style="animation-delay:'+(i*0.4)+'s"/><path d="M-6,-9 h12 l2,4 v10 l-2,4 h-12 l-2,-4 v-10z" fill="#1a1630" stroke="#f0d48a" stroke-width="1.6"/><rect x="-3.6" y="-5" width="7.2" height="10" rx="1.5" fill="#ffd77a"/><path d="M-4,-9 q4,-6 8,0" fill="none" stroke="#f0d48a" stroke-width="1.4"/></g>';
+        svg+='<g class="'+(dated?'rd-st':'rd-old')+'"'+(dated?' data-day="'+dayKey(dt)+'" tabindex="0"':'')+'>'+lantern
+          +'<text x="'+tx+'" y="'+(pt.y-(lines.length>1?14:4))+'" text-anchor="'+anchor+'" class="rd-name" filter="url(#rdSh)">'+lines.map(function(l,li){ return '<tspan x="'+tx+'" dy="'+(li?18:0)+'">'+esc(l)+'</tspan>'; }).join('')+'</text>'
+          +'<text x="'+tx+'" y="'+(pt.y+(lines.length>1?24:14))+'" text-anchor="'+anchor+'" class="rd-meta" filter="url(#rdSh)">'+(sign?'☾ '+esc(sign)+'  ·  ':'')+esc(date)+(j.note?'  ✎':'')+'</text></g>';
       });
-      var nx=pts[n-1], nl=(n-1)%2===0;
-      svg+='<g><circle cx="'+nx.x+'" cy="'+nx.y+'" r="9" fill="none" stroke="#7fd6a2" stroke-width="2" stroke-dasharray="3 3"/><text x="'+(nl?nx.x+18:nx.x-18)+'" y="'+(nx.y+4)+'" text-anchor="'+(nl?'start':'end')+'" font-size="12.5" font-style="italic" fill="#7fd6a2">'+esc(L('Tonight’s dream ☾','今晚的梦 ☾'))+'</text></g>';
-      road.innerHTML=svg+'</svg>';
+      var nx=pts[n-1], nr=nx.x<W*0.5;
+      svg+='<g class="rd-next"><circle cx="'+nx.x+'" cy="'+nx.y+'" r="22" fill="url(#rdT)"/><circle cx="'+nx.x+'" cy="'+nx.y+'" r="8" fill="none" stroke="#b8ffe0" stroke-width="1.6" stroke-dasharray="2.5 3"/>'
+        +'<text x="'+(nr?nx.x+24:nx.x-24)+'" y="'+(nx.y+5)+'" text-anchor="'+(nr?'start':'end')+'" class="rd-tonight" filter="url(#rdSh)">'+esc(L('Tonight’s station ☾','今晚的这一站 ☾'))+'</text></g>';
+      road.innerHTML='<div class="road-scene">'+svg+'</svg></div>';
     }
     // what Coffee notices
     var ins=$('profInsight'), out=[];
@@ -3417,7 +3473,7 @@
     try{ renderReading(r); }catch(e){}
     // 3 · Journal + Journey, from the captured dream text.
     try{
-      journal.unshift({date:new Date().toISOString(),feel:feel||'',lens:r.lens||'zhougong',school:r.school||'',note:'',title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
+      journal.unshift({date:new Date().toISOString(),feel:feel||'',station:r.station&&r.station.name||'',sign:r.station&&r.station.sign||(r.symbols&&r.symbols[0]?r.symbols[0].name:''),lens:r.lens||'zhougong',school:r.school||'',note:'',title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
     }catch(e){}
     try{ renderJourney(); }catch(e){}
     try{ refreshWeaveList(); }catch(e){}
@@ -7388,6 +7444,95 @@
     window.scrollTo({top:Math.max(0,panel.getBoundingClientRect().top+window.scrollY-10),behavior:'smooth'});
   });
   view('intake');
+})();
+</script>
+<script>
+/* ——— Manifestation · Coffee on ten mattresses, and a crystal ball ———
+   The painted room, plus one canvas: the crystal ball swirls and brightens
+   while a wish is typed or spoken, and wish-sparkles drift up the mattress
+   stack to the sleeping cat. Tapping Create sends a burst up to her. */
+(function(){
+  var scene=document.getElementById('peaScene'); if(!scene) return;
+  var PEA={img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/10de4a82-92c5-4ea0-a2ac-b3e23504b6f4.webp',w:1100,h:1971,ball:{x:0.763,y:0.746,r:0.118},cat:{x:0.37,y:0.285},pea:{x:0.49,y:0.795},win:{x:0.49,y:0.135,r:0.11}};
+  var bg=document.getElementById('peaBg'), cv=document.getElementById('peaCanvas'), cx=cv.getContext('2d'), inp=document.getElementById('wishInput');
+  bg.style.backgroundImage='url('+PEA.img+')';
+  var W=0,H=0,DPR=1, img={x:0,y:0,w:0,h:0}, energy=0, t0=performance.now(), parts=[], zs=[], running=false, raf=0, rec=false;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function layout(){
+    var r=scene.getBoundingClientRect(); W=r.width; H=r.height; DPR=Math.min(2,window.devicePixelRatio||1);
+    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); cx.setTransform(DPR,0,0,DPR,0,0);
+    // background-size:cover, position center 30%
+    var s=Math.max(W/PEA.w,H/PEA.h), iw=PEA.w*s, ih=PEA.h*s;
+    img={x:(W-iw)/2, y:(H-ih)*0.3, w:iw, h:ih};
+  }
+  function P(o){ return {x:img.x+o.x*img.w, y:img.y+o.y*img.h}; }
+  function spark(burst){
+    var b=P(PEA.ball), c=P(PEA.cat), r=PEA.ball.r*img.w;
+    var a=Math.random()*Math.PI*2;
+    parts.push({x:b.x+Math.cos(a)*r*.5, y:b.y+Math.sin(a)*r*.5, sx:b.x, sy:b.y, tx:c.x+(Math.random()-.5)*60, ty:c.y+(Math.random()-.5)*30, t:0, d:(burst?1.4:2.4)+Math.random()*1.4, hue:Math.random()<.5?265:170, s:1+Math.random()*2.2, wob:Math.random()*6});
+  }
+  function frame(now){
+    raf=0; if(!running) return;
+    var t=(now-t0)/1000; cx.clearRect(0,0,W,H);
+    energy=Math.max(rec?0.75+0.25*Math.sin(t*6):0, energy*0.985);
+    var b=P(PEA.ball), r=PEA.ball.r*img.w, e=energy;
+    // ball glow
+    var g=cx.createRadialGradient(b.x,b.y,r*.2,b.x,b.y,r*(2.2+e*1.2));
+    g.addColorStop(0,'rgba(200,180,255,'+(0.28+e*0.4)+')'); g.addColorStop(.5,'rgba(120,220,210,'+(0.1+e*0.18)+')'); g.addColorStop(1,'rgba(120,220,210,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(b.x,b.y,r*(2.2+e*1.2),0,Math.PI*2); cx.fill();
+    // swirling mist inside the ball
+    cx.save(); cx.beginPath(); cx.arc(b.x,b.y,r*.93,0,Math.PI*2); cx.clip();
+    cx.globalCompositeOperation='lighter';
+    var sp=0.35+e*2.2;
+    for(var k=0;k<5;k++){
+      var ang=t*sp*(k%2?1:-1)+k*1.3, rr=r*(0.25+0.12*Math.sin(t*0.7+k));
+      var mx=b.x+Math.cos(ang)*rr, my=b.y+Math.sin(ang*1.1)*rr*.8;
+      var mg=cx.createRadialGradient(mx,my,0,mx,my,r*(0.55+0.1*Math.sin(t+k)));
+      var col=k%3===0?'190,150,255':(k%3===1?'110,230,215':'255,190,240');
+      mg.addColorStop(0,'rgba('+col+','+(0.18+e*0.32)+')'); mg.addColorStop(1,'rgba('+col+',0)');
+      cx.fillStyle=mg; cx.beginPath(); cx.arc(mx,my,r,0,Math.PI*2); cx.fill();
+    }
+    cx.restore(); cx.globalCompositeOperation='source-over';
+    // the pea, softly glowing
+    var pe=P(PEA.pea), pg=cx.createRadialGradient(pe.x,pe.y,0,pe.x,pe.y,14+6*Math.sin(t*2));
+    pg.addColorStop(0,'rgba(170,255,140,.55)'); pg.addColorStop(1,'rgba(170,255,140,0)'); cx.fillStyle=pg; cx.beginPath(); cx.arc(pe.x,pe.y,22,0,Math.PI*2); cx.fill();
+    // window stars twinkle
+    var wn=P(PEA.win), wr=PEA.win.r*img.w;
+    for(var s=0;s<6;s++){ var sa=s*2.1, sx2=wn.x+Math.cos(sa)*wr*.6, sy2=wn.y+Math.sin(sa*1.3)*wr*.5, tw=.5+.5*Math.sin(t*2.3+s*1.7); cx.fillStyle='rgba(255,246,210,'+(0.15+tw*0.55)+')'; cx.beginPath(); cx.arc(sx2,sy2,1+tw*1.1,0,Math.PI*2); cx.fill(); }
+    // wish sparkles rising to the cat
+    if(!reduce&&Math.random()<e*0.45) spark(false);
+    for(var i=parts.length-1;i>=0;i--){
+      var q=parts[i]; q.t+=1/60/q.d; if(q.t>=1){ parts.splice(i,1); if(Math.random()<.35) zs.push({x:q.tx,y:q.ty,t:0}); continue; }
+      var u=q.t, ease=u*u*(3-2*u);
+      var x=q.x+(q.tx-q.x)*ease+Math.sin(u*Math.PI*3+q.wob)*20*(1-u), y=q.y+(q.ty-q.y)*ease-Math.sin(u*Math.PI)*40;
+      var al=Math.sin(u*Math.PI);
+      cx.fillStyle='hsla('+q.hue+',90%,80%,'+al+')'; cx.beginPath(); cx.arc(x,y,q.s,0,Math.PI*2); cx.fill();
+      cx.fillStyle='hsla('+q.hue+',90%,75%,'+(al*0.25)+')'; cx.beginPath(); cx.arc(x,y,q.s*3.2,0,Math.PI*2); cx.fill();
+    }
+    // sleepy z's from Coffee
+    var c=P(PEA.cat); if(Math.random()<0.006) zs.push({x:c.x+20,y:c.y-10,t:0});
+    cx.font='italic 600 16px "Cormorant Garamond",serif';
+    for(var j=zs.length-1;j>=0;j--){ var z=zs[j]; z.t+=1/60/2.6; if(z.t>=1){ zs.splice(j,1); continue; } cx.fillStyle='rgba(255,240,200,'+Math.sin(z.t*Math.PI)*0.85+')'; cx.fillText('z',z.x+z.t*26,z.y-z.t*40); }
+    raf=requestAnimationFrame(frame);
+  }
+  function start(){ if(running) return; running=true; layout(); raf=requestAnimationFrame(frame); }
+  function stop(){ running=false; if(raf) cancelAnimationFrame(raf); raf=0; }
+  window.addEventListener('resize',function(){ if(running) layout(); });
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting) start(); else stop(); }); },{threshold:0.05}).observe(scene); } else start();
+  if(inp){
+    inp.addEventListener('input',function(){ energy=Math.min(1,energy+0.22); scene.classList.add('wishing'); clearTimeout(inp.__pt); inp.__pt=setTimeout(function(){ if(!rec) scene.classList.remove('wishing'); },1800); });
+    inp.addEventListener('focus',function(){ energy=Math.max(energy,0.3); });
+  }
+  var mic=document.getElementById('wishMicBtn');
+  if(mic&&window.MutationObserver) new MutationObserver(function(){ rec=mic.getAttribute('aria-pressed')==='true'; scene.classList.toggle('wishing',rec); }).observe(mic,{attributes:true,attributeFilter:['aria-pressed']});
+  var cb=document.getElementById('createDaydreamBtn');
+  if(cb) cb.addEventListener('click',function(){ if(!inp||inp.value.trim().length<12) return; energy=1; for(var i=0;i<38;i++) setTimeout(function(){ spark(true); },i*28); },true);
+  function texts(){
+    var zh=window.DREAM_LANG==='zh', T=function(e,z){return zh?z:e;};
+    var k=document.getElementById('peaKicker'), ti=document.getElementById('peaTitle'), su=document.getElementById('peaSub');
+    if(k) k.textContent=T('Manifestation','造梦'); if(ti) ti.textContent=T('Whisper a wish into the crystal ball','对着水晶球，轻声说出一个心愿'); if(su) su.textContent=T('Coffee is asleep on ten mattresses, waiting to dream it with you.','可可睡在十层床垫上，等着和你一起把它梦出来。');
+  }
+  texts(); document.addEventListener('dreamlang',texts);
 })();
 </script>
 </body>
