@@ -1137,13 +1137,79 @@
   .acct-toast.show{opacity:1;transform:translate(-50%,0)}
   @keyframes acctUp{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
   @media(prefers-reduced-motion:reduce){.acct-keep{animation:none}.acct-toast{transition:none}}
+
+  /* ——— Landing (welcome) ——— */
+  .landing{position:fixed;inset:0;z-index:80;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(120% 80% at 50% 0%,#1d2547 0%,#0d1122 55%,#070912 100%);color:#eef0ff;opacity:1;transition:opacity .45s ease}
+  .landing[hidden]{display:none}
+  .landing.leaving{opacity:0;pointer-events:none}
+  .landing-sky{position:absolute;inset:0;background:url(assets/sky-stars-3f7764a7.webp) center top/cover no-repeat;opacity:.4;pointer-events:none}
+  .landing-in{position:relative;max-width:560px;margin:0 auto;padding:28px 20px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;min-height:100%}
+  .landing-top{width:100%;display:flex;justify-content:flex-end}
+  .landing-lang{display:flex;gap:2px;background:rgba(255,255,255,.06);border:1px solid rgba(240,212,138,.25);border-radius:999px;padding:3px}
+  .landing-lang button{background:transparent;border:none;color:#b9c0da;font-size:12.5px;font-weight:800;padding:5px 11px;border-radius:999px}
+  .landing-lang button[aria-pressed="true"]{background:rgba(240,212,138,.18);color:#f3e9c8}
+  .landing-moon{font-size:26px;color:var(--gold2);margin-top:6px;text-shadow:0 0 22px rgba(240,212,138,.5)}
+  .landing-name{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:52px;line-height:1;margin:6px 0 10px;color:#f3e9c8;letter-spacing:.01em;text-shadow:0 0 30px rgba(240,212,138,.28)}
+  .landing-tag{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:21px;line-height:1.3;color:#dfe3f5;margin:0 0 20px;max-width:420px}
+  .landing-film{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0b0f1f url(assets/cat-sleep-0f293551.webp) center 62%/46% no-repeat;border:1px solid rgba(240,212,138,.28);box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  .landing-film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+  .landing-film video[hidden]{display:none}
+  .landing-play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;padding-bottom:16px;background:linear-gradient(180deg,rgba(7,9,18,0) 40%,rgba(7,9,18,.75) 100%);border:none;color:#f3e9c8;width:100%}
+  .landing-play-ic{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(240,212,138,.92);color:#221a05;font-size:22px;padding-left:4px;box-shadow:0 0 30px rgba(240,212,138,.45);margin-bottom:auto;margin-top:auto}
+  .landing-play-t{font-size:13.5px;font-weight:800;letter-spacing:.02em}
+  .landing-cta{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:22px}
+  .landing-primary{background:var(--gold2);color:#221a05;border:none;border-radius:999px;padding:15px 18px;font-weight:900;font-size:16px;box-shadow:0 10px 28px rgba(240,212,138,.25)}
+  .landing-secondary{background:transparent;color:#f3e9c8;border:1px solid rgba(240,212,138,.45);border-radius:999px;padding:14px 18px;font-weight:800;font-size:15.5px}
+  .landing-link{background:transparent;border:none;color:#b9c0da;font-size:14px;padding:6px;text-decoration:underline;text-underline-offset:3px}
+  .landing-form{width:100%;margin-top:20px;text-align:left;background:rgba(20,27,52,.72);border:1px solid rgba(240,212,138,.3);border-radius:18px;padding:18px}
+  .landing-form[hidden]{display:none}
+  .landing-form h3{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:600;margin:0 0 4px;color:#f3e9c8}
+  .landing-form p{margin:0 0 12px;color:#c9cee3;font-size:14px;line-height:1.45}
+  .landing-form input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border-radius:12px;border:1px solid rgba(240,212,138,.35);background:rgba(7,9,18,.6);color:#eef0ff;margin-bottom:10px}
+  .landing-form input:focus{outline:2px solid rgba(240,212,138,.6);outline-offset:1px}
+  .landing-form .landing-primary{width:100%}
+  .landing-err{color:#f2b3b3!important;font-size:13.5px!important}
+  .landing-fine{margin-top:18px;color:#8e95b3;font-size:12.5px;line-height:1.5;max-width:420px}
+  @media(max-width:520px){.landing-name{font-size:44px}.landing-tag{font-size:19px}.landing-in{padding:18px 16px 32px}}
+  @media(prefers-reduced-motion:reduce){.landing{transition:none}}
+  .acct-pill{position:absolute;top:2px;left:0;display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(240,212,138,.4);color:#f3e9c8;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:800;max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .acct-pill[hidden]{display:none}
 </style>
 </head>
 <body>
+<div class="landing" id="landing" hidden role="dialog" aria-modal="true" aria-labelledby="landingName">
+  <div class="landing-sky" aria-hidden="true"></div>
+  <div class="landing-in">
+    <div class="landing-top"><div class="landing-lang" role="group" aria-label="Language · 语言"><button type="button" id="landEn" aria-pressed="true">EN</button><button type="button" id="landZh" aria-pressed="false">中文</button></div></div>
+    <div class="landing-moon" aria-hidden="true">☾</div>
+    <h1 class="landing-name" id="landingName">Dreameri</h1>
+    <p class="landing-tag" id="landTag">Coffee will walk you to the house at the edge of sleep.</p>
+    <div class="landing-film">
+      <video id="landVideo" hidden playsinline controls preload="none" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/bba12ab3-4830-4ca3-b80f-17f041acf0fe.mp4"></video>
+      <button type="button" class="landing-play" id="landPlay"><span class="landing-play-ic" aria-hidden="true">▶</span><span class="landing-play-t" id="landPlayT">Watch Coffee’s welcome · 0:47</span></button>
+    </div>
+    <div class="landing-cta" id="landCta">
+      <button type="button" class="landing-primary" id="landCreate">Create a free account</button>
+      <button type="button" class="landing-secondary" id="landEnter">Step inside</button>
+      <button type="button" class="landing-link" id="landSignIn">Already have an account? Sign in</button>
+    </div>
+    <form class="landing-form" id="landForm" hidden novalidate>
+      <h3 id="landFormT">Create your free account</h3>
+      <p id="landFormP">Your dreams, souvenir shelf and passport stamps are kept from night to night, on any device. No password: we email you a link.</p>
+      <label for="landEmail" class="visually-hidden" id="landEmailL" style="position:absolute;left:-9999px">Email</label>
+      <input type="email" id="landEmail" placeholder="you@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" />
+      <p class="landing-err" id="landErr" hidden></p>
+      <button type="submit" class="landing-primary" id="landSend">Email me my link</button>
+      <button type="button" class="landing-link" id="landBack" style="display:block;margin:8px auto 0">Back</button>
+    </form>
+    <p class="landing-fine" id="landFine">Free to start: a dream reading every night, sleep stories and your own dream passport.</p>
+  </div>
+</div>
 <div class="sky" aria-hidden="true"><img class="sky-stars" src="assets/sky-stars-3f7764a7.webp" alt="" /><img class="sky-moon" src="assets/sky-moon-c82e905d.webp" alt="" /><img class="mist mist-a" src="assets/mist-soft-b1e0853c.webp" alt="" /><img class="mist mist-b" src="assets/mist-soft-b1e0853c.webp" alt="" /></div>
 <div class="wait-overlay" id="waitOverlay" aria-live="polite"><div class="wo-panel"><div class="wait-scene" aria-hidden="true"><span class="wait-star" style="left:4%;top:14%">✦</span><span class="wait-star sm" style="right:8%;top:6%;animation-delay:.55s">✦</span><span class="wait-star" style="right:2%;top:46%;animation-delay:1.05s">✦</span><span class="wait-star sm" style="left:12%;top:54%;animation-delay:1.45s">✦</span><div class="wait-moon">☾</div><img class="wait-cat" src="assets/cat-sleep-0f293551.webp" alt="" /><div class="wait-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></div></div><b id="waitOverlayTitle">Reading your dream…</b><div class="steps" id="waitOverlayStep"></div><div class="wait-dots" aria-hidden="true"><span></span><span></span><span></span></div></div></div>
 <div class="wrap">
   <header class="site-head">
+    <button type="button" class="acct-pill" id="acctPill" hidden>Sign in</button>
     <div class="site-name">Dreameri</div>
     <div class="lang-switch" role="group" aria-label="Language · 语言"><button type="button" id="langEnBtn" aria-pressed="true">EN</button><button type="button" id="langZhBtn" aria-pressed="false">中文</button></div>
     <button type="button" class="settings-btn" id="byokToggle" aria-expanded="false" aria-controls="byokPanel" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
@@ -5699,6 +5765,7 @@
     }
     body.innerHTML=h;
     wire();
+    pill();
   }
   function wire(){
     var send=$('acctSend'), email=$('acctEmail');
@@ -5764,6 +5831,21 @@
     setTimeout(function(){ section.scrollIntoView({behavior:'smooth',block:'start'}); var e=$('acctEmail'); if(e) e.focus({preventScroll:true}); },60);
   }
   window.openDreamAccount=openAccount;
+  /* For the landing page: send a sign-in link, and tell it who is signed in. */
+  window.dreamSendLink=function(v){
+    holdPending(snapshot());
+    return sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}}).then(function(res){
+      if(res.error) throw res.error;
+      view='sent'; note=v; render();
+    });
+  };
+  function pill(){
+    var p=$('acctPill'); if(!p) return;
+    p.hidden=onFile;
+    p.textContent=user?((profile&&profile.display_name)||T('My account','我的账户')):T('Sign in','登录');
+  }
+  window.dreamAccountPill=pill;
+  var pillEl=$('acctPill'); if(pillEl) pillEl.addEventListener('click',openAccount);
 
   var toastT=null;
   function toastNote(msg){
@@ -5772,6 +5854,91 @@
   }
 
   render();
+})();
+</script>
+<script>
+/* ——— Landing page: the first thing a new visitor sees ———
+   Shows Coffee's welcome film and the ways in: create an account, sign in,
+   or step inside as a guest. Signed-in people, people coming back from a
+   sign-in link, and guests who already stepped inside go straight to the app.
+   Add ?welcome to the address to see it again. */
+(function(){
+  var el=document.getElementById('landing'); if(!el) return;
+  var SEEN='dreameri.entered.v1';
+  function $(id){ return document.getElementById(id); }
+  function zh(){ return window.DREAM_LANG==='zh'; }
+  function T(en,z){ return zh()?z:en; }
+  var force=/[?&]welcome\b/.test(location.search);
+  var returning=/access_token|type=magiclink|error_description/.test(location.hash+location.search);
+  var signedIn=false; try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i)||''; if(/^sb-.*-auth-token$/.test(k)&&localStorage.getItem(k)){ signedIn=true; break; } } }catch(e){}
+  var entered=false; try{ entered=!!localStorage.getItem(SEEN); }catch(e){}
+  if(location.protocol==='file:'&&!force) return;
+  if(!force&&(returning||signedIn||entered)) return;
+
+  var mode='create';
+  function texts(){
+    $('landTag').textContent=T('Coffee will walk you to the house at the edge of sleep.','咖啡会带你走到睡眠边缘的那座房子。');
+    $('landPlayT').textContent=T('Watch Coffee’s welcome · 0:47','看咖啡的欢迎短片 · 0:47');
+    $('landCreate').textContent=T('Create a free account','免费创建账户');
+    $('landEnter').textContent=T('Step inside','先进去看看');
+    $('landSignIn').textContent=T('Already have an account? Sign in','已经有账户？登录');
+    $('landFormT').textContent=mode==='create'?T('Create your free account','创建你的免费账户'):T('Welcome back','欢迎回来');
+    $('landFormP').textContent=mode==='create'
+      ?T('Your dreams, souvenir shelf and passport stamps are kept from night to night, on any device. No password: we email you a link.','你的梦、纪念品架子和护照印章会一夜一夜留下来，换设备也在。不需要密码：我们会把链接发到你的邮箱。')
+      :T('Enter your email and we will send you a sign-in link. No password needed.','输入邮箱，我们会把登录链接发给你。不需要密码。');
+    $('landSend').textContent=T('Email me my link','把链接发给我');
+    $('landBack').textContent=T('Back','返回');
+    $('landEmailL').textContent=T('Email','邮箱');
+    $('landFine').textContent=T('Free to start: a dream reading every night, sleep stories and your own dream passport.','免费开始：每晚一次解梦、睡前故事，还有你自己的梦之护照。');
+    $('landEn').setAttribute('aria-pressed',zh()?'false':'true'); $('landZh').setAttribute('aria-pressed',zh()?'true':'false');
+  }
+  function showForm(m){
+    mode=m; $('landCta').hidden=true; $('landForm').hidden=false; $('landErr').hidden=true; texts();
+    setTimeout(function(){ var e=$('landEmail'); e.focus(); e.scrollIntoView({block:'center',behavior:'smooth'}); },50);
+  }
+  function hideForm(){ $('landForm').hidden=true; $('landCta').hidden=false; }
+  function leave(){
+    try{ localStorage.setItem(SEEN,String(Date.now())); }catch(e){}
+    var v=$('landVideo'); if(v){ try{ v.pause(); }catch(e){} }
+    el.classList.add('leaving'); document.documentElement.style.overflow='';
+    setTimeout(function(){ el.hidden=true; el.classList.remove('leaving'); },460);
+  }
+
+  $('landPlay').addEventListener('click',function(){
+    var v=$('landVideo'); v.hidden=false; this.hidden=true;
+    var p=v.play(); if(p&&p.catch) p.catch(function(){});
+  });
+  $('landCreate').addEventListener('click',function(){ showForm('create'); });
+  $('landSignIn').addEventListener('click',function(){ showForm('signin'); });
+  $('landBack').addEventListener('click',hideForm);
+  $('landEnter').addEventListener('click',leave);
+  $('landEn').addEventListener('click',function(){ if(window.setDreamLang) window.setDreamLang('en'); texts(); });
+  $('landZh').addEventListener('click',function(){ if(window.setDreamLang) window.setDreamLang('zh'); texts(); });
+  document.addEventListener('dreamlang',texts);
+  $('landForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=($('landEmail').value||'').trim(), err=$('landErr'), btn=$('landSend');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ err.textContent=T('That email does not look right — check it and try again.','这个邮箱看起来不对——检查一下再试。'); err.hidden=false; return; }
+    if(!window.dreamSendLink){ err.textContent=T('Sign-in is not available just now — step inside and try again from Settings.','登录暂时不可用——先进去，稍后在设置里再试。'); err.hidden=false; return; }
+    err.hidden=true; btn.disabled=true; btn.textContent=T('Sending…','发送中…');
+    window.dreamSendLink(v).then(function(){
+      $('landFormT').textContent=T('Check your inbox','去收件箱看看');
+      $('landFormP').innerHTML='';
+      $('landFormP').appendChild(document.createTextNode(T('We sent a sign-in link to ','登录链接已发到 ')));
+      var b=document.createElement('b'); b.textContent=v; $('landFormP').appendChild(b);
+      $('landFormP').appendChild(document.createTextNode(T('. Open it on this device. You can step inside while you wait.','。在这台设备上打开它。等待的时候可以先进去看看。')));
+      $('landEmail').hidden=true; btn.hidden=true;
+      var back=$('landBack'); back.textContent=T('Step inside','先进去看看'); back.onclick=function(ev){ ev.stopImmediatePropagation(); leave(); };
+    }).catch(function(x){
+      btn.disabled=false; btn.textContent=T('Email me my link','把链接发给我');
+      err.textContent=/rate|seconds|limit/i.test(x&&x.message||'')?T('Too many links were sent just now — wait a minute, then try again.','刚才发了太多链接——等一分钟再试。'):T('The link could not be sent just now — try again in a moment.','链接暂时没能发出——稍后再试。');
+      err.hidden=false;
+    });
+  });
+
+  texts();
+  el.hidden=false;
+  document.documentElement.style.overflow='hidden';
 })();
 </script>
 </body>
