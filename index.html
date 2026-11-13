@@ -1447,6 +1447,25 @@
   .byok-plan.on{border-style:solid;border-color:rgba(127,214,162,.7)}
   .price-btn.alt{background:transparent;border:1px solid rgba(214,178,94,.6);color:#f0d48a;margin-top:8px}
   .price-card.plus.is-mine{box-shadow:0 0 0 2px rgba(214,178,94,.6)}
+  .prof-title{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:600;line-height:1.05;margin:6px 0 14px}
+  .prof-title em{color:var(--gold2)}
+  .prof-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 18px}
+  .prof-stat{padding:12px 8px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);text-align:center}
+  .prof-stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:28px;line-height:1;color:#f3dfa6}
+  .prof-stat span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-top:5px}
+  .prof-block{margin:0 0 18px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+  .prof-label{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px}
+  .dream-road svg{display:block;width:100%;height:auto}
+  .dream-road .rd-st{cursor:pointer}
+  .dream-road .rd-st:hover circle.rd-dot{r:11}
+  .road-empty{font-size:13.5px;opacity:.75;margin:0}
+  .prof-insight p{margin:0 0 8px;font-size:14.5px;line-height:1.55;color:#dfe3f5}
+  .prof-insight p b{color:#f3dfa6;font-weight:700}
+  .prof-insight .pi-feel{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
+  .prof-insight .pi-feel span{font-size:12px;padding:5px 10px;border-radius:999px;background:rgba(214,178,94,.12);border:1px solid rgba(214,178,94,.3)}
+  .journey.in-profile{margin-top:0;border-top:0;padding-top:0;max-width:none}
+  .journey.in-profile .journey-lede{display:none}
+  @media (max-width:520px){ .prof-stats{grid-template-columns:repeat(2,1fr)} }
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -1596,6 +1615,7 @@
   <div class="collect-strip" role="group" aria-label="Your collections">
     <button type="button" class="collect-btn" id="shelfOpenBtn"><span class="cb-ic" aria-hidden="true">✦</span><span id="shelfBtnLabel">Souvenir shelf</span><b id="shelfCount">0 of 50</b></button>
     <button type="button" class="collect-btn" id="passportOpenBtn"><span class="cb-ic" aria-hidden="true">☾</span><span id="passportBtnLabel">Dream passport</span><b id="passportCount">0 places visited</b></button>
+    <button type="button" class="collect-btn" id="profileOpenBtn"><span class="cb-ic" aria-hidden="true">✧</span><span id="profileBtnLabel">My dreams</span><b id="profileCount">0 dreams</b></button>
   </div>
 
   <main id="panelNight" class="night-intake" role="tabpanel" aria-label="Dream Decipher — night dream reading">
@@ -1700,9 +1720,9 @@
           <div class="reading-story" id="readingStory"><div class="section-label"><span>The reading</span></div><p id="readingNarrative"></p><p class="closing" id="readingClosing"></p></div>
           <div class="self-note" id="selfNote">
             <div class="section-label"><span id="snT">A sentence for yourself</span></div>
-            <p class="sn-hint" id="snHint">Write one line to your future self about this dream. It is kept with the dream in your Dream Calendar.</p>
+            <p class="sn-hint" id="snHint">Write one line to your future self about this dream. It is kept with the dream in My dreams.</p>
             <textarea id="snInput" rows="2" maxlength="240" placeholder="Today I want to remember…"></textarea>
-            <div class="sn-row"><span class="sn-saved" id="snSaved" hidden>✓ Kept in your Dream Calendar</span><button type="button" class="sn-btn" id="snBtn">Keep it</button></div>
+            <div class="sn-row"><span class="sn-saved" id="snSaved" hidden>✓ Kept in My dreams</span><button type="button" class="sn-btn" id="snBtn">Keep it</button></div>
           </div>
           <div class="deep-hook" id="deepHook">
             <div class="section-label"><span>The deeper part</span><span id="deepStateLabel" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></div>
@@ -1730,13 +1750,6 @@
     </section>
   </div>
 
-  <section class="journey" id="dreamJourney" aria-label="Dream Journey — patterns across your dreams">
-    <div class="kicker">Dream Journey</div>
-    <h2 class="journey-title">What your dreams <em>keep returning to</em></h2>
-    <p class="journey-lede">Every dream you read here is gathered below — the signs, places, people and scenes that come back, dream after dream. The more dreams you bring, the clearer the pattern, and the better it knows you. This is your Dream Memory: on the free version it keeps only the last 3 days; the full version keeps every dream.</p>
-    <div class="dream-cal" id="dreamCal"></div>
-    <div id="journeyBody"><p class="journey-empty">No dreams read yet. Read your first dream above, and its signs, places, people and scenes will start gathering here.</p></div>
-  </section>
   </main>
 
   <main id="panelDay" role="tabpanel" aria-label="Manifestation — daydreaming" hidden>
@@ -1870,6 +1883,30 @@
       </div>
       <button class="price-btn alt" id="byokPlanBtn" type="button">Use my own key</button>
     </div>
+  </div>
+</div>
+
+<div class="coll-page" id="profilePage" role="dialog" aria-modal="true" aria-label="My dreams">
+  <div class="coll-inner">
+    <button class="sub-close" id="profileClose" type="button" aria-label="Close">×</button>
+    <div class="kicker">My dreams</div>
+    <h2 class="prof-title" id="profTitle">Your dream <em>profile</em></h2>
+    <div class="prof-stats" id="profStats"></div>
+    <div class="prof-block">
+      <div class="prof-label" id="profMapLabel">Road into Dreamland</div>
+      <div class="dream-road" id="dreamRoad"></div>
+    </div>
+    <div class="prof-block">
+      <div class="prof-label" id="profInsightLabel">What Coffee notices</div>
+      <div class="prof-insight" id="profInsight"></div>
+    </div>
+    <div class="dream-cal" id="dreamCal"></div>
+  <section class="journey in-profile" id="dreamJourney" aria-label="Dream Journey — patterns across your dreams">
+      <div class="kicker">Patterns</div>
+      <h2 class="journey-title">What your dreams <em>keep returning to</em></h2>
+      <p class="journey-lede">Every dream you read here is gathered below — the signs, places, people and scenes that come back, dream after dream. The more dreams you bring, the clearer the pattern, and the better it knows you. This is your Dream Memory: on the free version it keeps only the last 3 days; the full version keeps every dream.</p>
+          <div id="journeyBody"><p class="journey-empty">No dreams read yet. Read your first dream above, and its signs, places, people and scenes will start gathering here.</p></div>
+    </section>
   </div>
 </div>
 
@@ -3233,18 +3270,105 @@
   });
   var _rj=renderJourney; renderJourney=function(){ _rj(); try{ renderCalendar(); }catch(e){} };
   window.renderDreamJourney=renderJourney;
+
+  /* ——— My dreams · profile: stats, the road, what Coffee notices ——— */
+  function datedJournal(){ return journal.filter(function(j){ return j&&j.date&&!isNaN(new Date(j.date)); }); }
+  function renderProfile(){
+    var cnt=$('profileCount'); if(cnt) cnt.textContent=window.DREAM_LANG==='zh'?(journal.length+' 个梦'):(journal.length+(journal.length===1?' dream':' dreams'));
+    var lbl=$('profileBtnLabel'); if(lbl) lbl.textContent=L('My dreams','我的梦');
+    var page=$('profilePage'); if(!page) return;
+    var zh=window.DREAM_LANG==='zh', dj=datedJournal(), now=new Date();
+    $('profTitle').innerHTML=zh?'你的<em>梦之档案</em>':'Your dream <em>profile</em>';
+    $('profMapLabel').textContent=L('Road into Dreamland','通往梦境的路');
+    $('profInsightLabel').textContent=L('What Coffee notices','可可注意到的');
+    // stats
+    var days={}; dj.forEach(function(j){ days[dayKey(new Date(j.date))]=1; });
+    var streak=0, d=new Date(now); if(!days[dayKey(d)]) d.setDate(d.getDate()-1);
+    while(days[dayKey(d)]){ streak++; d.setDate(d.getDate()-1); }
+    var month=dj.filter(function(j){ var x=new Date(j.date); return x.getMonth()===now.getMonth()&&x.getFullYear()===now.getFullYear(); }).length;
+    var places=tallyJourney('places').length;
+    function stat(n,l){ return '<div class="prof-stat"><b>'+n+'</b><span>'+l+'</span></div>'; }
+    $('profStats').innerHTML=stat(journal.length,L('Dreams read','解过的梦'))+stat(month,L('This month','本月'))+stat(streak,L('Night streak','连续的夜'))+stat(places,L('Places','去过的地方'));
+    // the road: last 7 dated dreams, oldest at the bottom, the next dream waiting at the top
+    var road=$('dreamRoad'), list=dj.slice(0,7).reverse();
+    if(!list.length){ road.innerHTML='<p class="road-empty">'+L('Your road begins with your first dream. Each one you read becomes a station here, in the order you dreamed them.','你的路从第一个梦开始。每解一个梦，它就成为这里的一站，按你做梦的顺序排开。')+'</p>'; }
+    else {
+      var W=340, step=86, n=list.length+1, H=(n-1)*step+70, pts=[];
+      for(var i=0;i<n;i++){ pts.push({x:i%2?W*0.68:W*0.32, y:H-30-i*step}); }
+      var path='M'+pts[0].x+','+(pts[0].y+30);
+      path+=' L'+pts[0].x+','+pts[0].y;
+      for(var k=1;k<n;k++){ var a=pts[k-1], b=pts[k], my=(a.y+b.y)/2; path+=' C'+a.x+','+my+' '+b.x+','+my+' '+b.x+','+b.y; }
+      var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(L('Your road of dreams','你的梦之路'))+'">'
+        +'<defs><linearGradient id="rdG" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6d5a2e"/><stop offset="1" stop-color="#f0d48a"/></linearGradient><filter id="rdGlow"><feGaussianBlur stdDeviation="4"/></filter></defs>'
+        +'<path d="'+path+'" fill="none" stroke="rgba(240,212,138,.12)" stroke-width="22" stroke-linecap="round"/>'
+        +'<path d="'+path+'" fill="none" stroke="url(#rdG)" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>';
+      list.forEach(function(j,i){
+        var pt=pts[i], dt=new Date(j.date), left=i%2===0;
+        var title=String(j.title||'').replace(/\s+/g,' ').trim(); if(title.length>24) title=title.slice(0,23)+'…';
+        var date=dt.toLocaleDateString(zh?'zh-CN':'en-US',{month:'short',day:'numeric'});
+        var tx=left?pt.x+18:pt.x-18, anchor=left?'start':'end';
+        svg+='<g class="rd-st" data-day="'+dayKey(dt)+'" tabindex="0"><circle cx="'+pt.x+'" cy="'+pt.y+'" r="13" fill="rgba(240,212,138,.18)" filter="url(#rdGlow)"/><circle class="rd-dot" cx="'+pt.x+'" cy="'+pt.y+'" r="8" fill="#11172b" stroke="#f0d48a" stroke-width="2"/>'
+          +'<text x="'+tx+'" y="'+(pt.y-3)+'" text-anchor="'+anchor+'" font-size="12.5" font-weight="700" fill="#eef0fa">'+esc(title)+'</text>'
+          +'<text x="'+tx+'" y="'+(pt.y+13)+'" text-anchor="'+anchor+'" font-size="10.5" fill="#aab2d4">'+esc(date)+(j.note?' · ✎':'')+'</text></g>';
+      });
+      var nx=pts[n-1], nl=(n-1)%2===0;
+      svg+='<g><circle cx="'+nx.x+'" cy="'+nx.y+'" r="9" fill="none" stroke="#7fd6a2" stroke-width="2" stroke-dasharray="3 3"/><text x="'+(nl?nx.x+18:nx.x-18)+'" y="'+(nx.y+4)+'" text-anchor="'+(nl?'start':'end')+'" font-size="12.5" font-style="italic" fill="#7fd6a2">'+esc(L('Tonight’s dream ☾','今晚的梦 ☾'))+'</text></g>';
+      road.innerHTML=svg+'</svg>';
+    }
+    // what Coffee notices
+    var ins=$('profInsight'), out=[];
+    if(journal.length<2){ out.push('<p>'+L('Read a few dreams and Coffee will start noticing what returns — the signs, places and feelings your nights keep coming back to.','多解几个梦，可可就会开始注意到那些反复出现的东西——你的夜晚一再回到的象、地方和感觉。')+'</p>'); }
+    else {
+      var signs=tallyJourney('symbols'), ppl=tallyJourney('people'), plc=tallyJourney('places'), pat=tallyJourney('patterns');
+      var top=[signs[0],ppl[0],plc[0],pat[0]].filter(function(x){return x&&x.count>1;}).sort(function(a,b){return b.count-a.count;})[0];
+      if(top) out.push('<p>'+(zh?('在你的 '+journal.length+' 个梦里，<b>'+esc(top.name)+'</b> 回来了 '+top.count+' 次。反复回来的象很少是偶然的——它多半系着一件白天还没放下的事。'):('Across your '+journal.length+' dreams, <b>'+esc(top.name)+'</b> has come back '+top.count+' times. A sign that keeps returning is rarely an accident — it usually ties to something the day hasn’t set down yet.'))+'</p>');
+      else out.push('<p>'+L('Nothing has repeated yet — your dreams are ranging widely, each one in new country. That often happens in seasons of change.','还没有什么重复出现——你的梦走得很远，每一个都在新的地方。这常常发生在变化的时节里。')+'</p>');
+      if(ppl[0]) out.push('<p>'+(zh?('出现最多的人：<b>'+esc(ppl[0].name)+'</b>。'):('The person who appears most: <b>'+esc(ppl[0].name)+'</b>.'))+(plc[0]?(zh?(' 最常去的地方：<b>'+esc(plc[0].name)+'</b>。'):(' The place you return to most: <b>'+esc(plc[0].name)+'</b>.')):'')+'</p>');
+      var feels={}; journal.forEach(function(j){ if(j.feel) feels[j.feel]=(feels[j.feel]||0)+1; });
+      var fk=Object.keys(feels).sort(function(a,b){return feels[b]-feels[a];});
+      if(fk.length){
+        var fl=function(f){ return zh&&typeof feelZhOf==='function'?feelZhOf(f):f; };
+        out.push('<p>'+(zh?('你最常带着 <b>'+esc(fl(fk[0]))+'</b> 醒来。'):('You most often wake feeling <b>'+esc(String(fl(fk[0])).toLowerCase())+'</b>.'))+'</p><div class="pi-feel">'+fk.slice(0,5).map(function(f){return '<span>'+esc(fl(f))+' · '+feels[f]+'</span>';}).join('')+'</div>');
+      }
+      if(dj.length>=3){
+        var wd={}; dj.forEach(function(j){ var w=new Date(j.date).getDay(); wd[w]=(wd[w]||0)+1; });
+        var bw=Object.keys(wd).sort(function(a,b){return wd[b]-wd[a];})[0];
+        if(wd[bw]>1){ var wn=(zh?['周日','周一','周二','周三','周四','周五','周六']:['Sundays','Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays'])[bw]; out.push('<p>'+(zh?('你的梦最常在<b>'+wn+'</b>被记下。'):('Your dreams arrive most on <b>'+wn+'</b>.'))+'</p>'); }
+      }
+      if(streak>=2) out.push('<p>'+(zh?('你已经连续 <b>'+streak+'</b> 个夜晚记下梦了。继续——梦被记得越多，就越清楚。'):('You’ve kept your dreams <b>'+streak+'</b> nights in a row. Keep going — dreams that are remembered grow clearer.'))+'</p>');
+    }
+    ins.innerHTML=out.join('');
+  }
+  document.addEventListener('click',function(e){
+    var st=e.target.closest&&e.target.closest('.rd-st'); if(!st) return;
+    var k=st.getAttribute('data-day'); var parts=k.split('-'); calMonth=new Date(+parts[0],+parts[1]-1,1); calSel=k; renderCalendar();
+    var c=$('dreamCal'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  var _rj2=renderJourney; renderJourney=function(){ _rj2(); try{ renderProfile(); }catch(e){} };
+  window.renderDreamJourney=renderJourney;
+  (function(){
+    var pg=$('profilePage'), ob=$('profileOpenBtn'), cb=$('profileClose');
+    function open(){ try{ renderJourney(); }catch(e){} pg.classList.add('open'); pg.scrollTop=0; document.body.style.overflow='hidden'; }
+    function close(){ pg.classList.remove('open'); document.body.style.overflow=''; }
+    if(ob) ob.addEventListener('click',open);
+    if(cb) cb.addEventListener('click',close);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&pg&&pg.classList.contains('open')) close(); });
+    window.openDreamProfile=open;
+    document.addEventListener('dreamlang',function(){ try{ renderProfile(); }catch(e){} });
+    try{ renderProfile(); }catch(e){}
+  })();
   /* A sentence for yourself: kept on the newest journal entry. */
   function resetSelfNote(){
     var i=$('snInput'); if(!i) return; i.value=''; $('snSaved').hidden=true;
     $('snT').textContent=L('A sentence for yourself','写给自己的一句话');
-    $('snHint').textContent=L('Write one line to your future self about this dream. It is kept with the dream in your Dream Calendar.','为这个梦，写一句给未来的自己。它会和这个梦一起，存进你的梦历。');
+    $('snHint').textContent=L('Write one line to your future self about this dream. It is kept with the dream in My dreams.','为这个梦，写一句给未来的自己。它会和这个梦一起，存进“我的梦”。');
     i.placeholder=L('Today I want to remember…','今天，我想记住……');
     $('snBtn').textContent=L('Keep it','存下来');
   }
   document.addEventListener('click',function(e){
     if(!e.target||e.target.id!=='snBtn') return;
     var v=$('snInput').value.trim(); if(!v||!journal.length) return;
-    journal[0].note=v; $('snSaved').textContent=L('✓ Kept in your Dream Calendar','✓ 已存进你的梦历'); $('snSaved').hidden=false;
+    journal[0].note=v; $('snSaved').textContent=L('✓ Kept in My dreams','✓ 已存进你的梦历'); $('snSaved').hidden=false;
     var d=new Date(journal[0].date||Date.now()); calMonth=new Date(d.getFullYear(),d.getMonth(),1); calSel=dayKey(d);
     try{ renderCalendar(); }catch(err){}
     toast(L('Kept with this dream ✦','已和这个梦存在一起 ✦'));
@@ -3288,7 +3412,7 @@
     try{ renderReading(r); }catch(e){}
     // 3 · Journal + Journey, from the captured dream text.
     try{
-      journal.unshift({date:new Date().toISOString(),lens:r.lens||'zhougong',school:r.school||'',note:'',title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
+      journal.unshift({date:new Date().toISOString(),feel:feel||'',lens:r.lens||'zhougong',school:r.school||'',note:'',title:String(r.titleHTML||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),line:r.line,symbols:(r.symbols||[]).map(function(s){return s.name}),snippet:truncStr(text,90),places:extractJourney(JOURNEY_PLACES,text),people:extractJourney(JOURNEY_PEOPLE,text),patterns:extractJourney(JOURNEY_PATTERNS,text)});
     }catch(e){}
     try{ renderJourney(); }catch(e){}
     try{ refreshWeaveList(); }catch(e){}
