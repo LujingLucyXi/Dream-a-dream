@@ -1297,6 +1297,30 @@
   .lens-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 4px;font-size:13px;color:#9aa6d1}
   .lens-row button{background:transparent;border:1px solid rgba(240,212,138,.4);color:#f3e9c8;border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px}
   .lens-tag{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#7fe7d6;margin:0 0 8px}
+
+  /* ——— The fireside as one whole scene ——— */
+  .hearth.inline{width:100vw;margin-left:calc(50% - 50vw);height:100svh;min-height:600px;border:none;border-radius:0;box-shadow:none;background:transparent}
+  .hearth.inline .hearth-zoom{position:absolute;inset:0;overflow:hidden;will-change:transform;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 88%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 88%,transparent 100%)}
+  .hearth-zoom{position:absolute;inset:0}
+  .hearth-bg video{opacity:1!important;transition:none}
+  html,body{overflow-x:hidden}
+  #panelNight .input-panel{max-width:none}
+  .hearth.inline .hearth-ui{padding:22px 16px calc(26px + env(safe-area-inset-bottom))}
+  .hearth.inline .hearth-card{max-width:none;width:calc(100% + 32px);margin:0 -16px -26px;border:none;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(180deg,rgba(5,8,18,0) 0,rgba(5,8,18,.72) 14%,rgba(5,8,18,.9) 40%,rgba(5,8,18,.94));padding:42px max(18px,calc(50% - 280px)) calc(24px + env(safe-area-inset-bottom))}
+  .hearth.inline .hearth-card h3{text-shadow:0 0 18px rgba(127,231,214,.35)}
+  .hearth.inline .hearth-card textarea,.hearth.inline .hearth-card input[type=text]{background:rgba(255,255,255,.035);border-color:rgba(127,231,214,.22)}
+  .hearth.inline .hearth-chips button{background:rgba(255,255,255,.03);border-color:rgba(240,212,138,.22)}
+  .hearth.inline .hearth-ghost{border-color:rgba(240,212,138,.25)}
+  .hearth.inline.speaking .hearth-head{opacity:.25;transition:opacity 1s ease}
+  .hearth.inline .hearth-head{transition:opacity 1s ease}
+  /* one gift card instead of two popups */
+  .dm-pop{background:radial-gradient(ellipse at 50% 40%,rgba(30,60,80,.55),rgba(3,5,12,.86) 70%)}
+  .dm-pop-card{border:none;background:radial-gradient(120% 90% at 50% 0%,rgba(127,231,214,.12),rgba(20,26,52,.0) 60%),linear-gradient(180deg,rgba(24,32,61,.96),rgba(12,16,34,.97));box-shadow:0 0 0 1px rgba(240,212,138,.18),0 0 60px rgba(127,231,214,.12),0 30px 70px rgba(0,0,0,.6)}
+  .dm-pop-sep{display:flex;align-items:center;gap:10px;margin:18px 0 6px;color:var(--gold2);font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+  .dm-pop-sep::before,.dm-pop-sep::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(240,212,138,.35),transparent)}
+  .dm-pop-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:6px}
+  .dm-pop-links button{background:none;border:none;color:#c9cee3;text-decoration:underline;text-underline-offset:3px;font-size:13.5px;padding:6px 2px}
+  .dm-pop-links button[disabled]{opacity:.6;text-decoration:none}
 </style>
 </head>
 <body>
@@ -1420,7 +1444,7 @@
   <div class="layout" id="reader">
     <section class="input-panel" aria-label="Tell your dream">
 <div class="hearth inline" id="hearth" role="region" aria-labelledby="hearthTitle">
-  <div class="hearth-bg" id="hearthBg" aria-hidden="true"><video id="hearthLoop" muted loop playsinline preload="none" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/1b292961-93e2-403f-a5e5-a8f23fc49a4c.mp4"></video></div>
+  <div class="hearth-zoom" id="hearthZoom" aria-hidden="true"><div class="hearth-bg" id="hearthBg"><video id="hearthLoop" muted loop playsinline preload="auto" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/d7aef08b-dcce-4be8-996a-2a28d8b90e50.jpg" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/1b292961-93e2-403f-a5e5-a8f23fc49a4c.mp4"></video></div></div>
   <canvas class="hearth-canvas" id="hearthCanvas" aria-hidden="true"></canvas>
   <div class="hearth-ui">
     <div class="hearth-top">
@@ -5669,36 +5693,34 @@
     var f=o.querySelector('.dm-pop-go'); if(f) setTimeout(function(){ f.focus(); },50);
     return o;
   }
-  function stampPopup(){
-    if(!lastReveal||!lastReveal.place) return;
-    var p=null; PP.forEach(function(x){ if(x.id===lastReveal.place) p=x; }); if(!p) return;
-    var st=stamps[p.id]; if(!st) return;
-    var isNew=lastReveal.newStamps.indexOf(p.id)!==-1;
-    var html='<div class="dm-pop-kicker">☾ '+(isNew?L('New passport stamp','护照新印章'):L('Stamped again','又盖了一次'))+'</div>'
-      +'<div class="dm-pop-stamp">'+stampHTML(p,st,true)+'</div>'
-      +'<h3>'+esc(placeName(p))+'</h3>'
-      +'<p class="dm-pop-from">'+(st.label?(L('Your dream took you here: ','你的梦带你到了这里：')+'<b>“'+esc(st.label)+'”</b>'):L('The place your dream happened.','你的梦发生的地方。'))
-      +(isNew?'':'<br>'+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次来到这里'):('Visit '+st.count+' to this place')))+'</p>'
-      +'<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+L('Done','好的')+'</button><button type="button" class="dm-pop-alt" data-pop-pass>'+L('Open the passport','打开护照')+'</button></div>';
-    popup(html,function(o,close){
-      o.querySelector('[data-pop-next]').addEventListener('click',close);
-      o.querySelector('[data-pop-pass]').addEventListener('click',function(){ close(); openPassport(); });
-    });
-  }
+  /* One card for everything tonight's dream left behind: the souvenir
+     (and the sign that left it), then — if the dream named a place —
+     its passport stamp, below a soft divider. */
   window.showCollectPopups=function(){
     if(!lastReveal) return;
     var g=GIFTS[lastReveal.giftId], entry=shelfEntry(g.id);
-    var html='<div class="dm-pop-kicker">✦ '+(lastReveal.fresh?L('A new souvenir','新的纪念品'):L('A keepsake returns','一件纪念品又回来了'))+'</div>'
+    var html='<div class="dm-pop-kicker">✦ '+(lastReveal.fresh?L('Your dream left you a souvenir','你的梦给你留下了一件纪念品'):L('A keepsake returns','一件纪念品又回来了'))+'</div>'
       +'<div class="dm-pop-illus">'+illusFor(g)+'</div>'
       +'<h3>'+esc(giftName(g))+'</h3>'
-      +'<p class="dm-pop-from">'+(lastReveal.from?(L('Left by the sign ','由这个梦的征兆留下：')+'<b>“'+esc(lastReveal.from)+'”</b>'):L('Left behind by this dream.','这个梦留下的。'))+'</p>'
-      +'<div class="dm-pop-task"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p></div>'
-      +'<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+(lastReveal.place?L('Continue','继续'):L('Done','好的'))+'</button>'
-      +'<button type="button" class="dm-pop-alt" data-pop-shelf>'+L('See it on the shelf','去架子上看它')+'</button>'
-      +'<button type="button" class="dm-pop-alt" data-task="'+g.id+'"'+(entry&&entry.taskDone?' disabled':'')+'>'+(entry&&entry.taskDone?('✓ '+L('Task done','任务完成')):L('Mark the task done','把任务标记为完成'))+'</button></div>';
+      +'<p class="dm-pop-from">'+(lastReveal.from?(L('Left by the sign ','由这个征兆留下：')+'<b>“'+esc(lastReveal.from)+'”</b>'):L('Left behind by this dream.','这个梦留下的。'))+'</p>'
+      +'<div class="dm-pop-task"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p></div>';
+    var p=null; if(lastReveal.place) PP.forEach(function(x){ if(x.id===lastReveal.place) p=x; });
+    var st=p&&stamps[p.id];
+    if(p&&st){
+      var isNew=lastReveal.newStamps.indexOf(p.id)!==-1;
+      html+='<div class="dm-pop-sep">☾ '+(isNew?L('New passport stamp','护照新印章'):L('Stamped again','又盖了一次'))+'</div>'
+        +'<div class="dm-pop-stamp">'+stampHTML(p,st,true)+'</div>'
+        +'<p class="dm-pop-from"><b style="color:#f3e9c8">'+esc(placeName(p))+'</b>'+(st.label?(' · '+L('your dream took you here: ','你的梦带你到了这里：')+'“'+esc(st.label)+'”'):'')
+        +(isNew?'':' · '+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次'):('visit '+st.count)))+'</p>';
+    }
+    html+='<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+L('Keep them','收下')+'</button></div>'
+      +'<div class="dm-pop-links"><button type="button" data-pop-shelf>'+L('See the shelf','看看架子')+'</button>'
+      +(p&&st?'<button type="button" data-pop-pass>'+L('Open the passport','打开护照')+'</button>':'')
+      +'<button type="button" data-task="'+g.id+'"'+(entry&&entry.taskDone?' disabled':'')+'>'+(entry&&entry.taskDone?('✓ '+L('Task done','任务完成')):L('Mark the task done','标记任务完成'))+'</button></div>';
     popup(html,function(o,close){
-      o.querySelector('[data-pop-next]').addEventListener('click',function(){ close(); stampPopup(); });
+      o.querySelector('[data-pop-next]').addEventListener('click',close);
       o.querySelector('[data-pop-shelf]').addEventListener('click',function(){ close(); selectedGift=g.id; openShelf(); });
+      var pp=o.querySelector('[data-pop-pass]'); if(pp) pp.addEventListener('click',function(){ close(); openPassport(); });
       var t=o.querySelector('[data-task]'); if(t) t.addEventListener('click',function(){ setTimeout(function(){ t.disabled=true; t.textContent='✓ '+L('Task done','任务完成'); },0); });
     });
   };
@@ -6240,9 +6262,9 @@
    through the same questions on their way to the reading. */
 (function(){
   var el=document.getElementById('hearth'); if(!el) return;
-  var HEARTH_IMG='https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/a2986705-c2a4-41a0-8b03-489f3f6ebed7.jpg';
-  var IMG_W=1200, IMG_H=1607;           /* the painting's own size */
-  var FIRE={x:0.53, y:0.585, w:0.2};        /* fire base, as fractions of the painting */
+  var HEARTH_IMG='https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/d7aef08b-dcce-4be8-996a-2a28d8b90e50.jpg';
+  var IMG_W=834, IMG_H=1112;           /* the painting's own size */
+  var FIRE={x:0.52, y:0.56, w:0.2};        /* fire base, as fractions of the painting */
   var BG_Y=0.58;                                  /* matches background-position-y */
   var AI_URL=(window.DREAM_READER_AI_ENDPOINT||'https://jlvlmuyegirglbyrnfbl.supabase.co/functions/v1/dream-reading');
   var TRANSCRIBE_URL='https://jlvlmuyegirglbyrnfbl.supabase.co/functions/v1/dream-transcribe';
@@ -6311,7 +6333,16 @@
     cx.setTransform(DPR,0,0,DPR,0,0);
     var s=Math.max(W/IMG_W,H/IMG_H), dw=IMG_W*s, dh=IMG_H*s;
     var ox=(W-dw)/2, oy=(H-dh)*BG_Y;
-    fx=ox+FIRE.x*dw; fy=oy+FIRE.y*dh; fw=FIRE.w*dw;
+    bx=ox+FIRE.x*dw; by=oy+FIRE.y*dh; bw=FIRE.w*dw; zox=bx; zoy=by-bw*.55;
+    applyZoom();
+  }
+  /* While the dreamer speaks, the scene leans in toward the fire. The
+     zoom is driven here, frame by frame, so the drawn flames stay locked
+     onto the painted logs at every step of it. */
+  var bx=0, by=0, bw=0, zox=0, zoy=0, zoom=1, zoomTo=1;
+  function applyZoom(){
+    fx=zox+(bx-zox)*zoom; fy=zoy+(by-zoy)*zoom; fw=bw*zoom;
+    var z=$('hearthZoom'); if(z){ z.style.transformOrigin=zox+'px '+zoy+'px'; z.style.transform='scale('+zoom.toFixed(4)+')'; }
   }
   function sprite(r,g,b){
     var c=document.createElement('canvas'); c.width=c.height=64; var x=c.getContext('2d');
@@ -6320,6 +6351,7 @@
     x.fillStyle=gr; x.fillRect(0,0,64,64); return c;
   }
   var SP=[sprite(200,255,240),sprite(70,230,200),sprite(35,170,195),sprite(28,90,165)];
+  var SPG=sprite(255,214,140), SPV=sprite(170,140,255);
   var parts=[], sparks=[], level=0, target=.22, flareV=0, t0=performance.now(), raf=0, running=false;
   var hist=[]; for(var i=0;i<90;i++) hist.push(0);
   function flare(v){ flareV=Math.max(flareV,v); }
@@ -6330,21 +6362,46 @@
       parts.push({x:fx+(Math.random()-.5)*spread*2, y:fy-Math.random()*fw*.05, vx:(Math.random()-.5)*.35, vy:-(0.7+Math.random()*1.3), life:1, decay:.012+Math.random()*.014, s:fw*(.18+Math.random()*.2), seed:Math.random()*6.28});
     }
   }
+  /* The mythical layer: an aurora breathing above the flames, a slow
+     ring of starlight circling the hearth, and motes of teal, gold and
+     violet rising into the chimney. */
+  var motes=[];
+  function drawMagic(t,m,heat){
+    var ar=cx.createRadialGradient(fx,fy-fw*1.3,0,fx,fy-fw*1.3,fw*(2.6+heat));
+    ar.addColorStop(0,'rgba(140,110,255,'+(0.10*m+heat*.03*m)+')'); ar.addColorStop(.5,'rgba(60,220,200,'+(0.08*m)+')'); ar.addColorStop(1,'rgba(40,40,120,0)');
+    cx.fillStyle=ar; cx.fillRect(0,0,W,H);
+    var R=fw*(1.15+.12*Math.sin(t*.8)), n=28;
+    for(var i=0;i<n;i++){
+      var ang=t*.45+i*6.283/n, x=fx+Math.cos(ang)*R*1.6, y=fy-fw*.35+Math.sin(ang)*R*.42;
+      var front=Math.sin(ang)>0?1:.45, s=fw*(.05+.03*Math.sin(t*3+i));
+      cx.globalAlpha=(.55*front)*m; cx.drawImage(i%3?SP[1]:SPG,x-s/2,y-s/2,s,s);
+    }
+    if(motes.length<90*m) motes.push({x:fx+(Math.random()-.5)*fw*2.4,y:fy+fw*.2,vy:-(0.4+Math.random()*1.1),vx:(Math.random()-.5)*.4,life:1,c:Math.random(),s:fw*(.03+Math.random()*.05)});
+    for(var j=motes.length-1;j>=0;j--){
+      var o=motes[j]; o.x+=o.vx+Math.sin(t*2+j)*.3; o.y+=o.vy*(1+heat*.4); o.life-=.006;
+      if(o.life<=0||o.y<0){ motes.splice(j,1); continue; }
+      cx.globalAlpha=Math.min(1,o.life*1.4)*m; cx.drawImage(o.c<.4?SP[1]:o.c<.7?SPG:SPV,o.x-o.s/2,o.y-o.s/2,o.s,o.s);
+    }
+    cx.globalAlpha=1;
+  }
   function frame(now){
     if(!running) return;
     raf=requestAnimationFrame(frame);
     var t=(now-t0)/1000;
     level+=(target-level)*.12; flareV*=.94;
-    var heat=Math.min(1.8,level+flareV);
+    zoomTo=(rec&&!reduce)?1.55:1; if(Math.abs(zoomTo-zoom)>.0005){ zoom+=(zoomTo-zoom)*.035; applyZoom(); }
+    var magic=Math.max(0,Math.min(1,(zoom-1)/.5));
+    var heat=Math.min(1.6,level*(1-magic*.35)+flareV+magic*.15);
     cx.clearRect(0,0,W,H);
     cx.globalCompositeOperation='lighter';
+    if(magic>.02) drawMagic(t,magic,heat);
     /* light thrown into the room */
     var room=cx.createRadialGradient(fx,fy-fw*.3,0,fx,fy-fw*.3,Math.max(W,H)*.75);
     room.addColorStop(0,'rgba(70,220,200,'+(0.10+heat*.08)+')'); room.addColorStop(1,'rgba(70,220,200,0)');
     cx.fillStyle=room; cx.fillRect(0,0,W,H);
     var glowR=fw*(1.2+heat*.7);
     var gl=cx.createRadialGradient(fx,fy-fw*.25,0,fx,fy-fw*.25,glowR);
-    gl.addColorStop(0,'rgba(120,255,225,'+(0.32+heat*.18)+')'); gl.addColorStop(1,'rgba(40,160,190,0)');
+    gl.addColorStop(0,'rgba(120,255,225,'+((0.32+heat*.18)/zoom)+')'); gl.addColorStop(1,'rgba(40,160,190,0)');
     cx.fillStyle=gl; cx.beginPath(); cx.arc(fx,fy-fw*.25,glowR,0,6.283); cx.fill();
     /* flames */
     var n=Math.round((reduce?2:4)*(0.7+heat*2.4)); spawn(n);
@@ -6356,7 +6413,7 @@
       p.life-=p.decay; p.s*=.986;
       if(p.life<=0){ parts.splice(i,1); continue; }
       var core=p.life>.8, sp=core?SP[0]:p.life>.5?SP[1]:p.life>.25?SP[2]:SP[3];
-      cx.globalAlpha=core?.1:Math.min(.42,p.life*.5);
+      cx.globalAlpha=(core?.1:Math.min(.42,p.life*.5))/Math.pow(zoom,1.6);
       cx.drawImage(sp,p.x-p.s/2,p.y-p.s*.9,p.s,p.s*1.8);
     }
     cx.globalAlpha=1;
@@ -6402,7 +6459,7 @@
       cx.strokeStyle=g; cx.lineWidth=s?1.4:2.4; cx.stroke();
     }
   }
-  function loop(on){ var v=$('hearthLoop'); if(!v) return; if(on&&!reduce&&!(navigator.connection&&navigator.connection.saveData)){ v.addEventListener('playing',function(){ v.classList.add('on'); },{once:true}); var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else { try{ v.pause(); }catch(e){} } }
+  function loop(on){ var v=$('hearthLoop'); if(!v) return; if(on&&!reduce&&!(navigator.connection&&navigator.connection.saveData)){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else { try{ v.pause(); }catch(e){} } }
   function start(){ if(running) return; running=true; layout(); micPoint(); t0=performance.now(); raf=requestAnimationFrame(frame); loop(true); }
   function stopAnim(){ running=false; cancelAnimationFrame(raf); parts.length=0; sparks.length=0; loop(false); }
   window.addEventListener('resize',function(){ if(!el.hidden){ layout(); micPoint(); } });
@@ -6428,6 +6485,7 @@
   }
   function ext(m){ return m.indexOf('mp4')>-1?'m4a':m.indexOf('ogg')>-1?'ogg':'webm'; }
   function setMic(){
+    el.classList.toggle('speaking',rec);
     var m=$('hearthMic'); m.classList.toggle('rec',rec); m.setAttribute('aria-pressed',rec?'true':'false'); m.disabled=busy; texts();
   }
   function begin(){
