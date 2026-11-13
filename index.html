@@ -1423,7 +1423,8 @@
   .dc-head h4{margin:0;font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600}
   .dc-head h4 small{display:block;font-family:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.6;font-weight:400}
   .dc-nav{font:inherit;font-size:18px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:transparent;color:inherit;cursor:pointer}
-  .dc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .dc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;max-width:440px;margin:0 auto}
+  .dc-list,.dc-empty{max-width:520px;margin-left:auto;margin-right:auto}
   .dc-dow{font-size:10.5px;opacity:.5;padding:2px 0}
   .dc-day{position:relative;aspect-ratio:1;border-radius:10px;font-size:13px;display:grid;place-items:center;border:1px solid transparent;background:none;color:#c8cde6;font-family:inherit;padding:0}
   .dc-day.has{cursor:pointer;color:#fff;background:rgba(214,178,94,.12);border-color:rgba(214,178,94,.35)}
@@ -1455,7 +1456,7 @@
   .prof-stat span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-top:5px}
   .prof-block{margin:0 0 18px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
   .prof-label{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px}
-  .dream-road svg{display:block;width:100%;height:auto}
+  .dream-road svg{display:block;width:100%;max-width:440px;margin:0 auto;height:auto}
   .dream-road .rd-st{cursor:pointer}
   .dream-road .rd-st:hover circle.rd-dot{r:11}
   .road-empty{font-size:13.5px;opacity:.75;margin:0}
@@ -3262,6 +3263,8 @@
     } else if(!Object.keys(byDay).length){
       html+='<p class="dc-empty">'+L('Each dream you read will appear here, on the day you dreamed it.','你解过的每个梦，都会落在它的那一天。')+'</p>';
     }
+    var undated=journal.filter(function(j){ return j&&!(j.date&&!isNaN(new Date(j.date))); }).length;
+    if(undated) html+='<p class="dc-empty">'+(window.DREAM_LANG==='zh'?(undated+' 个更早的梦是在梦历出现之前解的，没有日期——它们在上面的路上和下面的规律里。从现在起，每个梦都会落在它的那一天。'):(undated+(undated===1?' earlier dream was':' earlier dreams were')+' read before the calendar existed, so they have no date — you’ll find them on the road above and in the patterns below. Every dream from now on lands on its day.'))+'</p>';
     el.innerHTML=html;
   }
   document.addEventListener('click',function(e){
@@ -3292,7 +3295,7 @@
     function stat(n,l){ return '<div class="prof-stat"><b>'+n+'</b><span>'+l+'</span></div>'; }
     $('profStats').innerHTML=stat(journal.length,L('Dreams read','解过的梦'))+stat(month,L('This month','本月'))+stat(streak,L('Night streak','连续的夜'))+stat(places,L('Places','去过的地方'));
     // the road: last 7 dated dreams, oldest at the bottom, the next dream waiting at the top
-    var road=$('dreamRoad'), list=dj.slice(0,7).reverse();
+    var road=$('dreamRoad'), list=journal.filter(Boolean).slice(0,7).reverse();
     if(!list.length){ road.innerHTML='<p class="road-empty">'+L('Your road begins with your first dream. Each one you read becomes a station here, in the order you dreamed them.','你的路从第一个梦开始。每解一个梦，它就成为这里的一站，按你做梦的顺序排开。')+'</p>'; }
     else {
       var W=340, step=86, n=list.length+1, H=(n-1)*step+70, pts=[];
@@ -3305,11 +3308,11 @@
         +'<path d="'+path+'" fill="none" stroke="rgba(240,212,138,.12)" stroke-width="22" stroke-linecap="round"/>'
         +'<path d="'+path+'" fill="none" stroke="url(#rdG)" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>';
       list.forEach(function(j,i){
-        var pt=pts[i], dt=new Date(j.date), left=i%2===0;
+        var dated=!!(j.date&&!isNaN(new Date(j.date))), pt=pts[i], dt=dated?new Date(j.date):null, left=i%2===0;
         var title=String(j.title||'').replace(/\s+/g,' ').trim(); if(title.length>24) title=title.slice(0,23)+'…';
-        var date=dt.toLocaleDateString(zh?'zh-CN':'en-US',{month:'short',day:'numeric'});
+        var date=dated?dt.toLocaleDateString(zh?'zh-CN':'en-US',{month:'short',day:'numeric'}):L('Earlier','更早');
         var tx=left?pt.x+18:pt.x-18, anchor=left?'start':'end';
-        svg+='<g class="rd-st" data-day="'+dayKey(dt)+'" tabindex="0"><circle cx="'+pt.x+'" cy="'+pt.y+'" r="13" fill="rgba(240,212,138,.18)" filter="url(#rdGlow)"/><circle class="rd-dot" cx="'+pt.x+'" cy="'+pt.y+'" r="8" fill="#11172b" stroke="#f0d48a" stroke-width="2"/>'
+        svg+='<g class="'+(dated?'rd-st':'rd-old')+'"'+(dated?' data-day="'+dayKey(dt)+'" tabindex="0"':'')+'><circle cx="'+pt.x+'" cy="'+pt.y+'" r="13" fill="rgba(240,212,138,.18)" filter="url(#rdGlow)"/><circle class="rd-dot" cx="'+pt.x+'" cy="'+pt.y+'" r="8" fill="#11172b" stroke="#f0d48a" stroke-width="2"/>'
           +'<text x="'+tx+'" y="'+(pt.y-3)+'" text-anchor="'+anchor+'" font-size="12.5" font-weight="700" fill="#eef0fa">'+esc(title)+'</text>'
           +'<text x="'+tx+'" y="'+(pt.y+13)+'" text-anchor="'+anchor+'" font-size="10.5" fill="#aab2d4">'+esc(date)+(j.note?' · ✎':'')+'</text></g>';
       });
