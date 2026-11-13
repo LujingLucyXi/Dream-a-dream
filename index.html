@@ -6305,7 +6305,7 @@
     if(!user){ needSignIn(); return; }
     toastNote(T('Opening secure checkout…','正在打开安全支付页面…'));
     billing({action:'checkout',plan:plan,returnUrl:returnUrl()}).then(function(j){ if(j.url){ saveNow(); location.href=j.url; } })
-      .catch(function(e){ toastNote(/already/.test(e.message)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — please try again.','支付页面暂时没能打开——请再试一次。')); });
+      .catch(function(e){ var m=String(e&&e.message||e); try{ console.error('dreameri checkout',m); }catch(x){} toastNote(/already/.test(m)?T('You’re already on the full version ✦','你已经是完整版了 ✦'):T('Checkout could not open just now — ','支付页面暂时没能打开——')+m); });
   };
   window.dreamOpenPortal=function(){
     if(!user){ needSignIn(); return; }

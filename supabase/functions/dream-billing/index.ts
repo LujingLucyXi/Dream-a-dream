@@ -12,7 +12,8 @@
 // Falls back to STRIPE_SECRET_KEY when the DREAMERI_ one is not set.
 // Secrets: DREAMERI_STRIPE_SECRET_KEY (required; sk_test_... while testing, sk_live_... for real),
 //          DREAM_ALLOWED_ORIGINS (optional, same as the other functions).
-// "Verify JWT" can stay ON: only signed-in users call it.
+// Deploy with --no-verify-jwt: the function checks the user token itself (auth/v1/user),
+// and a gateway JWT check can block the browser's CORS preflight.
 
 const PRICES = {
   monthly: { amount: 399, interval: "month", name: "Dreameri — full version (monthly)" },
