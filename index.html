@@ -1326,6 +1326,39 @@
   .site-head,.mode-switch,.collect-strip{position:relative;z-index:5}
   .hearth.inline .hearth-zoom{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%)}
   .hearth.inline .hearth-bg::after{background:linear-gradient(180deg,rgba(5,7,15,.78) 0%,rgba(5,7,15,.35) 18%,rgba(5,7,15,0) 34%,rgba(5,7,15,0) 58%,rgba(5,7,15,.82) 100%)}
+
+  /* ——— The gift card: velvet, gold corners, a floating keepsake, a stamp pressed on paper ——— */
+  .dm-pop{background:radial-gradient(ellipse at 50% 38%,rgba(40,70,90,.5),rgba(3,5,12,.9) 70%);transition:opacity .3s ease}
+  .dm-pop.closing{opacity:0}
+  .dm-pop.closing .dm-pop-card{transform:translateY(12px) scale(.97);transition:transform .3s ease}
+  .dm-pop-card{overflow:hidden;padding:26px 22px 20px;border-radius:26px;background:radial-gradient(90% 60% at 50% 18%,rgba(127,231,214,.16),transparent 70%),radial-gradient(120% 80% at 50% 120%,rgba(120,90,200,.18),transparent 60%),linear-gradient(180deg,#1a2244,#0d1128);box-shadow:0 0 0 1px rgba(240,212,138,.28),0 0 0 6px rgba(240,212,138,.05),0 0 80px rgba(127,231,214,.14),0 40px 80px rgba(0,0,0,.65)}
+  .dm-corner{position:absolute;width:26px;height:26px;border:2px solid rgba(240,212,138,.6);pointer-events:none}
+  .dm-corner.tl{top:10px;left:10px;border-right:none;border-bottom:none;border-radius:10px 0 0 0}
+  .dm-corner.tr{top:10px;right:10px;border-left:none;border-bottom:none;border-radius:0 10px 0 0}
+  .dm-corner.bl{bottom:10px;left:10px;border-right:none;border-top:none;border-radius:0 0 0 10px}
+  .dm-corner.br{bottom:10px;right:10px;border-left:none;border-top:none;border-radius:0 0 10px 0}
+  .dm-sparks{position:absolute;inset:0;pointer-events:none}
+  .dm-sparks i{position:absolute;width:4px;height:4px;border-radius:50%;background:#f8e3a8;box-shadow:0 0 8px 2px rgba(248,227,168,.7);opacity:0;animation:dmTwinkle 3.2s ease-in-out infinite}
+  @keyframes dmTwinkle{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:.9;transform:scale(1)}}
+  .dm-pop-kicker{position:relative;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;letter-spacing:.02em;text-transform:none;font-weight:600;color:#f0d48a}
+  .dm-pop-illus{position:relative;width:150px;height:150px;margin:8px auto 2px;filter:none}
+  .dm-pop-illus img,.dm-pop-illus svg{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5));animation:dmFloat 4s ease-in-out infinite}
+  .dm-halo{position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,rgba(240,212,138,0),rgba(240,212,138,.35),rgba(127,231,214,.3),rgba(240,212,138,0) 60%);filter:blur(10px);animation:dmSpin 9s linear infinite}
+  @keyframes dmFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes dmSpin{to{transform:rotate(360deg)}}
+  .dm-pop-card h3{position:relative;font-size:29px}
+  .dm-pop-task{position:relative;background:rgba(255,255,255,.04);border:none;border-left:2px solid rgba(240,212,138,.55);border-radius:4px 12px 12px 4px}
+  .dm-pop-paper{position:relative;margin:4px -4px 10px;padding:16px 10px;border-radius:14px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.5),transparent 40%),repeating-linear-gradient(0deg,rgba(138,109,47,.05) 0 2px,transparent 2px 5px),#efe4c8;box-shadow:inset 0 0 30px rgba(138,109,47,.25),0 8px 20px rgba(0,0,0,.35)}
+  .dm-pop-paper .pstamp{background:transparent;animation:dmPress .7s cubic-bezier(.3,1.6,.5,1) .5s both}
+  @keyframes dmPress{0%{transform:scale(1.7) rotate(calc(var(--rot) - 8deg));opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(var(--rot));opacity:1}}
+  .pm6.pstamp{animation-name:dmPress6}
+  @keyframes dmPress6{0%{transform:scale(1.7) rotate(calc(var(--rot) + 37deg));opacity:0}100%{transform:scale(1) rotate(calc(var(--rot) + 45deg));opacity:1}}
+  .dm-pop-sep{position:relative}
+  .dm-pop-go{position:relative;background:linear-gradient(180deg,#f7e2a6,#e0bb63);box-shadow:0 6px 18px rgba(240,212,138,.25),inset 0 1px 0 rgba(255,255,255,.6)}
+  @media(prefers-reduced-motion:reduce){.dm-sparks i,.dm-halo,.dm-pop-illus img,.dm-pop-illus svg,.dm-pop-paper .pstamp{animation:none;opacity:1}}
+  /* reading: appears in place, no movement */
+  .unfold-hide{opacity:0!important;transform:none!important}
+  .unfold-in{transition:opacity .6s ease}
 </style>
 </head>
 <body>
@@ -5690,9 +5723,10 @@
   function renderReveal(){ var box=$('collectReveal'); if(box){ box.hidden=true; box.innerHTML=''; } }
   function popup(html,wire){
     var o=document.createElement('div'); o.className='dm-pop'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true');
-    o.innerHTML='<div class="dm-pop-card">'+html+'</div>';
+    var sp=''; for(var i=0;i<14;i++){ sp+='<i style="left:'+(6+Math.random()*88)+'%;top:'+(4+Math.random()*60)+'%;animation-delay:'+(Math.random()*3).toFixed(2)+'s"></i>'; }
+    o.innerHTML='<div class="dm-pop-card"><span class="dm-corner tl"></span><span class="dm-corner tr"></span><span class="dm-corner bl"></span><span class="dm-corner br"></span><div class="dm-sparks" aria-hidden="true">'+sp+'</div>'+html+'</div>';
     document.body.appendChild(o);
-    function close(){ o.remove(); setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },400); }
+    function close(){ o.classList.add('closing'); setTimeout(function(){ o.remove(); if(window.__giftDone){ var f=window.__giftDone; window.__giftDone=null; f(); } setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300); },320); }
     o.addEventListener('click',function(ev){ if(ev.target===o) o.querySelector('[data-pop-next]')&&o.querySelector('[data-pop-next]').click(); });
     wire(o,close);
     var f=o.querySelector('.dm-pop-go'); if(f) setTimeout(function(){ f.focus(); },50);
@@ -5705,7 +5739,7 @@
     if(!lastReveal) return;
     var g=GIFTS[lastReveal.giftId], entry=shelfEntry(g.id);
     var html='<div class="dm-pop-kicker">✦ '+(lastReveal.fresh?L('Your dream left you a souvenir','你的梦给你留下了一件纪念品'):L('A keepsake returns','一件纪念品又回来了'))+'</div>'
-      +'<div class="dm-pop-illus">'+illusFor(g)+'</div>'
+      +'<div class="dm-pop-illus"><span class="dm-halo" aria-hidden="true"></span>'+illusFor(g)+'</div>'
       +'<h3>'+esc(giftName(g))+'</h3>'
       +'<p class="dm-pop-from">'+(lastReveal.from?(L('Left by the sign ','由这个征兆留下：')+'<b>“'+esc(lastReveal.from)+'”</b>'):L('Left behind by this dream.','这个梦留下的。'))+'</p>'
       +'<div class="dm-pop-task"><span class="gt-label">'+L('Its small task','它的小任务')+'</span><p>'+esc(giftTask(g))+'</p></div>';
@@ -5714,9 +5748,8 @@
     if(p&&st){
       var isNew=lastReveal.newStamps.indexOf(p.id)!==-1;
       html+='<div class="dm-pop-sep">☾ '+(isNew?L('New passport stamp','护照新印章'):L('Stamped again','又盖了一次'))+'</div>'
-        +'<div class="dm-pop-stamp">'+stampHTML(p,st,true)+'</div>'
-        +'<p class="dm-pop-from"><b style="color:#f3e9c8">'+esc(placeName(p))+'</b>'+(st.label?(' · '+L('your dream took you here: ','你的梦带你到了这里：')+'“'+esc(st.label)+'”'):'')
-        +(isNew?'':' · '+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次'):('visit '+st.count)))+'</p>';
+        +'<div class="dm-pop-paper"><div class="dm-pop-stamp">'+stampHTML(p,st,false)+'</div></div>'
+        +(isNew?'':'<p class="dm-pop-from">'+(window.DREAM_LANG==='zh'?('第 '+st.count+' 次来到这里'):('Visit '+st.count+' to this place'))+'</p>');
     }
     html+='<div class="dm-pop-actions"><button type="button" class="dm-pop-go" data-pop-next>'+L('Keep them','收下')+'</button></div>'
       +'<div class="dm-pop-links"><button type="button" data-pop-shelf>'+L('See the shelf','看看架子')+'</button>'
@@ -6754,21 +6787,22 @@
   }
   function finish(){
     clearTimeout(timer); timer=null;
-    queue.forEach(function(n){ n.classList.remove('unfold-hide'); });
+    queue.forEach(function(n){ n.classList.add('unfold-in'); n.classList.remove('unfold-hide'); });
     queue=[]; $('revealSkip').hidden=true;
-    setTimeout(function(){ if(window.showCollectPopups) window.showCollectPopups(); setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300); },reduce?100:700);
+    setTimeout(function(){ if(!document.querySelector('.dm-pop')) document.body.classList.remove('reveal-busy'); },300);
   }
   function step(){
     var n=queue.shift(); if(!n){ finish(); return; }
     n.classList.add('unfold-in'); n.classList.remove('unfold-hide');
-    try{ n.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}); }catch(e){}
-    timer=setTimeout(step, n.matches('#symbols > *')?1100:1500);
+    timer=setTimeout(step,220);
   }
+  function fadeIn(){ if(reduce){ finish(); return; } $('revealSkip').hidden=false; clearTimeout(timer); timer=setTimeout(step,150); }
   document.addEventListener('dreamread',function(){
     document.body.classList.add('reveal-busy');
     view('reveal');
     $('revealBackT').textContent=T('Tell another dream','再讲一个梦');
     $('revealSkip').textContent=T('Show all','全部显示');
+    (function(){
     var L3=window.DREAM_LENSES||[], cur=window.__dreamLens||'zhougong', row=$('lensRow');
     if(row){
       row.innerHTML='';
@@ -6778,12 +6812,14 @@
         b.addEventListener('click',function(){ window.__dreamLens=x[0]; window.__dreamAnswers=window.__dreamLastAnswers||null; window.__dreamAsked=true; var rb=$('readBtn'); if(rb) rb.click(); });
         row.appendChild(b); });
     }
+    })();
     window.scrollTo({top:Math.max(0,panel.getBoundingClientRect().top+window.scrollY-10),behavior:'auto'});
     queue=parts();
-    if(reduce){ finish(); return; }
-    queue.forEach(function(n){ n.classList.add('unfold-hide'); });
-    $('revealSkip').hidden=false;
-    clearTimeout(timer); timer=setTimeout(step,400);
+    queue.forEach(function(n){ n.classList.remove('unfold-in'); n.classList.add('unfold-hide'); });
+    /* The gift card opens at once; the reading then appears in place,
+       part by part, without moving the page. */
+    if(window.showCollectPopups){ window.__giftDone=fadeIn; window.showCollectPopups(); if(!document.querySelector('.dm-pop')){ window.__giftDone=null; fadeIn(); } }
+    else fadeIn();
   });
   $('revealSkip').addEventListener('click',finish);
   $('revealBack').addEventListener('click',function(){
