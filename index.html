@@ -1321,6 +1321,11 @@
   .dm-pop-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:6px}
   .dm-pop-links button{background:none;border:none;color:#c9cee3;text-decoration:underline;text-underline-offset:3px;font-size:13.5px;padding:6px 2px}
   .dm-pop-links button[disabled]{opacity:.6;text-decoration:none}
+
+  /* ——— The scene reaches the very top: header, tabs and collections float over it ——— */
+  .site-head,.mode-switch,.collect-strip{position:relative;z-index:5}
+  .hearth.inline .hearth-zoom{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 86%,transparent 100%)}
+  .hearth.inline .hearth-bg::after{background:linear-gradient(180deg,rgba(5,7,15,.78) 0%,rgba(5,7,15,.35) 18%,rgba(5,7,15,0) 34%,rgba(5,7,15,0) 58%,rgba(5,7,15,.82) 100%)}
 </style>
 </head>
 <body>
@@ -6648,6 +6653,26 @@
   var inline=el.classList.contains('inline');
   function resetIntake(){ mode='speak'; typed=false; $('hearthText').value=''; $('hearthText').placeholder=''; stage('speak'); status(''); texts(); }
   window.resetDreamIntake=resetIntake;
+  /* Pull the scene up to the top of the page, under the header, so the
+     whole first screen is the cabin; its own words start below the
+     floating header. */
+  function placeScene(){
+    if(!inline) return;
+    if(el.offsetParent===null){ el.style.marginTop=''; return; }
+    el.style.marginTop='0px';
+    var top=el.getBoundingClientRect().top+window.scrollY;
+    el.style.marginTop=(-top)+'px';
+    var strip=document.querySelector('.collect-strip')||document.querySelector('.mode-switch');
+    var hb=strip?strip.getBoundingClientRect().bottom+window.scrollY:top;
+    var ui=el.querySelector('.hearth-ui'); if(ui) ui.style.paddingTop=Math.round(hb+14)+'px';
+    if(running){ layout(); micPoint(); }
+  }
+  window.addEventListener('resize',placeScene);
+  document.addEventListener('dreamview',function(){ setTimeout(placeScene,0); });
+  document.addEventListener('dreamlang',function(){ setTimeout(placeScene,0); });
+  window.addEventListener('load',placeScene);
+  setTimeout(placeScene,0); setTimeout(placeScene,600);
+  ['modeNightBtn','modeDayBtn'].forEach(function(id){ var b=$(id); if(b) b.addEventListener('click',function(){ setTimeout(placeScene,30); }); });
   if(inline){
     if(HEARTH_IMG.indexOf('__')!==0) $('hearthBg').style.backgroundImage='url('+HEARTH_IMG+')';
     stage('speak'); texts();
