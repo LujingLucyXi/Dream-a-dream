@@ -1658,10 +1658,10 @@
     <hr class="settings-sep" id="acctSep" hidden />
 
     <p class="settings-label">Your plan</p>
-    <h4 class="byok-title">Free version</h4>
+    <h4 class="byok-title" id="setPlanTitle">Free version</h4>
     <div class="plan-cols">
       <div class="plan-col">
-        <div class="plan-col-head"><h5>Free</h5><span>Your current plan</span></div>
+        <div class="plan-col-head"><h5>Free</h5><span id="setFreeTag">Your current plan</span></div>
         <ul>
           <li>One dream reading a day</li>
           <li>Two sleep stories a week, up to 5 minutes</li>
@@ -1676,7 +1676,7 @@
         </ul>
       </div>
       <div class="plan-col full">
-        <div class="plan-col-head"><h5>Pro</h5><span>Every lock opens</span></div>
+        <div class="plan-col-head"><h5>Pro</h5><span id="setProTag">Every lock opens</span></div>
         <ul>
           <li>10 dream readings a day</li>
           <li>A sleep story every day, up to 30 minutes</li>
@@ -2512,7 +2512,18 @@
     });
     if(lastReading){ try{ renderHook(lastReading); }catch(e){} }
     try{ if(window.dreamPaintPlan) window.dreamPaintPlan(); }catch(e){}
+    paintSettingsPlan();
   });
+  function paintSettingsPlan(){
+    var pro=isFullPlan(), byok=byokActive();
+    var t=$('setPlanTitle'), f=$('setFreeTag'), p=$('setProTag');
+    if(t) t.textContent=pro?L('Pro','Pro'):byok?L('Unlimited — your own key','无限版——用你自己的密钥'):L('Free version','免费版');
+    if(f) f.textContent=(!pro&&!byok)?L('Your current plan','你现在用的版本'):L('Free','免费');
+    if(p) p.textContent=pro?L('Your current plan','你现在用的版本'):L('Every lock opens','所有锁都打开');
+    var b=$('setPlansBtn'); if(b) b.textContent=pro?L('Compare plans','比较方案'):L('See the plans','看看方案');
+  }
+  document.addEventListener('dreamlang',function(){ try{ paintSettingsPlan(); }catch(e){} });
+  setTimeout(function(){ try{ paintSettingsPlan(); }catch(e){} },0);
   (function(){
     var uob=$('unlockOneBtn'); if(uob) uob.addEventListener('click',function(){ unlockPreviewReading(); });
     var upb=$('unlockPlansBtn'); if(upb) upb.addEventListener('click',function(){ if(window.openSubscribePage) window.openSubscribePage(); });
@@ -7022,7 +7033,7 @@
     if(npwSave) npwSave.addEventListener('click',function(){
       var pw=npw&&npw.value||''; if(pw.length<8){ note=T('Choose a longer password — at least 8 characters.','请用更长的密码——至少 8 个字符。'); render(); return; }
       npwSave.disabled=true;
-      sb.auth.updateUser({password:pw}).then(function(res){ if(res.error){ note=pwErr(res.error); } else { note=recovering?T('New password saved ✓ — you’re signed in.','新密码已保存 ✓——你已登录。'):T('Password saved ✓ — next time you can sign in with it.','密码已保存 ✓——下次可以用它登录。'); recovering=false; } render(); });
+      sb.auth.updateUser({password:pw}).then(function(res){ if(res.error){ note=pwErr(res.error); } else { note=recovering?T('New password saved ✓ — you’re signed in.','新密码已保存 ✓——你已登录。'):T('Password saved ✓ — next time you can sign in with it.','密码已保存 ✓——下次可以用它登录。'); recovering=false; } render(); var shown=note; setTimeout(function(){ if(note===shown&&user){ note=''; render(); } },5000); });
     });
     var again=$('acctAgain'); if(again) again.addEventListener('click',function(){ view='idle'; note=''; render(); });
     var save=$('acctNameSave'), nameEl=$('acctName');
