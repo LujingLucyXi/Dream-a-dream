@@ -1169,6 +1169,7 @@
   .landing-form input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border-radius:12px;border:1px solid rgba(240,212,138,.35);background:rgba(7,9,18,.6);color:#eef0ff;margin-bottom:10px}
   .landing-form input:focus{outline:2px solid rgba(240,212,138,.6);outline-offset:1px}
   .landing-form .landing-primary{width:100%}
+  .landing-err.ok{color:#9fd8b0}
   .landing-err{color:#f2b3b3!important;font-size:13.5px!important}
   .landing-fine{margin-top:18px;color:#8e95b3;font-size:12.5px;line-height:1.5;max-width:420px}
   @media(max-width:520px){.landing-name{font-size:44px}.landing-tag{font-size:19px}.landing-in{padding:18px 16px 32px}}
@@ -1568,6 +1569,11 @@
   .bank-share button{font:inherit;font-weight:800;font-size:13px;padding:9px 16px;border-radius:999px;border:0;background:#b9a0ff;color:#1b1730;cursor:pointer}
   .bank-share button:disabled{opacity:.6;cursor:progress}
   .bank-share .bs-done{color:#9fd8b0;font-weight:700}
+  .acct-opt{font-weight:400;opacity:.65;text-transform:none;letter-spacing:0}
+  .acct-links{justify-content:space-between}
+  .acct-linkbtn{font:inherit;font-size:12.5px;background:none;border:0;padding:4px 0;color:var(--gold2);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .landing-form input[type=password]{margin-top:10px}
+  .landing-form .land-links{display:flex;justify-content:space-between;gap:10px;margin:8px 0 0}
   .lens-school{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:12px 14px;border-radius:14px}
   .lens-school p{margin:4px 0 0;font-family:"Cormorant Garamond",serif;font-size:19px;line-height:1.3}
   .ls-name{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
@@ -1620,11 +1626,13 @@
     </div>
     <form class="landing-form" id="landForm" hidden novalidate>
       <h3 id="landFormT">Create your free account</h3>
-      <p id="landFormP">Your dreams, souvenir shelf and passport stamps are kept from night to night, on any device. No password: we email you a link.</p>
+      <p id="landFormP">Your dreams, souvenir shelf and passport stamps are kept from night to night, on any device. Choose a password, or leave it empty and we’ll email you a link.</p>
       <label for="landEmail" class="visually-hidden" id="landEmailL" style="position:absolute;left:-9999px">Email</label>
       <input type="email" id="landEmail" placeholder="you@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" />
+      <input type="password" id="landPw" placeholder="Password (optional)" autocomplete="current-password" />
       <p class="landing-err" id="landErr" hidden></p>
       <button type="submit" class="landing-primary" id="landSend">Email me my link</button>
+      <div class="land-links"><button type="button" class="landing-link" id="landLinkOnly">Email me a link instead</button><button type="button" class="landing-link" id="landForgot">Forgot password?</button></div>
       <button type="button" class="landing-link" id="landBack" style="display:block;margin:8px auto 0">Back</button>
     </form>
     <p class="landing-fine" id="landFine">Free to start: a dream reading every night, sleep stories and your own dream passport.</p>
@@ -6912,6 +6920,7 @@
   /* ——— Sign-in state ——— */
   var handled=null;
   sb.auth.onAuthStateChange(function(event,session){
+    if(event==='PASSWORD_RECOVERY'){ recovering=true; setTimeout(function(){ try{ var L0=document.getElementById('landing'); if(L0&&!L0.hidden){ L0.hidden=true; document.documentElement.style.overflow=''; } }catch(e){} openAccount(); },300); }
     var u=session&&session.user||null;
     if(u&&handled===u.id){ user=u; return; }            /* token refresh: nothing to redo */
     if(u){
@@ -6944,11 +6953,14 @@
          +'<div class="byok-actions"><button type="button" class="byok-btn" id="acctAgain">'+T('Use a different email','换一个邮箱')+'</button></div>';
       } else {
         h='<h4 class="byok-title">'+T('Keep your dreams','把你的梦留下来')+'</h4>'
-         +'<p class="byok-intro">'+T('Sign in to keep your souvenir shelf, passport stamps and dream journey from night to night — on any device. No password: we email you a link.','登录后，你的纪念品架子、护照印章和梦之旅程会一夜一夜留下来——换设备也在。不需要密码：我们会把链接发到你的邮箱。')+'</p>'
+         +'<p class="byok-intro">'+T('Sign in to keep your souvenir shelf, passport stamps and dream journey from night to night — on any device. Use a password, or get a link by email.','登录后，你的纪念品架子、护照印章和梦之旅程会一夜一夜留下来——换设备也在。可以用密码，也可以用邮件链接。')+'</p>'
          +'<label class="byok-label" for="acctEmail">'+T('Email','邮箱')+'</label>'
          +'<div class="byok-field"><input type="email" id="acctEmail" placeholder="you@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" /></div>'
-         +(view==='error'?'<p class="byok-status acct-err" role="status">'+esc(note)+'</p>':'')
-         +'<div class="byok-actions"><button type="button" class="byok-save" id="acctSend"'+(busy?' disabled':'')+'>'+(busy?T('Sending…','发送中…'):T('Email me a sign-in link','把登录链接发给我'))+'</button></div>';
+         +'<label class="byok-label" for="acctPw">'+T('Password','密码')+' <span class="acct-opt">'+T('— or leave empty and we’ll email you a link','——或者留空，我们发链接给你')+'</span></label>'
+         +'<div class="byok-field"><input type="password" id="acctPw" placeholder="'+T('At least 8 characters','至少 8 个字符')+'" autocomplete="current-password" /><button type="button" class="byok-show" id="acctPwShow">'+T('Show','显示')+'</button></div>'
+         +(view==='error'?'<p class="byok-status acct-err" role="status">'+esc(note)+'</p>':'')+(view==='info'?'<p class="byok-status" role="status">'+esc(note)+'</p>':'')
+         +'<div class="byok-actions"><button type="button" class="byok-save" id="acctPwIn"'+(busy?' disabled':'')+'>'+(busy?T('One moment…','稍等…'):T('Sign in','登录'))+'</button><button type="button" class="byok-btn" id="acctPwUp"'+(busy?' disabled':'')+'>'+T('Create account','创建账户')+'</button></div>'
+         +'<div class="byok-actions acct-links"><button type="button" class="acct-linkbtn" id="acctSend"'+(busy?' disabled':'')+'>'+T('Email me a sign-in link instead','改用邮件登录链接')+'</button><button type="button" class="acct-linkbtn" id="acctForgot">'+T('Forgot password?','忘记密码？')+'</button></div>';
       }
     } else {
       var name=profile&&profile.display_name||'';
@@ -6959,6 +6971,8 @@
        +'<label class="byok-label" for="acctName">'+T('Your name in the app','你在应用里的名字')+'</label>'
        +'<div class="byok-field"><input type="text" id="acctName" maxlength="60" value="'+esc(name)+'" placeholder="'+T('Optional','可不填')+'" autocomplete="nickname" /><button type="button" class="byok-show" id="acctNameSave">'+T('Save','保存')+'</button></div>'
        +'<p class="byok-help">'+(synced?T('Your shelf, passport and dream journey are saved automatically.','你的纪念品架子、护照和梦之旅程会自动保存。'):T('Loading what you saved…','正在载入你保存的内容…'))+'</p>'
+       +'<label class="byok-label" for="acctNewPw">'+(recovering?T('Choose a new password','设置新密码'):T('Password','密码'))+' <span class="acct-opt">'+(recovering?'':T('— set one to sign in without an email link','——设置后，不用邮件链接也能登录'))+'</span></label>'
+       +'<div class="byok-field"><input type="password" id="acctNewPw" placeholder="'+T('At least 8 characters','至少 8 个字符')+'" autocomplete="new-password" /><button type="button" class="byok-show" id="acctNewPwSave">'+T('Save','保存')+'</button></div>'
        +'<div class="byok-actions"><button type="button" class="byok-btn" id="acctOut">'+T('Sign out','退出登录')+'</button>'
        +'<button type="button" class="byok-btn acct-del'+(deleteArmed?' armed':'')+'" id="acctDel"'+(busy?' disabled':'')+'>'+(deleteArmed?T('Tap again to delete everything','再点一次，删除全部'):T('Delete my account','删除我的账户'))+'</button></div>'
        +(deleteArmed?'<p class="byok-help acct-err">'+T('This deletes your account, your souvenirs, stamps and saved dreams for good. It cannot be undone.','这会永久删除你的账户、纪念品、印章和保存的梦，无法恢复。')+'</p>':'');
@@ -6980,7 +6994,36 @@
         view='sent'; note=v; render();
       });
     });
-    if(email) email.addEventListener('keydown',function(e){ if(e.key==='Enter'&&send) send.click(); });
+    if(email) email.addEventListener('keydown',function(e){ if(e.key==='Enter'){ var pw0=$('acctPw'); if(pw0&&pw0.value) $('acctPwIn').click(); else if(send) send.click(); } });
+    var pwEl=$('acctPw'), pwIn=$('acctPwIn'), pwUp=$('acctPwUp'), forgot=$('acctForgot'), pwShow=$('acctPwShow');
+    function emailOk(){ var v=(email&&email.value||'').trim(); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ view='error'; note=T('That email does not look right — check it and try again.','这个邮箱看起来不对——检查一下再试。'); render(); var e2=$('acctEmail'); if(e2){ e2.value=v; e2.focus(); } return null; } return v; }
+    function keep(v,pw){ var e2=$('acctEmail'); if(e2) e2.value=v; var p2=$('acctPw'); if(p2&&pw) p2.value=pw; }
+    if(pwShow) pwShow.addEventListener('click',function(){ if(!pwEl) return; var s=pwEl.type==='password'; pwEl.type=s?'text':'password'; pwShow.textContent=s?T('Hide','隐藏'):T('Show','显示'); });
+    if(pwEl) pwEl.addEventListener('keydown',function(e){ if(e.key==='Enter') pwIn.click(); });
+    if(pwIn) pwIn.addEventListener('click',function(){
+      var v=emailOk(); if(!v) return; var pw=pwEl&&pwEl.value||'';
+      if(!pw){ if(send) send.click(); return; }
+      busy=true; render(); keep(v,pw);
+      window.dreamPasswordSignIn(v,pw).then(function(){ busy=false; view='idle'; note=''; }).catch(function(e){ busy=false; view='error'; note=e.message; render(); keep(v,pw); });
+    });
+    if(pwUp) pwUp.addEventListener('click',function(){
+      var v=emailOk(); if(!v) return; var pw=pwEl&&pwEl.value||'';
+      if(!pw){ view='error'; note=T('Choose a password first — at least 8 characters. Or use the email link.','先设一个密码——至少 8 个字符。或者用邮件链接。'); render(); keep(v,''); var p3=$('acctPw'); if(p3) p3.focus(); return; }
+      busy=true; render(); keep(v,pw);
+      window.dreamPasswordSignUp(v,pw).then(function(r){ busy=false; if(r.confirm){ view='sent'; note=v; render(); var bi=document.querySelector('#acctBody .byok-intro'); if(bi) bi.textContent=T('Almost there — we sent a confirmation link to '+v+'. Open it once, and from then on you can sign in with your password.','快好了——确认链接已发到 '+v+'。打开一次，之后就能用密码登录了。'); } })
+        .catch(function(e){ busy=false; view='error'; note=e.message; render(); keep(v,pw); });
+    });
+    if(forgot) forgot.addEventListener('click',function(){
+      var v=emailOk(); if(!v) return;
+      window.dreamResetPassword(v).then(function(){ view='info'; note=T('If there’s an account for '+v+', a link to choose a new password is on its way.','如果 '+v+' 有账户，设置新密码的链接已经在路上了。'); render(); keep(v,''); })
+        .catch(function(e){ view='error'; note=e.message; render(); keep(v,''); });
+    });
+    var npw=$('acctNewPw'), npwSave=$('acctNewPwSave');
+    if(npwSave) npwSave.addEventListener('click',function(){
+      var pw=npw&&npw.value||''; if(pw.length<8){ note=T('Choose a longer password — at least 8 characters.','请用更长的密码——至少 8 个字符。'); render(); return; }
+      npwSave.disabled=true;
+      sb.auth.updateUser({password:pw}).then(function(res){ if(res.error){ note=pwErr(res.error); } else { note=recovering?T('New password saved ✓ — you’re signed in.','新密码已保存 ✓——你已登录。'):T('Password saved ✓ — next time you can sign in with it.','密码已保存 ✓——下次可以用它登录。'); recovering=false; } render(); });
+    });
     var again=$('acctAgain'); if(again) again.addEventListener('click',function(){ view='idle'; note=''; render(); });
     var save=$('acctNameSave'), nameEl=$('acctName');
     if(save) save.addEventListener('click',function(){
@@ -7034,6 +7077,33 @@
   }
   window.openDreamAccount=openAccount;
   /* For the landing page: send a sign-in link, and tell it who is signed in. */
+  /* ——— Passwords, alongside email links ——— */
+  function pwErr(e){
+    var m=String(e&&e.message||e||'');
+    if(/invalid login|invalid credentials/i.test(m)) return T('That email and password don’t match. Try again, or use “Forgot password?”.','邮箱和密码对不上。再试一次，或者点“忘记密码？”。');
+    if(/not confirmed/i.test(m)) return T('Please confirm your email first — open the link we sent you.','请先确认你的邮箱——打开我们发给你的链接。');
+    if(/already registered|already exists/i.test(m)) return T('There’s already an account with this email — sign in instead.','这个邮箱已经有账户了——直接登录吧。');
+    if(/at least|weak|short/i.test(m)) return T('Choose a longer password — at least 8 characters.','请用更长的密码——至少 8 个字符。');
+    if(/rate|seconds|limit/i.test(m)) return T('Too many tries just now — wait a minute, then try again.','刚才试得太多了——等一分钟再试。');
+    return T('That didn’t work just now — please try again.','暂时没成功——请再试一次。');
+  }
+  window.dreamPasswordSignIn=function(email,pw){
+    holdPending(snapshot());
+    return sb.auth.signInWithPassword({email:email,password:pw}).then(function(res){ if(res.error) throw new Error(pwErr(res.error)); return res; });
+  };
+  window.dreamPasswordSignUp=function(email,pw){
+    if(String(pw).length<8) return Promise.reject(new Error(pwErr('at least')));
+    holdPending(snapshot());
+    return sb.auth.signUp({email:email,password:pw,options:{emailRedirectTo:location.origin+location.pathname}}).then(function(res){
+      if(res.error) throw new Error(pwErr(res.error));
+      if(res.data&&res.data.user&&Array.isArray(res.data.user.identities)&&!res.data.user.identities.length) throw new Error(pwErr('already registered'));
+      return {confirm:!(res.data&&res.data.session)};
+    });
+  };
+  window.dreamResetPassword=function(email){
+    return sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}).then(function(res){ if(res.error) throw new Error(pwErr(res.error)); });
+  };
+  var recovering=false;
   window.dreamSendLink=function(v){
     holdPending(snapshot());
     return sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}}).then(function(res){
@@ -7086,9 +7156,14 @@
     $('landSignIn').textContent=T('Already have an account? Sign in','已经有账户？登录');
     $('landFormT').textContent=mode==='create'?T('Create your free account','创建你的免费账户'):T('Welcome back','欢迎回来');
     $('landFormP').textContent=mode==='create'
-      ?T('Your dreams, souvenir shelf and passport stamps are kept from night to night, on any device. No password: we email you a link.','你的梦、纪念品架子和护照印章会一夜一夜留下来，换设备也在。不需要密码：我们会把链接发到你的邮箱。')
-      :T('Enter your email and we will send you a sign-in link. No password needed.','输入邮箱，我们会把登录链接发给你。不需要密码。');
-    $('landSend').textContent=T('Email me my link','把链接发给我');
+      ?T('Your dreams, souvenir shelf and passport stamps are kept from night to night, on any device. Choose a password, or leave it empty and we’ll email you a link.','你的梦、纪念品架子和护照印章会一夜一夜留下来，换设备也在。设一个密码，或者留空，我们把链接发到你的邮箱。')
+      :T('Sign in with your password — or leave it empty and we’ll email you a sign-in link.','用密码登录——或者留空，我们把登录链接发到你的邮箱。');
+    var hasPw=!!($('landPw')&&$('landPw').value);
+    $('landSend').textContent=hasPw?(mode==='create'?T('Create my account','创建我的账户'):T('Sign in','登录')):T('Email me my link','把链接发给我');
+    $('landPw').placeholder=mode==='create'?T('Choose a password (or leave empty for a link)','设一个密码（或留空，用链接登录）'):T('Password (or leave empty for a link)','密码（或留空，用链接登录）');
+    $('landPw').autocomplete=mode==='create'?'new-password':'current-password';
+    $('landLinkOnly').textContent=T('Email me a link instead','改用邮件链接'); $('landLinkOnly').hidden=!hasPw;
+    $('landForgot').textContent=T('Forgot password?','忘记密码？'); $('landForgot').hidden=mode==='create';
     $('landBack').textContent=T('Back','返回');
     $('landEmailL').textContent=T('Email','邮箱');
     $('landFine').textContent=T('Free to start: a dream reading every night, sleep stories and your own dream passport.','免费开始：每晚一次解梦、睡前故事，还有你自己的梦之护照。');
@@ -7124,9 +7199,31 @@
   $('landEn').addEventListener('click',function(){ if(window.setDreamLang) window.setDreamLang('en'); texts(); });
   $('landZh').addEventListener('click',function(){ if(window.setDreamLang) window.setDreamLang('zh'); texts(); });
   document.addEventListener('dreamlang',texts);
+  $('landPw').addEventListener('input',texts);
+  $('landLinkOnly').addEventListener('click',function(){ $('landPw').value=''; texts(); $('landForm').requestSubmit?$('landForm').requestSubmit():$('landSend').click(); });
+  $('landForgot').addEventListener('click',function(){
+    var v=($('landEmail').value||'').trim(), err=$('landErr');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ err.textContent=T('Enter your email first, then tap “Forgot password?”.','先输入邮箱，再点“忘记密码？”。'); err.hidden=false; return; }
+    if(!window.dreamResetPassword) return;
+    window.dreamResetPassword(v).then(function(){ err.textContent=T('If there’s an account for that email, a link to choose a new password is on its way.','如果这个邮箱有账户，设置新密码的链接已经在路上了。'); err.hidden=false; err.classList.add('ok'); }).catch(function(x){ err.textContent=x.message; err.hidden=false; });
+  });
   $('landForm').addEventListener('submit',function(e){
     e.preventDefault();
-    var v=($('landEmail').value||'').trim(), err=$('landErr'), btn=$('landSend');
+    var v=($('landEmail').value||'').trim(), err=$('landErr'), btn=$('landSend'), pw=$('landPw').value||'';
+    if(pw&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)&&window.dreamPasswordSignIn){
+      err.hidden=true; btn.disabled=true; btn.textContent=T('One moment…','稍等…');
+      var go=mode==='create'?window.dreamPasswordSignUp(v,pw):window.dreamPasswordSignIn(v,pw);
+      go.then(function(r){
+        btn.disabled=false;
+        if(r&&r.confirm){
+          $('landFormT').textContent=T('Confirm your email','确认你的邮箱');
+          $('landFormP').textContent=T('We sent a confirmation link to '+v+'. Open it once — after that you can sign in with your password on any device.','确认链接已发到 '+v+'。打开一次——之后在任何设备上都能用密码登录。');
+          $('landEmail').hidden=true; $('landPw').hidden=true; btn.hidden=true; $('landLinkOnly').hidden=true; $('landForgot').hidden=true;
+          var back=$('landBack'); back.textContent=T('Step inside','先进去看看'); back.onclick=function(ev){ ev.stopImmediatePropagation(); leave(); };
+        } else { leave(); }
+      }).catch(function(x){ btn.disabled=false; texts(); err.textContent=x.message; err.hidden=false; });
+      return;
+    }
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ err.textContent=T('That email does not look right — check it and try again.','这个邮箱看起来不对——检查一下再试。'); err.hidden=false; return; }
     if(!window.dreamSendLink){ err.textContent=T('Sign-in is not available just now — step inside and try again from Settings.','登录暂时不可用——先进去，稍后在设置里再试。'); err.hidden=false; return; }
     err.hidden=true; btn.disabled=true; btn.textContent=T('Sending…','发送中…');
