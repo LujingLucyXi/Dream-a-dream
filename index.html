@@ -6982,8 +6982,8 @@
        +'<label class="byok-label" for="acctName">'+T('Your name in the app','你在应用里的名字')+'</label>'
        +'<div class="byok-field"><input type="text" id="acctName" maxlength="60" value="'+esc(name)+'" placeholder="'+T('Optional','可不填')+'" autocomplete="nickname" /><button type="button" class="byok-show" id="acctNameSave">'+T('Save','保存')+'</button></div>'
        +'<p class="byok-help">'+(synced?T('Your shelf, passport and dream journey are saved automatically.','你的纪念品架子、护照和梦之旅程会自动保存。'):T('Loading what you saved…','正在载入你保存的内容…'))+'</p>'
-       +'<label class="byok-label" for="acctNewPw">'+(recovering?T('Choose a new password','设置新密码'):T('Password','密码'))+' <span class="acct-opt">'+(recovering?'':T('— set one to sign in without an email link','——设置后，不用邮件链接也能登录'))+'</span></label>'
-       +'<div class="byok-field"><input type="password" id="acctNewPw" placeholder="'+T('At least 8 characters','至少 8 个字符')+'" autocomplete="new-password" /><button type="button" class="byok-show" id="acctNewPwSave">'+T('Save','保存')+'</button></div>'
+       +((recovering||pwOpen)?'<label class="byok-label" for="acctNewPw">'+(recovering?T('Choose a new password','设置新密码'):T('New password','新密码'))+'</label>'
+       +'<div class="byok-field"><input type="password" id="acctNewPw" placeholder="'+T('At least 8 characters','至少 8 个字符')+'" autocomplete="new-password" /><button type="button" class="byok-show" id="acctNewPwSave">'+T('Save','保存')+'</button></div>':'<div class="byok-actions acct-links"><button type="button" class="acct-linkbtn" id="acctPwOpen">'+T('Set or change password','设置或修改密码')+'</button></div>')
        +'<div class="byok-actions"><button type="button" class="byok-btn" id="acctOut">'+T('Sign out','退出登录')+'</button>'
        +'<button type="button" class="byok-btn acct-del'+(deleteArmed?' armed':'')+'" id="acctDel"'+(busy?' disabled':'')+'>'+(deleteArmed?T('Tap again to delete everything','再点一次，删除全部'):T('Delete my account','删除我的账户'))+'</button></div>'
        +(deleteArmed?'<p class="byok-help acct-err">'+T('This deletes your account, your souvenirs, stamps and saved dreams for good. It cannot be undone.','这会永久删除你的账户、纪念品、印章和保存的梦，无法恢复。')+'</p>':'');
@@ -7029,11 +7029,12 @@
       window.dreamResetPassword(v).then(function(){ view='info'; note=T('If there’s an account for '+v+', a link to choose a new password is on its way.','如果 '+v+' 有账户，设置新密码的链接已经在路上了。'); render(); keep(v,''); })
         .catch(function(e){ view='error'; note=e.message; render(); keep(v,''); });
     });
+    var pwo=$('acctPwOpen'); if(pwo) pwo.addEventListener('click',function(){ pwOpen=true; render(); var f=$('acctNewPw'); if(f) f.focus(); });
     var npw=$('acctNewPw'), npwSave=$('acctNewPwSave');
     if(npwSave) npwSave.addEventListener('click',function(){
       var pw=npw&&npw.value||''; if(pw.length<8){ note=T('Choose a longer password — at least 8 characters.','请用更长的密码——至少 8 个字符。'); render(); return; }
       npwSave.disabled=true;
-      sb.auth.updateUser({password:pw}).then(function(res){ if(res.error){ note=pwErr(res.error); } else { note=recovering?T('New password saved ✓ — you’re signed in.','新密码已保存 ✓——你已登录。'):T('Password saved ✓ — next time you can sign in with it.','密码已保存 ✓——下次可以用它登录。'); recovering=false; } render(); var shown=note; setTimeout(function(){ if(note===shown&&user){ note=''; render(); } },5000); });
+      sb.auth.updateUser({password:pw}).then(function(res){ if(res.error){ note=pwErr(res.error); } else { note=recovering?T('New password saved ✓ — you’re signed in.','新密码已保存 ✓——你已登录。'):T('Password saved ✓ — next time you can sign in with it.','密码已保存 ✓——下次可以用它登录。'); recovering=false; pwOpen=false; } render(); var shown=note; setTimeout(function(){ if(note===shown&&user){ note=''; render(); } },5000); });
     });
     var again=$('acctAgain'); if(again) again.addEventListener('click',function(){ view='idle'; note=''; render(); });
     var save=$('acctNameSave'), nameEl=$('acctName');
@@ -7081,6 +7082,7 @@
   function keepOnFocus(e){ var t=e.target; if(t&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!(keepEl&&keepEl.contains(t))) hideKeepNote(); }
   function hideKeepNote(){ clearTimeout(keepTimer); document.removeEventListener('focusin',keepOnFocus,true); if(keepEl){ keepEl.remove(); keepEl=null; } }
   window.dreamOpenAccount=function(){ openAccount(); };
+  (function(){ var tg=$('byokToggle'); if(tg) tg.addEventListener('click',function(){ if(pwOpen&&!recovering){ pwOpen=false; if(user) render(); } }); })();
   function openAccount(){
     var panel=$('byokPanel'), tog=$('byokToggle');
     if(panel&&panel.hidden&&tog) tog.click();
@@ -7114,7 +7116,7 @@
   window.dreamResetPassword=function(email){
     return sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}).then(function(res){ if(res.error) throw new Error(pwErr(res.error)); });
   };
-  var recovering=false;
+  var recovering=false, pwOpen=false;
   window.dreamSendLink=function(v){
     holdPending(snapshot());
     return sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}}).then(function(res){
