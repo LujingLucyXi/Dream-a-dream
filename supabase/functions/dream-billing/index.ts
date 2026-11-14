@@ -2,7 +2,7 @@
 // Deployed in the Dreameri project (ref jlvlmuyegirglbyrnfbl).
 // POST with the signed-in user's access token in Authorization: Bearer <token>.
 //   { action: "checkout", plan: "monthly" | "yearly" | "unlock", returnUrl }
-//       -> { url } : a Stripe Checkout page. monthly $3.99, yearly $29 (recurring),
+//       -> { url } : a Stripe Checkout page. monthly $5.99, yearly $49 (recurring),
 //          unlock = $1 one-time for one reading's deeper part.
 //   { action: "portal", returnUrl } -> { url } : Stripe's billing portal (cancel, card).
 //   { action: "verify", sessionId } -> { paid } : was this one-time unlock paid by this user?
@@ -16,8 +16,8 @@
 // and a gateway JWT check can block the browser's CORS preflight.
 
 const PRICES = {
-  monthly: { amount: 399, interval: "month", name: "Dreameri — full version (monthly)" },
-  yearly: { amount: 2900, interval: "year", name: "Dreameri — full version (yearly)" },
+  monthly: { amount: 599, interval: "month", name: "Dreameri Pro (monthly)" },
+  yearly: { amount: 4900, interval: "year", name: "Dreameri Pro (yearly)" },
 } as const;
 const UNLOCK = { amount: 100, name: "Dreameri — unlock one reading" };
 
@@ -136,8 +136,8 @@ Deno.serve(async (req: Request) => {
           "subscription_data[metadata][user_id]": user.id,
           allow_promotion_codes: "true",
           "custom_text[submit][message]": plan === "monthly"
-            ? "Billed $3.99 every month until you cancel. Cancel anytime in Dreameri (Settings → Manage subscription) — you keep the full version until the end of the month you paid for. No charges after you cancel; past months are not refunded."
-            : "Billed $29 once a year until you cancel. Cancel anytime in Dreameri (Settings → Manage subscription) — you keep the full version until the end of the year you paid for. No charges after you cancel; past periods are not refunded.",
+            ? "Billed $5.99 every month until you cancel. Cancel anytime in Dreameri (Settings → Manage subscription) — Pro stays until the end of the month you paid for. No charges after you cancel; past months are not refunded."
+            : "Billed $49 once a year until you cancel. Cancel anytime in Dreameri (Settings → Manage subscription) — Pro stays until the end of the year you paid for. No charges after you cancel; past periods are not refunded.",
           success_url: back + "?sub=success",
           cancel_url: back + "?sub=cancel",
         });
