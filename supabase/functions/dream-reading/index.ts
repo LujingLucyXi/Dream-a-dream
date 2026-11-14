@@ -120,10 +120,10 @@ const FREE_READINGS_PER_DAY = 1;
 const FREE_STORIES_PER_WEEK = 2;
 const FREE_STORY_MAX_MIN = 5;
 const FREE_STORY_MAX_TOKENS = 2200;
-// Pro: 10 readings a day, 2 sleep stories a day of up to 45 minutes.
+// Pro: 10 readings a day, 1 sleep story a day of up to 30 minutes.
 const PRO_READINGS_PER_DAY = 10;
-const PRO_STORIES_PER_DAY = 2;
-const PRO_STORY_MAX_MIN = 45;
+const PRO_STORIES_PER_DAY = 1;
+const PRO_STORY_MAX_MIN = 30;
 
 async function whoIs(req: Request): Promise<{ id: string; plan: string } | null> {
   const url = Deno.env.get("SUPABASE_URL");
