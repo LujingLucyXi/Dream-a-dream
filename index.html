@@ -1450,6 +1450,9 @@
   .price-card.plus.is-mine{box-shadow:0 0 0 2px rgba(214,178,94,.6)}
   .prof-title{padding-right:40px;font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:600;line-height:1.05;margin:6px 0 14px}
   .prof-title em{color:var(--gold2)}
+  .prof-sync{margin:-8px 0 14px;font-size:12.5px;color:#aab2d4}
+  .prof-sync.ok{color:#9fd8b0}.prof-sync.err{color:#ec8f84}
+  .prof-sync button{font:inherit;font-size:12.5px;background:none;border:0;color:var(--gold2);text-decoration:underline;cursor:pointer;padding:0}
   .prof-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 18px}
   .prof-stat{padding:12px 8px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);text-align:center}
   .prof-stat b{display:block;font-family:"Cormorant Garamond",serif;font-size:28px;line-height:1;color:#f3dfa6}
@@ -2006,6 +2009,7 @@
     <button class="sub-close" id="profileClose" type="button" aria-label="Close">×</button>
     <div class="kicker">My dreams</div>
     <h2 class="prof-title" id="profTitle">Your dream <em>profile</em></h2>
+    <p class="prof-sync" id="profSync"></p>
     <div class="prof-stats" id="profStats"></div>
     <div class="prof-block">
       <div class="prof-label" id="profMapLabel">Road into Dreamland</div>
@@ -3529,7 +3533,25 @@
     var k=st.getAttribute('data-day'); var parts=k.split('-'); calMonth=new Date(+parts[0],+parts[1]-1,1); calSel=k; renderCalendar();
     var c=$('dreamCal'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'});
   });
-  var _rj2=renderJourney; renderJourney=function(){ _rj2(); try{ renderProfile(); }catch(e){} };
+  var _rj2=renderJourney; renderJourney=function(){ _rj2(); try{ renderProfile(); renderSync(); }catch(e){} };
+  /* Where your dreams are kept: account, this device, or a save that failed. */
+  function renderSync(){
+    var el=$('profSync'); if(!el) return;
+    var s=window.dreamSaveStatus?window.dreamSaveStatus():{state:'local',signedIn:false};
+    el.className='prof-sync';
+    if(s.state==='saved'&&s.signedIn){
+      var mins=Math.round((Date.now()-s.at)/60000);
+      el.classList.add('ok'); el.textContent='☁ '+L('Saved to your account','已保存到你的账户')+' · '+(mins<1?L('just now','刚刚'):(window.DREAM_LANG==='zh'?(mins+' 分钟前'):(mins+' min ago')));
+    } else if(s.state==='error'&&s.signedIn){
+      el.classList.add('err'); el.textContent='⚠ '+L('Couldn’t reach your account just now — everything is kept on this device and will save when it can.','暂时连不上你的账户——一切都先留在这台设备上，能连上时就会保存。');
+    } else {
+      el.innerHTML=esc(L('Kept on this device only.','只保存在这台设备上。'))+' <button type="button" data-sync-signin>'+esc(L('Sign in to keep your dreams on every device','登录，让你的梦在每台设备上都在'))+'</button>';
+    }
+  }
+  document.addEventListener('dreamsave',renderSync);
+  document.addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('[data-sync-signin]')){ var c=$('profileClose'); if(c) c.click(); if(window.dreamOpenAccount) window.dreamOpenAccount(); } });
+  setInterval(function(){ var pg=$('profilePage'); if(pg&&pg.classList.contains('open')) renderSync(); },30000);
+
   window.renderDreamJourney=renderJourney;
   (function(){
     var pg=$('profilePage'), ob=$('profileOpenBtn'), cb=$('profileClose');
@@ -6700,6 +6722,15 @@
      collected before asking for the link is held on this device until the
      link is opened, then merged in and erased. Kept at most a day. */
   var PENDING_KEY='dream-a-dream.pending-collections.v1', PENDING_MAX_MS=24*3600*1000;
+  /* Every dream, souvenir and stamp is also kept on this device, signed in
+     or not, so a refresh, a closed tab or a failed save never loses them.
+     Signing in merges it into the account; signing out erases it. */
+  var LOCAL_KEY='dreameri.device-state.v1', lastLocal=null;
+  function keepLocal(st){ try{ var j=JSON.stringify(st); if(j===lastLocal) return; if(isEmpty(st)){ localStorage.removeItem(LOCAL_KEY); lastLocal=j; return; } localStorage.setItem(LOCAL_KEY,j); lastLocal=j; }catch(e){} }
+  function readLocal(){ try{ var raw=localStorage.getItem(LOCAL_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+  var saveState='local', saveAt=0, saveErr='';
+  window.dreamSaveStatus=function(){ return {state:saveState, at:saveAt, err:saveErr, signedIn:!!(typeof user!=='undefined'&&user)}; };
+  function announceSave(){ try{ document.dispatchEvent(new CustomEvent('dreamsave')); }catch(e){} }
   function holdPending(st){ try{ if(!isEmpty(st)) localStorage.setItem(PENDING_KEY,JSON.stringify({t:Date.now(),st:st})); }catch(e){} }
   function takePending(){ try{ var raw=localStorage.getItem(PENDING_KEY); localStorage.removeItem(PENDING_KEY); if(!raw) return null; var p=JSON.parse(raw); return (p&&p.st&&Date.now()-p.t<PENDING_MAX_MS)?p.st:null; }catch(e){ return null; } }
 
@@ -6717,6 +6748,7 @@
   var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'implicit'}});
   var user=null, profile=null, view='idle', note='', busy=false, deleteArmed=false;
   var synced=false, lastSaved=null, langTouched=false, prompted=false;
+  (function(){ var loc=readLocal(); if(loc&&!isEmpty(loc)&&isEmpty(snapshot())){ applyState(loc); lastLocal=JSON.stringify(loc); } })();
 
   /* ——— Plans & payments (Stripe, via the dream-billing function) ——— */
   var BILLING_URL=SUPABASE_URL+'/functions/v1/dream-billing';
@@ -6834,7 +6866,7 @@
       if(held) local=merge(held,local);
       var next=saved?(isEmpty(local)?saved:merge(saved,local)):local;
       applyState(next);
-      synced=true; lastSaved=saved?JSON.stringify(saved):null;
+      synced=true; lastSaved=saved?JSON.stringify(saved):null; saveState='saved'; saveAt=Date.now(); announceSave();
       return saveNow();
     });
   }
@@ -6843,10 +6875,13 @@
     var st=snapshot(), json=JSON.stringify(st);
     if(json===lastSaved) return Promise.resolve();
     return sb.from('dream_user_state').upsert({user_id:user.id,data:st,updated_at:new Date().toISOString()},{onConflict:'user_id'}).then(function(res){
-      if(!res.error) lastSaved=json;
-    });
+      if(!res.error){ lastSaved=json; saveState='saved'; saveAt=Date.now(); saveErr=''; }
+      else { saveState='error'; saveErr=String(res.error.message||res.error); try{ console.error('dreameri save failed',saveErr); }catch(e){} }
+      announceSave();
+    },function(e){ saveState='error'; saveErr=String(e&&e.message||e); announceSave(); });
   }
   setInterval(function(){
+    try{ keepLocal(snapshot()); }catch(e){}
     if(user&&synced){ saveNow(); return; }
     if(!user&&view==='sent') holdPending(snapshot());
     if(!user&&!prompted&&!onFile&&!isEmpty(snapshot())&&!document.body.classList.contains('reveal-busy')){ prompted=true; showKeepNote(); }
@@ -6884,11 +6919,11 @@
       Promise.all([loadProfile().then(function(){ announcePlan(); }),loadAndMerge()]).then(function(){
         if(event==='SIGNED_IN'&&/access_token|type=magiclink/.test(location.hash+location.search)) toastNote(T('Signed in — your shelf, passport and dreams are kept now ✦','已登录——你的纪念品架子、护照和梦都会被保存 ✦'));
         render();
-      }).catch(function(){ note=T('Signed in, but your saved dreams could not be loaded just now. They are safe — try again in a moment.','已登录，但暂时没能载入你保存的梦。它们是安全的——稍后再试。'); render(); });
+      }).catch(function(){ saveState='error'; saveErr='load'; announceSave(); note=T('Signed in, but your saved dreams could not be loaded just now. They are safe — try again in a moment.','已登录，但暂时没能载入你保存的梦。它们是安全的——稍后再试。'); render(); });
       hideKeepNote();
     } else {
       var was=user; user=null; profile=null; handled=null; synced=false; lastSaved=null; view='idle'; deleteArmed=false;
-      if(was){ applyState({}); }                           /* leave nothing personal on a shared device */
+      if(was){ applyState({}); try{ localStorage.removeItem(LOCAL_KEY); }catch(e){} lastLocal=null; saveState='local'; announceSave(); }   /* leave nothing personal on a shared device */
       render(); announcePlan();
     }
   });
