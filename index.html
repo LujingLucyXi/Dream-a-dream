@@ -2534,7 +2534,7 @@
   // aiLang() so readings, scenes and stories come back in Chinese too.
   function L(en,zh){ return window.DREAM_LANG==='zh'?zh:en; }
   function aiLang(kind){
-    if(window.DREAM_LANG!=='zh') return (kind==='story'||kind==='scene')?'':'\n\nLANGUAGE — STRICT: the dreamer chose ENGLISH. Write EVERY JSON string value in natural English — title, symbol names and meanings, mood, tags, narrative, line, closing, brightSign, warningSign and every other field — EVEN IF the dream above is written in Chinese or another language. Read the dream in its own language, then write the reading in English. A symbol name translates the dreamer\u2019s words into short English (never paste a long untranslated sentence as a name). Only the "icon" codes and the place id stay as listed.';
+    if(window.DREAM_LANG!=='zh') return kind==='story'?'\n\nLANGUAGE — STRICT: the listener chose ENGLISH. Write the ENTIRE story and its title in natural English — every sentence, every line of dialogue. The wish, scene or notes above may be written in Chinese or another language: read them for meaning only, and never copy, quote or keep a single sentence of them in that language. Keep given names as given; render places and things in English. Not one Chinese character may appear in the story.':kind==='scene'?'\n\nLANGUAGE — STRICT: the dreamer chose ENGLISH. Write every JSON string value (title, scene, seed) in natural, poetic English, even if the wish is written in Chinese or another language — read it for meaning and write the scene first-hand in English. Not one Chinese character may appear.':'\n\nLANGUAGE — STRICT: the dreamer chose ENGLISH. Write EVERY JSON string value in natural English — title, symbol names and meanings, mood, tags, narrative, line, closing, brightSign, warningSign and every other field — EVEN IF the dream above is written in Chinese or another language. Read the dream in its own language, then write the reading in English. A symbol name translates the dreamer\u2019s words into short English (never paste a long untranslated sentence as a name). Only the "icon" codes and the place id stay as listed.';
     if(kind==='story') return '\n\nLANGUAGE — STRICT: write the ENTIRE story and its title in Simplified Chinese (简体中文) — natural, literary Chinese, the way a Chinese bedtime novel reads. All dialogue in Chinese, in Chinese quotation marks. Character names stay exactly as given. Every rule above still applies, in Chinese. 核心与来路（严格）：动笔前先在心里定下核心、主要人物、地点与时间；先写一小段来路，定下气氛，把人一步步带进核心，再把描述里的每一个细节展开；所有游走都绕着核心转，不许换一个世界，不许逐字重复心愿原话。创作手法（严格，完整的故事工艺）：一个人、一个想要、一个障碍、一个变化——做梦的人只想要一件具体的事，就是核心本身；中间只设一个温和的障碍，一次迟疑、一点小害怕、走错一步、丢了一件小东西、天气或者时间，绝不是反派，也绝不残忍；到结尾，要有一件事真的变了，哪怕只是心情稳稳落了地。皮克斯故事脊柱——全篇的骨架，顺序一条都不能少：从前……；每天……；可是有一天（有一晚）……；因为这样……；因为这样……；直到最后……（核心那一刻完整到来）；从那以后……每一步都必须由上一步引起，顺不下来的场景直接删掉；这条脊柱就是来路、核心、落地的顺序，绝不许写成“然后……然后……”。冯内古特的规矩，照着用：每个人物都要想要点什么，哪怕只是一杯水；每一句话要么显出人物，要么把事情往前推，两样都不占的，删掉；尽量贴着核心开场，来路要短，靠把人一步步带进核心来挣自己的位置；让听故事的人心里向着做梦的人；不浪费他的时间，一分钟都不浪费。展示，不要讲述：核心和每一个重要时刻，都要写成正在发生的场景——动作、对白、五感，看见的、听见的、闻到的、尝到的、摸到的，都要在场；概述只许用来压缩场景之间的过渡和路程；绝不用一句话直接点名情绪，不写“她很开心”，不写“他觉得安心”，能用一个动作、一个手势、一句对白显出来的，就那样写。场景检验：每一个场景都要有目标、一个温和的障碍、一次选择、一个后果；场景里什么都没有转弯的，压缩成一句话；有转弯的，展开来写，把地方、对白和细节都给足。环境要干活：环境不是贴在后面的背景纸，它定气氛、限住人物的选择、把心情放大；每个场景只用一两个具体的感官细节，选来定住地点、时间和心情的，多了就拖慢故事，绝不堆成一串清单。 FIRST-HAND CHINESE, NEVER TRANSLATED CHINESE: compose in Chinese from the start — no English calques or idiom shapes （站在新郎等人的地方 / 忘了整理表情 / 戒指滑上手指 / 它成了真的 are all banned shapes); tell it the way a Chinese storyteller tells it. RHYTHM: 句子长短交错，短句可以单独成段，留白就是停顿——像讲故事的人那样，有呼吸、有迟疑、有轻重。PUNCTUATION — STRICT, CHINESE FULL-WIDTH ONLY: 逗号 ，、顿号 、、句号 。、问号 ？、感叹号 ！、分号 ；、冒号 ：；对话引号只用 “”；省略号只用 ……；破折号只用 ——。NEVER use half-width punctuation (, . ? ! : ;) anywhere in the Chinese text, never put spaces around punctuation, and never leave spaces between Chinese characters. NEVER EMPHASISE THE EVENT: 就是这一天本身 / 不是念头里的，是正在发生的 / 婚礼本身，不是婚礼的样子 — any sentence pointing at the event itself instead of living it is deleted.';
     if(kind==='scene') return '\n\nLANGUAGE — STRICT: write every JSON string value (title, scene, seed) in Simplified Chinese (简体中文), natural and poetic — the seed line too. 核心与来路（严格）：先在心里定下核心、主要人物、地点与时间；先写来路、定下气氛，再进核心；描述里的每个细节都要展开成活的片刻，不许逐字重复心愿原话；所有游走只绕着核心转，不许换世界。创作手法（严格，完整的故事工艺）：把这个场景架在一条因果的脊柱上，顺序一条都不能少——从前……；每天……；可是这一次……；因为这样……；因为这样……；直到最后，核心那一刻落下来……；从那以后……每一步都必须由上一步引起，绝不许写成“然后……然后……”。一个人、一个想要、一个温和的障碍、一个变化：障碍只是一次迟疑、一点小害怕、走错一步，绝不是反派；到结尾，要有一件事真的变了。每句话要么显出人物，要么把事情往前推，两样都不占的，删掉，这也是冯内古特的规矩；每个人物都要想要点什么，哪怕只是一杯水；尽量贴着核心开场，来路只占它该占的分量；让听故事的人心里向着做梦的人；不浪费他的时间，一分钟都不浪费。展示，不要讲述：场景要在实时里发生，有动作、有对白、有五感；概述只许用来压缩过渡；绝不用一句话直接点名情绪，能用动作或者一句对白显出来的，就那样写。场景检验：每一段都要带着一个小目标、一个温和的障碍、一次选择、一个后果，带不齐的，就压缩成一句话。环境要干活：每一段只用一两个感官细节，选来定住地点、时间和心情的；环境是推着故事走的，不是贴在后面的背景纸。 FIRST-HAND CHINESE, NEVER TRANSLATED CHINESE: no English calques （站在新郎等人的地方 / 忘了整理表情 / 它成了真的 are banned shapes); write it as a Chinese storyteller would, with a storyteller\u2019s rhythm — varied sentence lengths, short lines standing alone, rests before the tender moments. PUNCTUATION — STRICT, CHINESE FULL-WIDTH ONLY: 逗号 ，、顿号 、、句号 。、问号 ？、感叹号 ！、冒号 ：；引号只用 “”；省略号只用 ……；破折号只用 ——；never half-width punctuation (, . ? ! : ;), never spaces around punctuation, never spaces between Chinese characters. The scene text uses \\n\\n between its short paragraphs.';
     return '\n\nLANGUAGE — STRICT: write every JSON string value in Simplified Chinese (简体中文) — title, symbol names and meanings, narrative, line, closing, insight and the daydream fields — in a natural 玄学 voice. Only the symbol "icon" values stay as the English codes listed. FIRST-HAND CHINESE, NEVER TRANSLATED CHINESE: compose in Chinese from the start — no English calques or idiom shapes; write it the way a Chinese 解梦人 tells it, plain and warm. PUNCTUATION — STRICT, CHINESE FULL-WIDTH ONLY: 逗号 ，、顿号 、、句号 。、问号 ？、感叹号 ！、分号 ；、冒号 ：；引号只用 “” 和 ‘’；省略号只用 ……；破折号只用 ——。NEVER use half-width punctuation (, . ? ! : ; ( )) anywhere in the Chinese text, never put spaces around punctuation, and never leave spaces between Chinese characters. THE "closing" FIELD IN CHINESE: write it as 今晚，临睡前，把这一句轻轻握住：“<向前看的一句>。” — then one short warm sentence picturing the life it points toward; never the English "Tonight, as you fall asleep" format. THE "daydreamAction" PREFIX IN CHINESE: begin it with 更清晰的白日梦： or 今天的一小步： — never the English prefixes. THE "title": a short Chinese title of 4-10 characters built only from the dream.';
@@ -2720,6 +2720,7 @@
       if(!raw.seed&&raw.line) raw.seed=raw.line;
       if(!raw.scene||!raw.seed) return null;
       raw.scene=scrubRequirementEchoes(String(raw.scene),null,wish);
+      if(window.DREAM_LANG!=='zh'&&window.__cjkShare&&window.__cjkShare(raw.scene+raw.seed)>0.05) return null;
       if(/\bmy ex\b|\bex\b|ex-boyfriend|ex-girlfriend/i.test(String(raw.seed))) raw.seed=window.DREAM_LANG==='zh'?'我睡在我正走向的生活里。':'I sleep inside the life I am growing toward.';
       return {wish:wish,title:zhT(String(raw.title||L('A Scene To Step Into','走进这个场景'))),scene:zhT(String(raw.scene)),seed:zhT(String(raw.seed)),source:L('Written by cloud AI','云端 AI 所写')};
     }catch(e){return null}
@@ -3882,6 +3883,10 @@
   // enough of the wish's own distinctive words must actually appear in the story.
   function storyRelevant(story,dd,st){
     if(!story||story.length<600) return false;
+    // A Chinese wish told as an English story (or the reverse) shares no
+    // words with it: the lexical gate below would reject every good story
+    // and hand the night to the built-in writer. Trust the prompt there.
+    if((cjkShare((dd.wish||'')+(dd.scene||''))>0.3)!==(cjkShare(story)>0.3)) return true;
     var sLow=' '+String(story).toLowerCase().replace(/\s+/g,' ')+' ';
     var wishLow=String(dd.wish||'').toLowerCase().replace(/\s+/g,' ');
     // Described-event gate: when the wish names a major life EVENT, the
@@ -3997,6 +4002,8 @@
     if(kept.length&&kept.length>=Math.ceil(paras.length*2/3)) return kept.join('\n\n');
     return story;
   }
+  function cjkShare(s){ s=String(s||'').replace(/\s+/g,''); if(!s.length) return 0; var m=s.match(/[\u3400-\u9fff]/g); return (m?m.length:0)/s.length; }
+  window.__cjkShare=cjkShare;
   function parseSleepStory(data,st,ddWish){
     try{
       var raw=data;
@@ -4010,6 +4017,8 @@
       story=String(story).trim();
       story=scrubRequirementEchoes(story,st,ddWish);
       if(story.length<200) return null;
+      if(window.DREAM_LANG!=='zh'&&cjkShare(story)>0.05) return null;
+      if(window.DREAM_LANG==='zh'&&cjkShare(story)<0.3) return null;
       return {title:zhT(String(raw.title||L('Your Sleep Story','你的睡前故事'))),story:zhT(story)};
     }catch(e){return null}
   }
@@ -4106,7 +4115,8 @@
     st=st||{};
     var themeKey=st.theme&&STORY_THEMES[st.theme]?st.theme:'wonder';
     var themeLabel=STORY_THEMES[themeKey].label;
-    var sceneSents=splitSentences(dd.scene||'');
+    if(window.DREAM_LANG!=='zh'){ dd=Object.assign({},dd); if(cjkShare(dd.title)>0.05) dd.title='Tonight'; if(cjkShare(dd.seed)>0.05) dd.seed='Rest now; the good part is still on its way.'; }
+    var sceneSents=splitSentences(dd.scene||'').filter(function(x){ return window.DREAM_LANG==='zh'||cjkShare(x)<0.05; });
     var s1=sceneSents[0]||'';
     var s2=sceneSents[1]||'';
     var modes=st.characterModes&&st.characterModes.length?st.characterModes:(st.characterMode?[st.characterMode]:['self']);
