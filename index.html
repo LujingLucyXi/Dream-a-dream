@@ -1485,18 +1485,19 @@
   .byok-panel:not([hidden]) .settings-head{position:sticky;top:-28px;z-index:2;background:#0c1020;padding:14px 0 10px;margin-top:-14px}
   /* Manifestation · the princess-and-the-pea room: the whole upper half */
   body{overflow-x:clip}
-  .pea-scene{position:relative;overflow:hidden;width:100vw;margin:0 0 18px calc(50% - 50vw);margin-bottom:18px;height:clamp(460px,62vh,760px);background:#0f1428}
+  .pea-scene{position:relative;overflow:hidden;width:100vw;margin:0 0 18px calc(50% - 50vw);margin-bottom:-40px;height:clamp(460px,62vh,760px);background:transparent}
+  .pea-blur,.pea-zoom{-webkit-mask-image:linear-gradient(180deg,#000 0,#000 72%,rgba(0,0,0,.55) 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 72%,rgba(0,0,0,.55) 86%,transparent 100%)}
   .pea-blur{position:absolute;inset:-40px;background:#141a33 center/cover no-repeat;filter:blur(28px) brightness(.55) saturate(1.1)}
   .pea-zoom{position:absolute;inset:0;transition:transform 1.3s cubic-bezier(.2,.8,.2,1)}
   .pea-art{position:absolute;background:#141a33 center/100% 100% no-repeat;box-shadow:0 0 80px 40px rgba(10,13,28,.55)}
   .pea-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  .pea-scene:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,10,22,.75),rgba(8,10,22,0) 26%,rgba(8,10,22,0) 62%,rgba(8,10,22,.85))}
+  .pea-scene:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,10,22,.75),rgba(8,10,22,0) 26%,rgba(8,10,22,0) 58%,rgba(8,10,22,.5) 80%,rgba(8,10,22,0) 100%)}
   .pea-head{position:absolute;left:0;right:0;top:0;z-index:2;text-align:center;padding:18px 16px 0;pointer-events:none;transition:opacity .6s}
   .pea-scene.listening .pea-head{opacity:0}
   .pea-kicker{font-size:10.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2)}
   .pea-head h3{margin:4px 0 2px;font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;line-height:1.1;color:#fbeccb;text-shadow:0 2px 12px rgba(0,0,0,.7)}
   .pea-head p{margin:0;font-size:13.5px;color:#cdd3ee;text-shadow:0 1px 6px rgba(0,0,0,.8)}
-  .pea-cta{position:absolute;left:0;right:0;bottom:16px;z-index:2;text-align:center}
+  .pea-cta{position:absolute;left:0;right:0;bottom:calc(6% + 34px);z-index:2;text-align:center}
   .pea-mic{position:relative;width:78px;height:78px;border-radius:50%;border:0;cursor:pointer;color:#1b1730;background:radial-gradient(circle at 35% 30%,#fff4cf,#f0d48a 45%,#b8892f);box-shadow:0 0 0 6px rgba(240,212,138,.18),0 10px 30px rgba(0,0,0,.5);display:inline-grid;place-items:center;-webkit-tap-highlight-color:transparent}
   .pea-mic svg{position:relative;z-index:1}
   .pea-ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(190,160,255,.7);opacity:0}
@@ -8147,7 +8148,11 @@
    turns the wish into its own view that unfolds in place, with a card. */
 (function(){
   var scene=document.getElementById('peaScene'); if(!scene) return;
-  var PEA={img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/10de4a82-92c5-4ea0-a2ac-b3e23504b6f4.webp',w:1100,h:1971,ball:{x:0.763,y:0.746,r:0.118},cat:{x:0.37,y:0.285},pea:{x:0.49,y:0.795},win:{x:0.49,y:0.135,r:0.11},focus:{x0:0.04,x1:0.96,y0:0.16,y1:0.86}};
+  var PEA_WIDE={img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/da223400-b3e5-4dd0-8baa-1231cfd6f520.webp',w:2200,h:1228,ball:{x:0.748,y:0.737,r:0.054},cat:{x:0.5,y:0.3},pea:{x:0.498,y:0.872},win:{x:0.497,y:0.124,r:0.04},focus:{x0:0.12,x1:0.9,y0:0.12,y1:0.9}};
+  var PEA_TALL={img:'https://d2ol7oe51mr4n9.cloudfront.net/user_3LwkVQUENz7zqU3fmxgUqEtij7i/10de4a82-92c5-4ea0-a2ac-b3e23504b6f4.webp',w:1100,h:1971,ball:{x:0.763,y:0.746,r:0.118},cat:{x:0.37,y:0.285},pea:{x:0.49,y:0.795},win:{x:0.49,y:0.135,r:0.11},focus:{x0:0.04,x1:0.96,y0:0.16,y1:0.86}};
+  /* Wide screens get the landscape painting, phones the tall one: either
+     way the room covers the full width with nothing cropped that matters. */
+  var PEA=(window.innerWidth/Math.max(1,window.innerHeight*0.62)>1)?PEA_WIDE:PEA_TALL;
   var art=document.getElementById('peaBg'), blur=document.getElementById('peaBlur'), zoom=document.getElementById('peaZoom'), cv=document.getElementById('peaCanvas'), cx=cv.getContext('2d'), inp=document.getElementById('wishInput');
   var big=document.getElementById('peaMic'), small=document.getElementById('wishMicBtn'), status=document.getElementById('peaStatus');
   art.style.backgroundImage=blur.style.backgroundImage='url('+PEA.img+')';
@@ -8155,10 +8160,11 @@
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function layout(){
     var r=scene.getBoundingClientRect(); W=r.width; H=r.height; if(!W||!H) return; DPR=Math.min(2,window.devicePixelRatio||1);
+    var want=(W/H>1)?PEA_WIDE:PEA_TALL; if(want!==PEA){ PEA=want; art.style.backgroundImage=blur.style.backgroundImage='url('+PEA.img+')'; }
     cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); cx.setTransform(DPR,0,0,DPR,0,0);
     // fit the band that holds the stack, the cat and the ball; fill the width when that is bigger
     var f=PEA.focus, s=Math.min(H*0.9/((f.y1-f.y0)*PEA.h), W/((f.x1-f.x0)*PEA.w));
-    s=Math.max(s, Math.min(W/PEA.w, H*1.6/PEA.h));
+    s=Math.max(s, W/PEA.w, H/PEA.h);   /* always cover: edge to edge, no side bars */
     var iw=PEA.w*s, ih=PEA.h*s, fcx=(f.x0+f.x1)/2*iw, fcy=(f.y0+f.y1)/2*ih;
     var x=W/2-fcx, y=H*0.52-fcy;
     if(iw>=W) x=Math.min(0,Math.max(W-iw,x)); if(ih>=H) y=Math.min(0,Math.max(H-ih,y));
@@ -8174,25 +8180,25 @@
   function frame(now){
     raf=0; if(!running) return;
     var t=(now-t0)/1000; cx.clearRect(0,0,W,H);
-    energy=Math.max(rec?0.75+0.25*Math.sin(t*6):0, energy*0.985);
+    energy=Math.max(rec?0.55+0.12*Math.sin(t*1.6):0, energy*0.99);   /* a slow breath, not a flicker */
     var b=P(PEA.ball), r=PEA.ball.r*img.w, e=energy;
-    var g=cx.createRadialGradient(b.x,b.y,r*.2,b.x,b.y,r*(2.2+e*1.2));
-    g.addColorStop(0,'rgba(200,180,255,'+(0.28+e*0.4)+')'); g.addColorStop(.5,'rgba(120,220,210,'+(0.1+e*0.18)+')'); g.addColorStop(1,'rgba(120,220,210,0)');
-    cx.fillStyle=g; cx.beginPath(); cx.arc(b.x,b.y,r*(2.2+e*1.2),0,Math.PI*2); cx.fill();
+    var br=0.5+0.5*Math.sin(t*0.55), g=cx.createRadialGradient(b.x,b.y,r*.2,b.x,b.y,r*(2+br*0.25+e*0.9));
+    g.addColorStop(0,'rgba(200,180,255,'+(0.13+br*0.05+e*0.22)+')'); g.addColorStop(.5,'rgba(120,220,210,'+(0.05+e*0.1)+')'); g.addColorStop(1,'rgba(120,220,210,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(b.x,b.y,r*(2+br*0.25+e*0.9),0,Math.PI*2); cx.fill();
     cx.save(); cx.beginPath(); cx.arc(b.x,b.y,r*.93,0,Math.PI*2); cx.clip(); cx.globalCompositeOperation='lighter';
-    var sp=0.35+e*2.2;
+    var sp=0.16+e*0.7;
     for(var k=0;k<5;k++){
       var ang=t*sp*(k%2?1:-1)+k*1.3, rr=r*(0.25+0.12*Math.sin(t*0.7+k)), mx=b.x+Math.cos(ang)*rr, my=b.y+Math.sin(ang*1.1)*rr*.8;
       var mg=cx.createRadialGradient(mx,my,0,mx,my,r*(0.55+0.1*Math.sin(t+k))), col=k%3===0?'190,150,255':(k%3===1?'110,230,215':'255,190,240');
-      mg.addColorStop(0,'rgba('+col+','+(0.18+e*0.32)+')'); mg.addColorStop(1,'rgba('+col+',0)'); cx.fillStyle=mg; cx.beginPath(); cx.arc(mx,my,r,0,Math.PI*2); cx.fill();
+      mg.addColorStop(0,'rgba('+col+','+(0.1+e*0.16)+')'); mg.addColorStop(1,'rgba('+col+',0)'); cx.fillStyle=mg; cx.beginPath(); cx.arc(mx,my,r,0,Math.PI*2); cx.fill();
     }
-    if(e>0.4){ for(var q2=0;q2<3;q2++){ var la=t*3+q2*2.1, lx=b.x+Math.cos(la)*r*.5, ly=b.y+Math.sin(la)*r*.35; cx.fillStyle='rgba(255,255,255,'+(0.25*e)+')'; cx.beginPath(); cx.arc(lx,ly,1.6,0,Math.PI*2); cx.fill(); } }
+    if(e>0.5){ for(var q2=0;q2<2;q2++){ var la=t*1.1+q2*2.1, lx=b.x+Math.cos(la)*r*.5, ly=b.y+Math.sin(la)*r*.35; cx.fillStyle='rgba(255,255,255,'+(0.14*e)+')'; cx.beginPath(); cx.arc(lx,ly,1.6,0,Math.PI*2); cx.fill(); } }
     cx.restore(); cx.globalCompositeOperation='source-over';
-    var pe=P(PEA.pea), pg=cx.createRadialGradient(pe.x,pe.y,0,pe.x,pe.y,14+6*Math.sin(t*2));
-    pg.addColorStop(0,'rgba(170,255,140,.55)'); pg.addColorStop(1,'rgba(170,255,140,0)'); cx.fillStyle=pg; cx.beginPath(); cx.arc(pe.x,pe.y,22,0,Math.PI*2); cx.fill();
+    var pe=P(PEA.pea), pg=cx.createRadialGradient(pe.x,pe.y,0,pe.x,pe.y,14+4*Math.sin(t*0.8));
+    pg.addColorStop(0,'rgba(170,255,140,.35)'); pg.addColorStop(1,'rgba(170,255,140,0)'); cx.fillStyle=pg; cx.beginPath(); cx.arc(pe.x,pe.y,22,0,Math.PI*2); cx.fill();
     var wn=P(PEA.win), wr=PEA.win.r*img.w;
-    for(var s2=0;s2<6;s2++){ var sa=s2*2.1, sx2=wn.x+Math.cos(sa)*wr*.6, sy2=wn.y+Math.sin(sa*1.3)*wr*.5, tw=.5+.5*Math.sin(t*2.3+s2*1.7); cx.fillStyle='rgba(255,246,210,'+(0.15+tw*0.55)+')'; cx.beginPath(); cx.arc(sx2,sy2,1+tw*1.1,0,Math.PI*2); cx.fill(); }
-    if(!reduce&&Math.random()<e*0.28) spark(false);
+    for(var s2=0;s2<6;s2++){ var sa=s2*2.1, sx2=wn.x+Math.cos(sa)*wr*.6, sy2=wn.y+Math.sin(sa*1.3)*wr*.5, tw=.5+.5*Math.sin(t*0.9+s2*1.7); cx.fillStyle='rgba(255,246,210,'+(0.12+tw*0.3)+')'; cx.beginPath(); cx.arc(sx2,sy2,1+tw*1.1,0,Math.PI*2); cx.fill(); }
+    if(!reduce&&Math.random()<e*0.12) spark(false);
     for(var i=parts.length-1;i>=0;i--){
       var q=parts[i]; q.t+=1/60/q.d; if(q.t>=1){ parts.splice(i,1); if(Math.random()<.35) zs.push({x:q.tx,y:q.ty,t:0}); continue; }
       var u=q.t, ease=u*u*(3-2*u), x=q.x+(q.tx-q.x)*ease+Math.sin(u*Math.PI*3+q.wob)*20*(1-u), y=q.y+(q.ty-q.y)*ease-Math.sin(u*Math.PI)*40, al=Math.sin(u*Math.PI);
