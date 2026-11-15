@@ -3912,6 +3912,18 @@
     // rules ban. Relevance is the core carried in EXPANDED form:
     // the wish's distinctive people, places and things, lived in
     // the story's own words — counted by the anchor hits below.
+    // Chinese has no spaces: splitting the wish on whitespace leaves whole
+    // clauses, which a story that rightly paraphrases never repeats — so
+    // every Chinese wish failed this gate and fell to the built-in story.
+    // For Chinese, count the wish's content bigrams found in the story.
+    if(cjkShare(dd.wish||'')>0.3){
+      var STOPC=/[我你他她它的了在是和与着地得很也都就这那一个有没不把被让给吗呢吧啊呀哦]/;
+      var runs=String(dd.wish||'').match(/[\u3400-\u9fff]+/g)||[], seenB={}, bis=[];
+      runs.forEach(function(r){ for(var i=0;i<r.length-1;i++){ var bg=r.substr(i,2); if(STOPC.test(bg)||seenB[bg]) continue; seenB[bg]=1; bis.push(bg); } });
+      if(bis.length<3) return !evFail;
+      var bh=0; bis.forEach(function(bg){ if(story.indexOf(bg)!==-1) bh++; });
+      return !evFail&&(bh>=2||bh/bis.length>=0.2);
+    }
     var stop={}; 'that this with from your yours their there then than into over under while about would could should where whenever already inside beside enough every each other another being been have were will just like feel feels life want wish dream tonight scene story slowly quiet quietly softly gentle gently warm light close comes come goes make makes made take takes keep keeps back down around through once more most very really truly still even also only here what which whose whom them they and the for are was not but all any can had her his its one our out she him who now day days long opens full whole begins begin ends end rest rests hold holds held line seed words word own picture pictured moments moment people person place places room rooms home house stand standing walk walking hear hears heard touch sound sounds goodnight good night sleep asleep falling drift drifting breathe breathing breath body heart mind let lets letting become becomes becoming seems seem look looks looking see sees seen get gets getting put puts ways part parts side sides'.split(' ').forEach(function(w){stop[w]=1});
     function stem(w){ return w.replace(/(ings|ing|ed|es|s)$/,''); }
     var words=wishLow.replace(/[^a-z0-9\u4e00-\u9fff\s]/g,' ').split(/\s+/).filter(function(w){return w.length>=4&&!stop[w]});
