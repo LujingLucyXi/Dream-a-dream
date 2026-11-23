@@ -261,8 +261,13 @@
   .weave-box{margin-top:14px;border-top:1px solid rgba(255,255,255,.1);padding-top:12px}
   .weave-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
   .weave-head b{font-size:12.5px}
-  .weave-toggle{border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#eef0ff;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;flex:none}
-  .weave-toggle[aria-pressed="true"]{background:var(--gold2);color:#221a05;border-color:var(--gold2)} .weave-toggle[aria-pressed="false"]{background:rgba(255,255,255,.09);color:#d5dbef;border-color:rgba(255,255,255,.3)}
+  .weave-toggle{position:relative;display:inline-flex;align-items:center;gap:9px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#d5dbef;border-radius:999px;padding:7px 12px 7px 9px;font-size:12px;font-weight:800;flex:none;transition:background .18s,border-color .18s,color .18s}
+  .weave-toggle::before{content:"";width:34px;height:20px;border-radius:999px;background:#555d73;flex:none;transition:background .18s}
+  .weave-toggle::after{content:"";position:absolute;left:12px;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;transform:translateY(-50%);box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .18s,background .18s}
+  .weave-toggle[aria-checked="true"]{background:var(--gold2);color:#221a05;border-color:var(--gold2)}
+  .weave-toggle[aria-checked="true"]::before{background:#9b7a2f}
+  .weave-toggle[aria-checked="true"]::after{transform:translate(14px,-50%);background:#fff}
+  .weave-toggle:focus-visible{outline:3px solid #fff;outline-offset:3px}
   .weave-list{margin:8px 0 0;font-size:12px;line-height:1.6;color:#9aa6d1}
   .weave-list b{color:#e8ebf8;font-weight:700}
   /* ——— Free / full version · 免费版与完整版 ——— */
@@ -1957,7 +1962,7 @@
           <div class="set-group"><div class="set-name">Setting <span>· the scene the story lives in</span></div><div class="pick-row" role="group" aria-label="Story setting"><button type="button" class="pick-btn" data-ssetting="surprise" aria-pressed="true">Let the story choose</button><button type="button" class="pick-btn" data-ssetting="water" aria-pressed="false">By the water</button><button type="button" class="pick-btn" data-ssetting="coast" aria-pressed="false">Sea coast &amp; harbour</button><button type="button" class="pick-btn" data-ssetting="wild" aria-pressed="false">Forest &amp; hills</button><button type="button" class="pick-btn" data-ssetting="snow" aria-pressed="false">Snowy mountains</button><button type="button" class="pick-btn" data-ssetting="desert" aria-pressed="false">Desert at dusk</button><button type="button" class="pick-btn" data-ssetting="meadow" aria-pressed="false">Meadows &amp; farmland</button><button type="button" class="pick-btn" data-ssetting="garden" aria-pressed="false">Garden courtyard</button><button type="button" class="pick-btn" data-ssetting="home" aria-pressed="false">A warm home</button><button type="button" class="pick-btn" data-ssetting="town" aria-pressed="false">A small town</button><button type="button" class="pick-btn" data-ssetting="city" aria-pressed="false">City lights at night</button><button type="button" class="pick-btn" data-ssetting="temple" aria-pressed="false">Temple &amp; shrine gardens</button><button type="button" class="pick-btn" data-ssetting="island" aria-pressed="false">A small island</button><button type="button" class="pick-btn" data-ssetting="train" aria-pressed="false">A night train</button><button type="button" class="pick-btn" data-ssetting="sky" aria-pressed="false">Under the open sky</button></div><div class="set-custom"><label class="char-lab" for="settingCustom">Or describe your own setting <span>· in your own words — the story will live there</span></label><input class="char-input" id="settingCustom" type="text" maxlength="200" placeholder="e.g. a snow cabin above a frozen lake, lanterns along the path home" /></div></div>
           <div class="set-group"><div class="set-name">Length <span>· how long the story runs — free up to 5 min</span></div><div class="pick-row" role="group" aria-label="Story length"><button type="button" class="pick-btn" data-slength="5" aria-pressed="true">5 min</button><button type="button" class="pick-btn locked" data-slength="10" data-locked="true" aria-pressed="false">10 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="20" data-locked="true" aria-pressed="false">20 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="30" data-locked="true" aria-pressed="false">30 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button><button type="button" class="pick-btn locked" data-slength="45" data-locked="true" aria-pressed="false">45 min<span class="lock-tag" role="img" aria-label="Locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span></button></div></div>
           <div class="set-group"><div class="set-name">Characters <span>· who's in the story — pick any, they can be together</span></div><div class="pick-row" role="group" aria-label="Story characters — choose one or more"><button type="button" class="pick-btn" data-schar="self" aria-pressed="true">Me — I'm in the story</button><button type="button" class="pick-btn" data-schar="named" aria-pressed="false">People I name</button><button type="button" class="pick-btn" data-schar="invented" aria-pressed="false">Let the story invent some</button></div><p style="margin:7px 0 0;font-size:12px;line-height:1.55;color:#9aa6d1">Not either/or — tap more than one. For example: you <em>and</em> people you name, together in the same story.</p><div class="char-fields" id="charFields" hidden><div id="charNameRow"><label class="char-lab" for="charName">Their names <span>· one name, or several — “Mara &amp; Tomas”</span></label><input id="charName" type="text" maxlength="60" placeholder="e.g. Mara, Tomas" /></div><label class="char-lab" for="charDetails">The characters in more detail <span>· optional — who they are, and to each other — and to you, if you're in it too</span></label><textarea id="charDetails" rows="3" maxlength="600" placeholder="e.g. Mara, my older sister, who always knows the way home. Tomas, the kind stranger she keeps meeting by the water, who may not stay a stranger…"></textarea></div></div>
-          <div class="weave-box"><div class="weave-head"><b>Weave in my past dreams</b><button type="button" class="weave-toggle" id="weaveToggle" aria-pressed="false">Off — not woven in</button></div><p class="weave-list" id="weaveList"></p></div>
+          <div class="weave-box"><div class="weave-head"><b>Weave in my past dreams</b><button type="button" class="weave-toggle" id="weaveToggle" role="switch" aria-checked="false">Off — not woven in</button></div><p class="weave-list" id="weaveList"></p></div>
         </div>
         <button class="day-cta" id="createDaydreamBtn"><span id="dayBtnLabel">Create my scene &amp; story</span><span>→</span></button>
       </div>
@@ -5452,7 +5457,7 @@
       includeInvented:charModes.indexOf('invented')!==-1,
       characterName:nameEl?nameEl.value.trim():'',
       characterDetails:detEl?detEl.value.trim():'',
-      weave:weaveBtn?weaveBtn.getAttribute('aria-pressed')==='true':false,
+      weave:weaveBtn?weaveBtn.getAttribute('aria-checked')==='true':false,
       weaveElements:getWeaveElements()
     };
   }
@@ -5514,8 +5519,8 @@
     });
     var weaveBtnEl=document.getElementById('weaveToggle');
     if(weaveBtnEl) weaveBtnEl.addEventListener('click',function(){
-      var on=weaveBtnEl.getAttribute('aria-pressed')!=='true';
-      weaveBtnEl.setAttribute('aria-pressed',on?'true':'false');
+      var on=weaveBtnEl.getAttribute('aria-checked')!=='true';
+      weaveBtnEl.setAttribute('aria-checked',on?'true':'false');
       weaveBtnEl.textContent=on?L('On — woven in','开启——织入'):L('Off — not woven in','关闭——不织入');
     });
   }
