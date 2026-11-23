@@ -1775,9 +1775,10 @@
     <p class="byok-help">No key yet? Create one at platform.openai.com under API keys, add a little credit, then paste it here. OpenAI bills your key directly — a reading costs a fraction of a cent; a spoken story, a few cents.</p>
   </section>
 
-  <div class="mode-switch" role="tablist" aria-label="Choose a mode">
-    <button class="mode-btn" id="modeNightBtn" role="tab" aria-selected="true" aria-controls="panelNight">☾ &nbsp;<span class="mode-label">Dream Decipher</span></button>
-    <button class="mode-btn" id="modeDayBtn" role="tab" aria-selected="false" aria-controls="panelDay"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M5 19 13.2 10.8"/><path d="M16.6 3.1l.9 2.15 2.15.9-2.15.9-.9 2.15-.9-2.15-2.15-.9 2.15-.9z" fill="currentColor" stroke="none"/><path d="M20.7 11.2l.5 1.25 1.25.5-1.25.5-.5 1.25-.5-1.25-1.25-.5 1.25-.5z" fill="currentColor" stroke="none"/><path d="M10.6 3.4l.45 1.05 1.05.45-1.05.45-.45 1.05-.45-1.05-1.05-.45 1.05-.45z" fill="currentColor" stroke="none"/></svg> &nbsp;<span class="mode-label">Manifestation</span></button>
+  <div class="mode-switch" role="group" aria-label="Choose a section">
+    <button type="button" class="mode-btn on" id="modeNightBtn" aria-pressed="true" aria-controls="panelNight">☾ &nbsp;<span class="mode-label">Dream Decipher</span></button>
+    <button type="button" class="mode-btn" id="modeDayBtn" aria-pressed="false" aria-controls="panelDay"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M5 19 13.2 10.8"/><path d="M16.6 3.1l.9 2.15 2.15.9-2.15.9-.9 2.15-.9-2.15-2.15-.9 2.15-.9z" fill="currentColor" stroke="none"/><path d="M20.7 11.2l.5 1.25 1.25.5-1.25.5-.5 1.25-.5-1.25-1.25-.5 1.25-.5z" fill="currentColor" stroke="none"/><path d="M10.6 3.4l.45 1.05 1.05.45-1.05.45-.45 1.05-.45-1.05-1.05-.45 1.05-.45z" fill="currentColor" stroke="none"/></svg> &nbsp;<span class="mode-label">Manifestation</span></button>
+    <button type="button" class="mode-btn" id="modeVaultBtn" aria-pressed="false" aria-haspopup="dialog" aria-controls="vaultPage">❖ &nbsp;<span class="mode-label">Dream Vault</span></button>
   </div>
 
   <div class="collect-strip" role="group" aria-label="Your collections">
@@ -1785,7 +1786,6 @@
     <button type="button" class="collect-btn" id="passportOpenBtn"><span class="cb-ic" aria-hidden="true">☾</span><span id="passportBtnLabel">Dream passport</span><b id="passportCount">0 places visited</b></button>
     <button type="button" class="collect-btn" id="profileOpenBtn"><span class="cb-ic" aria-hidden="true">✧</span><span id="profileBtnLabel">My dreams</span><b id="profileCount">0 dreams</b></button>
     <button type="button" class="collect-btn" id="bankOpenBtn"><span class="cb-ic" aria-hidden="true">♫</span><span id="bankBtnLabel">Dream Bank</span><b id="bankCount">stories</b></button>
-    <button type="button" class="collect-btn" id="vaultOpenBtn"><span class="cb-ic" aria-hidden="true">❖</span><span id="vaultBtnLabel">Dream Vault</span><b id="vaultCount">0 books</b></button>
   </div>
 
   <main id="panelNight" class="night-intake" role="tabpanel" aria-label="Dream Decipher — night dream reading">
@@ -3900,7 +3900,7 @@
   window.dreamOpenVault=openVault;
   (function(){
     var pg=$('vaultPage'), ob=$('vaultOpenBtn'), cb=$('vaultClose');
-    function close(){ pg.classList.remove('open'); document.body.style.overflow=''; }
+    function close(){ pg.classList.remove('open'); document.body.style.overflow=''; if(window.closeDreamVaultSection) window.closeDreamVaultSection(); }
     if(ob) ob.addEventListener('click',function(){ openVault(null); }); if(cb) cb.addEventListener('click',close);
     document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&pg&&pg.classList.contains('open')) close(); });
     paintVaultCount(); document.addEventListener('dreamlang',function(){ paintVaultCount(); if(pg.classList.contains('open')) renderVault(); });
@@ -5740,21 +5740,32 @@
 
 <script>
 (function(){
-  var nightBtn=document.getElementById('modeNightBtn'), dayBtn=document.getElementById('modeDayBtn');
+  var nightBtn=document.getElementById('modeNightBtn'), dayBtn=document.getElementById('modeDayBtn'), vaultBtn=document.getElementById('modeVaultBtn');
   var pN=document.getElementById('panelNight'), pD=document.getElementById('panelDay');
+  var currentMode='night', returnMode='night';
+  function selected(btn,on){ if(btn){ btn.setAttribute('aria-pressed',on?'true':'false'); btn.classList.toggle('on',on); } }
   function show(m){
+    if(m==='vault'){
+      if(currentMode!=='vault') returnMode=currentMode;
+      currentMode='vault'; if(pN) pN.hidden=true; if(pD) pD.hidden=true;
+      selected(nightBtn,false); selected(dayBtn,false); selected(vaultBtn,true);
+      if(window.dreamOpenVault) window.dreamOpenVault();
+      return;
+    }
+    currentMode=m;
     var night=(m!=='day');
     if(pN) pN.hidden=!night;
     if(pD) pD.hidden=night;
-    if(nightBtn){nightBtn.setAttribute('aria-selected',night?'true':'false'); nightBtn.classList.toggle('on',night);}
-    if(dayBtn){dayBtn.setAttribute('aria-selected',night?'false':'true'); dayBtn.classList.toggle('on',!night);}
+    selected(nightBtn,night); selected(dayBtn,!night); selected(vaultBtn,false);
     // Opening Manifestation: warm up all six voice greetings in the
     // background, so tapping a voice plays its real hello at once.
     if(!night&&window.prefetchVoiceGreetings){ try{ window.prefetchVoiceGreetings(); }catch(err){} }
   }
   window.showDreamMode=show;
+  window.closeDreamVaultSection=function(){ if(currentMode==='vault') show(returnMode); };
   if(nightBtn) nightBtn.addEventListener('click',function(){show('night')});
   if(dayBtn) dayBtn.addEventListener('click',function(){show('day')});
+  if(vaultBtn) vaultBtn.addEventListener('click',function(){show('vault')});
   show('night');
 })();
 </script>
@@ -6401,6 +6412,7 @@
     setHTML('.day-head h2','Manifest your <em>dream</em>','睡前<em>造梦</em>',lang);
     var nl=document.querySelector('#modeNightBtn .mode-label'); if(nl) nl.textContent=(lang==='zh'?'解梦':'Dream Decipher');
     var dl=document.querySelector('#modeDayBtn .mode-label'); if(dl) dl.textContent=(lang==='zh'?'造梦':'Manifestation');
+    var vl=document.querySelector('#modeVaultBtn .mode-label'); if(vl) vl.textContent=(lang==='zh'?'盗梦':'Dream Vault');
     var cn=document.getElementById('cardNo'); if(cn) cn.textContent=(lang==='zh'?'解梦':'Dream Decipher');
     var ps=document.querySelectorAll('#storySettings p');
     for(var i=0;i<ps.length;i++){
