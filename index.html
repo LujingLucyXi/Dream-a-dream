@@ -218,6 +218,7 @@
   .story-cta{margin-top:14px;width:100%;background:var(--gold2);color:#221a05;border:none;border-radius:14px;padding:14px 16px;font-weight:900;font-size:14.5px}
   .story-cta[disabled]{opacity:.6;cursor:wait}
   .story-text{margin-top:16px;font-size:15.5px;line-height:1.9;color:#e8ebf8;white-space:pre-line}
+  .story-gen-error{color:#ffb4a9!important;font-weight:700}
   .story-read{margin-top:18px;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
   .story-read h4{margin:5px 0 10px}
   .story-fulltext{font-size:15.5px;line-height:1.9;color:#e8ebf8;white-space:pre-line}
@@ -5528,20 +5529,15 @@
     if(pe.playBtn){ pe.playBtn.disabled=false; pe.playBtn.textContent='▶'; }
     if(pe.status) pe.status.textContent=L('Your story is being written — when it is ready, tap ▶ Play here to listen.','你的故事正在写——好了以后，点这里的 ▶ 播放才开始听。');
     refreshWeaveList();
-    function localClosing(){
-      // The seed-line ending, written locally — used to close the story
-      // gracefully if a later cloud chapter fails mid-journey.
-      return zhT(L('And so the evening finishes its small completions: the last cup washed, the door locked for the night, the lamp turned low. One line stays on the table when everything else has been put away — the line chosen for tonight. ','于是这个晚上做完它最后的小事：最后一只杯子洗好，门为夜锁上，灯调低。其他都收起来之后，桌上留下一句话——今晚选定的那一句。')+dd.seed+L(' Then the dark does the rest, kindly. Good night.','剩下的，交给黑暗，它会温柔地办。晚安。'));
-    }
     function runStory(){
       var st=readStorySettings();
       var myGen=++storyGen;
       btn.disabled=true; btn.textContent=L('Writing your sleep story\u2026 \u2726','正在写你的睡前故事\u2026 \u2726');
       var status=$('storyGenStatus');
       var total=storyChapterCount(st);
-      if(status) status.textContent=total>1
+      if(status){ status.classList.remove('story-gen-error'); status.textContent=total>1
         ? (L('Writing your ','正在写你的 ')+st.lengthMin+L('-minute story in ',' 分钟故事，共 ')+total+L(' chapters — tap ▶ Play in the player when you are ready to listen…',' 章——想听的时候点播放器里的 ▶ 播放…'))
-        : L('Writing your story — theme, mood and place exactly as you chose them above…','正在写你的故事——主题、氛围和地方都按你上面选的来…');
+        : L('Writing your story — theme, mood and place exactly as you chose them above…','正在写你的故事——主题、氛围和地方都按你上面选的来…'); }
       if(waitEl) waitEl.style.display='';
       var waitSteps=[L('Gathering your wish','收拢你的心愿'),L('Choosing the light and the weather','选好光线和天气'),L('Weaving the story, scene by scene','一幕一幕编织故事'),L('Laying the last line down gently','轻轻放下最后一句')]; var wi=0; var wStep=$('storyWaitStep'); if(wStep) wStep.textContent=waitSteps[0];
       if(window.showWaitOverlay) window.showWaitOverlay(L('Weaving your story…','正在编织你的故事…'),waitSteps);
@@ -5556,18 +5552,36 @@
         maybeStitch();
         try{ showBankShare(dd,st); }catch(e){}
         try{ vaultOnStoryFinished(dd,st); }catch(e){}
-        if(status) status.textContent=note||L('Your story is written — tap ▶ Play above to listen at a calm pace, and read the full text below.','你的故事写好了——点上面的 ▶，用舒缓的语速听，全文在下面。');
+        if(status){ status.classList.remove('story-gen-error'); status.textContent=note||L('Your story is written — tap ▶ Play above to listen at a calm pace, and read the full text below.','你的故事写好了——点上面的 ▶，用舒缓的语速听，全文在下面。'); }
         btn.disabled=false;
         btn.textContent=L('Rewrite the story \u263e','重写故事 \u263e');
+      }
+      function failStory(note,keepPartial){
+        if(myGen!==storyGen) return;
+        pStoryComplete=true; clearInterval(waitTimer);
+        if(window.hideWaitOverlay) window.hideWaitOverlay();
+        if(waitEl) waitEl.style.display='none';
+        synthStop(); synthFallback=false; pWantPlay=false; playerFailed=false; pGen++;
+        var p=playerEls();
+        if(p.audio){ p.audio.pause(); p.audio.removeAttribute('src'); try{ p.audio.load(); }catch(err){} }
+        if(p.playBtn){ p.playBtn.disabled=true; p.playBtn.textContent='▶'; }
+        if(p.status) p.status.textContent=L('No audio is available because the story did not finish.','故事未完成，因此没有可播放的声音。');
+        if(!keepPartial){
+          currentStory=null;
+          if(titleEl) titleEl.textContent=L('Your sleep story','你的睡前故事');
+          var emptyText=$('storyFullText'); if(emptyText) emptyText.textContent='';
+          var emptyRead=$('storyRead'); if(emptyRead) emptyRead.hidden=true;
+        }
+        if(status){ status.classList.add('story-gen-error'); status.textContent=note; }
+        btn.disabled=false; btn.textContent=L('Try again','再试一次');
       }
       function showStoryText(){
         if(titleEl) titleEl.textContent=currentStory.title;
         var ft=$('storyFullText'); if(ft) ft.textContent=currentStory.story;
         var rb=$('storyRead'); if(rb) rb.hidden=false;
       }
-      // Chapter 1 gets the relevance gate, as before: one attempt, and if it
-      // comes back unrelated to this wish, one stricter retry — then the
-      // built-in writer takes over at once rather than chaining long waits.
+      // Chapter 1 gets one stricter retry if the first response is unrelated.
+      // If neither response is usable, show an error instead of inventing a fallback.
       function firstChapter(){
         return fetchCloudSleepStory(dd,false,st,{index:0,total:total,tail:''}).then(function(ai){
           if(ai&&!storyRelevant(ai.story,dd,st)){
@@ -5581,12 +5595,7 @@
       firstChapter().then(function(ai){
         if(myGen!==storyGen) return;
         if(!ai){
-          // The cloud is silent tonight: the built-in writer tells the whole
-          // story at the chosen length, in one piece.
-          currentStory=generateSleepStory(dd,st);
-          showStoryText();
-          pWantPlay=false; startPlayerVoice();
-          finishStory(L('Your story is written — tap ▶ Play above to listen, and read the full text below.','你的故事写好了——点上面的 ▶ 开始听，全文在下面。'));
+          failStory(L('We couldn’t write your sleep story this time. Please try again.','这次没能写出你的睡前故事，请再试一次。'),false);
           return;
         }
         currentStory={title:ai.title||'Your Sleep Story',story:ai.story};
@@ -5606,10 +5615,7 @@
           fetchCloudSleepStory(dd,false,st,{index:idx,total:total,tail:tail}).then(function(part){
             if(myGen!==storyGen) return;
             if(!part||!part.story){
-              // A chapter went missing: close the story gently with the seed
-              // line rather than leaving it hanging mid-journey.
-              appendStoryText(localClosing());
-              finishStory(L('Tonight\u2019s story is a little shorter than planned — it is complete below. Tap ▶ Play above to listen.','今晚的故事比计划的短一点——全文完整地在下面。点上面的 ▶ 开始听。'));
+              failStory(L('The story stopped before it was complete. The text above is only a partial story. Please try again.','故事还没写完就中断了。上面的内容只是部分故事，请再试一次。'),true);
               return;
             }
             appendStoryText(part.story);
@@ -5661,7 +5667,7 @@
     var body=$('dayOutputBody');
     body.innerHTML='<div class="day-scene-title">'+esc(dd.title)+'</div><p class="day-scene">'+esc(dd.scene)+'</p>'
       +'<div class="seed-box"><div class="sl"><span>'+L('Tonight\u2019s seed','今晚的入睡种子')+'</span></div><blockquote>\u201C'+esc(dd.seed)+'\u201D</blockquote></div>'
-      +'<div class="sleep-story" id="sleepStory"><div class="ss-kicker">'+L('Sleep story','睡前故事')+'</div><h4 id="storyTitle">'+L('Your sleep story','你的睡前故事')+'</h4><p class="ss-intro" id="storyGenStatus">\'+L(\'Writing your story from your wish, in the direction you chose above\u2026\',\'正在按你选的方向，从你的心愿写故事\u2026\')+\'</p>'
+      +'<div class="sleep-story" id="sleepStory"><div class="ss-kicker">'+L('Sleep story','睡前故事')+'</div><h4 id="storyTitle">'+L('Your sleep story','你的睡前故事')+'</h4><p class="ss-intro" id="storyGenStatus" role="status" aria-live="polite">\'+L(\'Writing your story from your wish, in the direction you chose above\u2026\',\'正在按你选的方向，从你的心愿写故事\u2026\')+\'</p>'
       +'<button type="button" class="story-cta" id="storyBtn" disabled>\'+L(\'Writing your story\u2026 \u2726\',\'正在写你的故事\u2026 \u2726\')+\'</button>'
       +'<div class="story-read" id="storyRead" hidden><div class="ss-kicker">'+L('Your story','你的故事')+'</div><div class="story-fulltext" id="storyFullText"></div></div></div>';
     // The audio player goes IN FRONT of the story text: it moves from
