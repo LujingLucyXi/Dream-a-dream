@@ -170,6 +170,29 @@ async function rpc(name: string, args: Record<string, unknown>): Promise<number 
     return null;
   }
 }
+async function releaseStory(subject: string, storyId: string): Promise<boolean> {
+  const url = Deno.env.get("SUPABASE_URL");
+  const svc = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!url || !svc || !storyId) return false;
+  const params = new URLSearchParams({
+    subject: "eq." + subject,
+    story_id: "eq." + storyId,
+  });
+  try {
+    const r = await fetch(`${url}/rest/v1/dream_story_usage?${params}`, {
+      method: "DELETE",
+      headers: {
+        apikey: svc,
+        Authorization: `Bearer ${svc}`,
+        Prefer: "return=minimal",
+      },
+      signal: AbortSignal.timeout(3000),
+    });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
 // ---- end Plans ----
 
 function json(req: Request, body: unknown, status = 200): Response {
@@ -216,12 +239,18 @@ Deno.serve(async (req: Request) => {
   const L = pro
     ? { readings: PRO_READINGS_PER_DAY, stories: PRO_STORIES_PER_DAY, days: 1, maxMin: PRO_STORY_MAX_MIN }
     : { readings: FREE_READINGS_PER_DAY, stories: FREE_STORIES_PER_WEEK, days: 7, maxMin: FREE_STORY_MAX_MIN };
+  if (kind === "story-release") {
+    const sid = String(body.storyId || "").slice(0, 64);
+    const released = await releaseStory(subject, sid);
+    return json(req, { released });
+  }
   if (kind === "quota") {
     const readingsLeft = await rpc("dream_reading_take", { p_subject: subject, p_limit: L.readings, p_take: false });
     const storiesLeft = await rpc("dream_story_take", { p_subject: subject, p_story_id: "", p_limit: L.stories, p_days: L.days });
     return json(req, { plan, readingsLeft, storiesLeft, storyMaxMin: L.maxMin });
   }
   let left: number | null = null;
+  let storyIdToRelease = "";
   if (kind === "reading") {
     left = await rpc("dream_reading_take", { p_subject: subject, p_limit: L.readings, p_take: true });
     if (left === -1) return json(req, { error: "free_limit", what: "reading", limit: L.readings, plan }, 402);
@@ -229,6 +258,7 @@ Deno.serve(async (req: Request) => {
     const mins = Number(body.storyLength || 0);
     if (mins > L.maxMin) return json(req, { error: "free_limit", what: "story_length", limit: L.maxMin, plan }, 402);
     const sid = String(body.storyId || "").slice(0, 64) || crypto.randomUUID();
+    storyIdToRelease = sid;
     left = await rpc("dream_story_take", { p_subject: subject, p_story_id: sid, p_limit: L.stories, p_days: L.days });
     if (left === -1) return json(req, { error: "free_limit", what: "story", limit: L.stories, plan }, 402);
   }
@@ -257,6 +287,8 @@ Deno.serve(async (req: Request) => {
     });
     const data = await r.json();
     if (!r.ok) {
+      // Failed upstream generations return their reserved story slot.
+      if (isStory && storyIdToRelease) await releaseStory(subject, storyIdToRelease);
       // Logged so failures show up in Supabase -> Edge Functions -> Logs,
       // instead of only as the page quietly using its built-in text.
       console.error(kind, "openai error", r.status, Date.now() - started, "ms", JSON.stringify(data?.error || {}).slice(0, 300));
@@ -264,6 +296,7 @@ Deno.serve(async (req: Request) => {
     if (data && typeof data === "object") data.dreameri = { plan, left };
     return json(req, data, r.status);
   } catch (e) {
+    if (isStory && storyIdToRelease) await releaseStory(subject, storyIdToRelease);
     console.error(kind, "failed after", Date.now() - started, "ms:", String(e));
     return json(req, { error: String(e) }, 502);
   }
