@@ -1710,7 +1710,7 @@
     </div>
     <hr class="settings-sep" id="acctSep" hidden />
 
-    <p class="settings-label">Your plan</p>
+    <p class="settings-label" id="setPlanLabel">Your plan</p>
     <h4 class="byok-title" id="setPlanTitle">Free version</h4>
     <div class="plan-cols">
       <div class="plan-col">
@@ -1935,7 +1935,7 @@
   <section class="daydream" id="daydream" aria-label="Daydream — create a dream by day">
     <div class="day-head">
       <div>
-        <h2>Make a <em>daydream</em></h2>
+        <h2>Manifest your <em>dream</em></h2>
         <p>Manifest your dream. Set the scene — we’ll develop your sleep story.</p>
       </div>
     </div>
@@ -2582,11 +2582,12 @@
     paintSettingsPlan();
   });
   function paintSettingsPlan(){
-    var pro=isFullPlan(), byok=byokActive();
-    var t=$('setPlanTitle'), f=$('setFreeTag'), p=$('setProTag');
-    if(t) t.textContent=pro?L('Pro','Pro'):byok?L('Unlimited — your own key','无限版——用你自己的密钥'):L('Free version','免费版');
-    if(f) f.textContent=(!pro&&!byok)?L('Your current plan','你现在用的版本'):L('Free','免费');
-    if(p) p.textContent=pro?L('Your current plan','你现在用的版本'):L('Every lock opens','所有锁都打开');
+    var pro=isFullPlan(), byok=byokActive(), signedIn=!!(window.dreamIsSignedIn&&window.dreamIsSignedIn());
+    var label=$('setPlanLabel'), t=$('setPlanTitle'), f=$('setFreeTag'), p=$('setProTag');
+    if(label) label.textContent=signedIn?L('Your plan','你的版本'):L('Plans','方案');
+    if(t) t.textContent=!signedIn?L('Choose a plan','选择方案'):pro?L('Pro','Pro'):byok?L('Unlimited — your own key','无限版——用你自己的密钥'):L('Free version','免费版');
+    if(f) f.textContent=!signedIn?'':(!pro&&!byok)?L('Your current plan','你现在用的版本'):L('Free','免费');
+    if(p) p.textContent=!signedIn?L('Pro option','Pro 方案'):pro?L('Your current plan','你现在用的版本'):L('Every lock opens','所有锁都打开');
     var b=$('setPlansBtn'); if(b) b.textContent=pro?L('Compare plans','比较方案'):L('See the plans','看看方案');
   }
   document.addEventListener('dreamlang',function(){ try{ paintSettingsPlan(); }catch(e){} });
@@ -6366,7 +6367,7 @@
   function specials(lang){
     setHTML('.input-panel h1','What did you<br>dream <em>last night?</em>','昨晚，你<br>梦到了<em>什么？</em>',lang);
     // In Chinese the manifestation is a bedtime one: 睡前造梦, not 白天造梦.
-    setHTML('.day-head h2','Make a <em>daydream</em>','睡前<em>造梦</em>',lang);
+    setHTML('.day-head h2','Manifest your <em>dream</em>','睡前<em>造梦</em>',lang);
     var nl=document.querySelector('#modeNightBtn .mode-label'); if(nl) nl.textContent=(lang==='zh'?'解梦':'Dream Decipher');
     var dl=document.querySelector('#modeDayBtn .mode-label'); if(dl) dl.textContent=(lang==='zh'?'造梦':'Manifestation');
     var cn=document.getElementById('cardNo'); if(cn) cn.textContent=(lang==='zh'?'解梦':'Dream Decipher');
@@ -7093,6 +7094,7 @@
   /* ——— Plans & payments (Stripe, via the dream-billing function) ——— */
   var BILLING_URL=SUPABASE_URL+'/functions/v1/dream-billing';
   window.dreamAuthToken=function(){ return sb.auth.getSession().then(function(r){ return r&&r.data&&r.data.session?r.data.session.access_token:null; }).catch(function(){ return null; }); };
+  window.dreamIsSignedIn=function(){ return !!user; };
   window.dreamPlan=function(){ return profile&&profile.plan==='full'?'full':'free'; };
   function announcePlan(){ try{ document.dispatchEvent(new CustomEvent('dreamplan',{detail:window.dreamPlan()})); }catch(e){} }
   function billing(body){
